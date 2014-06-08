@@ -21,7 +21,9 @@
 #define FREE 0
 
 int numSolution = 0;
-
+/*
+ * Utility for printing the chess board onto the screen
+ */
 void printChessboard(int **chessboard)
 {
 	int i, j;
