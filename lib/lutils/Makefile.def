@@ -1,0 +1,6 @@
+CC=gcc
+CFLAGS=-Wall
+LIBLDFLAGS=-cvq
+LIBLD=ar
+
+LUTIL_SRC=src/sll.c ../include/sll.h
