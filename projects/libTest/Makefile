@@ -4,6 +4,7 @@ CFLAGS=-I$(IDIR) -Wall
 
 ODIR=./obj
 LDIR =../../lib/archive/
+LIBDIR=../../lib
 
 LIBS=-lm -llutils
 
@@ -13,8 +14,8 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = testMain.o sllTest.o 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-$(LUTILLIB): $(LUTILC) $(LUTILH)
-	cd $(LUTILDIR); make;
+$(LIBUTIL): $(LIBUTILC) $(LIBUTILH)
+	cd $(LIBDIR); make;
 
 $(ODIR)/%.o: %.c $(DEPS) $(LUTILLIB)
 		$(CC) -c -o $@ $< $(CFLAGS)
