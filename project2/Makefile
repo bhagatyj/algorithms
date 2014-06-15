@@ -30,5 +30,5 @@ clean:
 	depend.sh `dirname $*.c` $(CFLAGS) $*.c > $@
 
 # include the C include dependencies
-include $(OBJ:.o=.d)
+-include $(OBJ:.o=.d)
 
