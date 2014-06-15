@@ -1,6 +1,9 @@
 #!/bin/sh
+echoerr() { echo "$@" 1>&2; }
+
 DIR="$1"
 shift 1
+#echoerr Came here "$@"
 case "$DIR" in
 "" | ".")
 gcc -MM -MG "$@" |

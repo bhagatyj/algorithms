@@ -1,5 +1,5 @@
 MODULES := ant bee
-
+export PATH := .:$(PATH)
 # look for include files in each of the modules
 CFLAGS += $(patsubst %,-I%,$(MODULES))
 
@@ -25,9 +25,10 @@ clean:
 	find . -name "*.o" -exec rm -f {} \;
 	find . -name "*.d" -exec rm -f {} \;
 
+# calculate C include dependencies
+%.d: %.c
+	depend.sh `dirname $*.c` $(CFLAGS) $*.c > $@
+
 # include the C include dependencies
 include $(OBJ:.o=.d)
 
-# calculate C include dependencies
-%.d: %.c
-	depend.sh ‘dirname $*.c‘ $(CFLAGS) $*.c > $@
