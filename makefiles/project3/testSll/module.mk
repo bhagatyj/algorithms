@@ -1,4 +1,4 @@
-SRC += bee/parse.y
+SRC += testSll/sllTest.y
 LIBS += -ly
 %.c %.h: %.y
 	$(YACC) -d $*.y

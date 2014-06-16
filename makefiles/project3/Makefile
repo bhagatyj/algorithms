@@ -1,4 +1,4 @@
-MODULES := ant bee
+MODULES := libSll testSll
 export PATH := .:$(PATH)
 # look for include files in each of the modules
 CFLAGS += $(patsubst %,-I%,$(MODULES))
