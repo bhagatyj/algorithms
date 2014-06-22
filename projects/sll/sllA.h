@@ -6,7 +6,6 @@
  * is it holding the data created by someone-else.
  * redZone & magic are for sanity checks.
 */
-#define SL_ALLOCATE_DATA 1
 typedef struct sllNode_ {
 	struct sllNode 	*next;
 	unsigned int	magic;
@@ -22,10 +21,10 @@ typedef struct sllList_ {
 sllList * createSll(void);
 
 /*
- * aPI for SLL Node Creation
+ * API for SLL Node Creation
  */
-//int createSllNode (void *data, unsigned int flags, int size);
-int createSllNode(void *data, unsigned int flags);
+//int createSllNode (void *data, int size);
+int createSllNode(void *data, unsigned int size);
 
 /* 
  * API for SLL Node addition to SLL List
