@@ -3,27 +3,27 @@
 # Author:  Bhagat Janarthanan
 #
 
-TARGET = link
-LIBS = -lm
-CC = gcc
-CFLAGS = -g -Wall
+SLL := obj/sll
+LIBS := -lm
+CC := gcc
+CFLAGS := -g -Wall
 
 .PHONY: default all clean
 
-default: $(TARGET)
+default: $(SLL)
 all: default
 
-OBJECTS = $(patsubst %.c, %.o, $(wildcard *.c))
-HEADERS = $(wildcard *.h)
+OBJECTS := $(patsubst %.c, obj/%.o, $(wildcard src/*.c))
+HEADERS := $(wildcard src/*.h)
 
-%.o: %.c $(HEADERS)
+obj/%.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PRECIOUS: $(TARGET) $(OBJECTS)
+.PRECIOUS: $(SLL) $(OBJECTS)
 
-$(TARGET): $(OBJECTS)
+$(SLL): $(OBJECTS)
 	$(CC) $(OBJECTS) -Wall $(LIBS) -o $@
 
 clean:
-	-rm -f *.o
-	-rm -f $(TARGET)
+	-rm -f obj/*.o
+	-rm -f $(SLL)
