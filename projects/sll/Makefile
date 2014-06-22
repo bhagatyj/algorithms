@@ -13,7 +13,7 @@ CFLAGS := -g -Wall
 default: $(SLL)
 all: default
 
-OBJECTS := $(patsubst %.c, obj/%.o, $(wildcard src/*.c))
+OBJECTS := $(patsubst %.c, obj/%.o, $(wildcard *.c))
 HEADERS := $(wildcard src/*.h)
 
 obj/%.o: %.c $(HEADERS)
