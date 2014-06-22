@@ -6,25 +6,24 @@
  * is it holding the data created by someone-else.
  * redZone & magic are for sanity checks.
 */
-typedef struct sllNode_ {
-	struct sllNode 	*next;
-	unsigned int	magic;
-	unsigned int	flags;
-	void 			*data;
-	unsigned int	redZone;
-} sllNode;
+typedef struct sllANode_ {
+	struct sllANode 	*next;
+	unsigned int		magic;
+	unsigned int		flags;
+	void 				*data;
+	unsigned int		redZone;
+} sllANode;
 
-typedef struct sllList_ {
-	struct sllNode 	*next;
-} sllList;
+typedef struct sllAList_ {
+	struct sllANode 	*next;
+} sllAList;
 
-sllList * createSll(void);
+sllAList * createSllA(void);
 
 /*
  * API for SLL Node Creation
  */
-//int createSllNode (void *data, int size);
-int createSllNode(void *data, unsigned int size);
+int createSllANode(void *data);
 
 /* 
  * API for SLL Node addition to SLL List
@@ -32,13 +31,13 @@ int createSllNode(void *data, unsigned int size);
  * addtoSll - Adds node to SLL
  * Returns 0 on success
  */
-int addNodeToSll(sllList *list, sllNode *node);
-int addDataToSll(sllList *list, void *data, unsigned int flags, int size);
+int addNodeToSllA(sllAList *list, sllANode *node);
+int addDataToSllA(sllAList *list, void *data, unsigned int flags, int size);
 
 /*
  * API for Removal of SLL Node from an SLL List.
  */
-int removeNodeFromSll(sllList *list, sllNode *node);
+int removeNodeFromSllA(sllAList *list, sllANode *node);
 
 /* 
  * Search for a particular node in a List using function that operates on data
@@ -54,11 +53,11 @@ int removeNodeFromSll(sllList *list, sllNode *node);
 /*
  * Delete the SLL Node
  */
-void deleteSllNode(sllNode *node);
+void deleteSllANode(sllANode *node);
 /* 
  * Delete the SLL List
  */
-void deleteSllList(sllList *list);
+void deleteSllAList(sllAList *list);
 
 /* 
  * Iterate through the SLL List using a function that operates on data.

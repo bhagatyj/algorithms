@@ -1,20 +1,19 @@
-#include "sll.h"
+#include "sllA.h"
 #include <string.h>
 
 
-sllList * createSll(void)
+sllAList * createSll(void)
 {
-	return NULL;
+	sllAList *list = malloc(sizeof(sllAList));
+	return list;
 }
 
-
-
 /*
- * aPI for SLL Node Creation
+ * API for SLL Node Creation
  */
-//int createSllNode (void *data, unsigned int flags, int size);
-int createSllNode(void *data, unsigned int flags)
+int createSllANode(void *data)
 {
+	sllA
 	return 0;
 }
 
@@ -24,11 +23,11 @@ int createSllNode(void *data, unsigned int flags)
  * addtoSll - Adds node to SLL
  * Returns 0 on success
  */
-int addNodeToSll(sllList *list, sllNode *node)
+int addNodeToSllA(sllAList *list, sllANode *node)
 {
 	return 0;
 }
-int addDataToSll(sllList *list, void *data, unsigned int flags, int size)
+int addDataToSllA(sllAList *list, void *data, unsigned int flags, int size)
 {
 	return 0;
 }
@@ -36,7 +35,7 @@ int addDataToSll(sllList *list, void *data, unsigned int flags, int size)
 /*
  * API for Removal of SLL Node from an SLL List.
  */
-int removeNodeFromSll(sllList *list, sllNode *node)
+int removeNodeFromSllA(sllAList *list, sllANode *node)
 {
 	return 0;
 }
@@ -55,14 +54,14 @@ int removeNodeFromSll(sllList *list, sllNode *node)
 /*
  * Delete the SLL Node
  */
-void deleteSllNode(sllNode *node)
+void deleteSllANode(sllANode *node)
 {
 	return;
 }
 /* 
  * Delete the SLL List
  */
-void deleteSllList(sllList *list)
+void deleteSllAList(sllAList *list)
 {
 	return;
 }
