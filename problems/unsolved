@@ -1,0 +1,75 @@
+======================
+You have an array of integers(size N), such that each integer is present an odd number of time, except 3 of them(which are present even number of times). Find the three numbers. 
+
+Only XOR based solution was permitted. 
+Time Complexity: O(N) 
+Space Complexity: O(1) 
+
+Sample Input: 
+{1,6,4,1,4,5,8,8,4,6,8,8,9,7,9,5,9} 
+Sample Output: 
+1 6 8
+======================
+Traveler wants to travel from city “A” to city “D”. 
+There is a path from city “A” to city “D”. 
+Path consists of steps, i.e. travel from city “A” to city “B”. 
+Path is encoded as sequence of steps. 
+Sequence is in incorrect order. 
+Your task is to restore order of steps in the path. 
+Input (unordered sequence): 
+C -> D 
+A -> B 
+B -> C 
+Output (Correctly ordered list which represents path): 
+A, B, C, D 
+Implement following API:
+
+
+class Step {
+String start;
+String finish;
+};
+
+class Node {
+String value;
+Node next;
+}
+
+List<String> findPath(List<Step> steps) {
+}
+======================
+Suppose you have a million integer numbers. 
+Return all possible values of a,b and c such that 
+a+b+c<=d. 
+d will be provided to you. 
+ex: if the numbers are 1,2,3,4,5,6,7 
+and d=7 
+[1,2,3] 
+[1,2,4] 
+
+[1,2,3] will be same as [1,3,2] and [3,2,1]... 
+
+follow up: 
+
+Return all such parts that satisfy the above condition if d is not provided.
+======================
+How many occurrences of a given search word can you find in a two-dimensional array of characters given that the word can go up, down, left, right, and around 90 degree bends? 
+
+Ex: 
+Count of occurrences of SNAKES 
+S N B S N 
+B A K E A 
+B K B B K 
+S E B S E 
+
+The answer is 3. 
+
+I jus want to give a brief explanation about this question since all the others just posted their code. The basic idea is to do search at each possible possition. In this example, we want to find "SNAKE", then the possible start positions are the positions where the character is "S", then you keep a visited array to avoid going back to the same position. The visited array is a little bit tricky. For example, if the matrix is : 
+S N B S N 
+B A K E A 
+B K B B K 
+S E B S E 
+Then you go from (0, 0) to (1, 0), to (2, 0), you visited array in these three positions are set as true, but when you discovered that (2, 0) is not a possible answer, you should reset the visited array at position (2, 0) to false immediately since you may go to it later.
+======================
+
+======================
