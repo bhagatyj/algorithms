@@ -1,4 +1,8 @@
-// HDR : Split a line into words.
+// Code a function that receives a string composed by words separated
+// by spaces and returns a string where words appear in the same order 
+// but than the original string, but every word is inverted. 
+
+// For example "boy ran fast" becomes "yob nar tsaf"
 
 
 #include <stdio.h>
@@ -74,20 +78,29 @@ char ** getWords(char *line)
 	}
 
 	return words;
+}
 
+void printReverse(char *word)
+{
+	int i;
+	for (i = strlen(word); i>=0; i--) {
+		printf("%c",word[i]);
+	}
 }
 
 int main(int argc, char **argv)
 {
 	int i;
 
-	char **words = getWords("Here is an apple.");
+	char **words = getWords("Here is an apple");
 	for (i=0; i<MAXWORDS; i++) {
 		if (words[i]) {
-			printf("%s\n", words[i]);
+			printReverse(words[i]);
+			printf(" ");
 		} else {
 			break;
 		}
 	}
+	printf("\n");
 	return 0;
 }
