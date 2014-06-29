@@ -10,6 +10,8 @@ int mymemcpy(unsigned int *wdst, unsigned int *wsrc, int words)
 	// In the case of overlapping window, where the source
 	// is less than the dst but the (src + size) is more than
 	// destination, copy from end to begining.
+	// Boundary check on both sides is needed for 
+	// all cases to work.
 
 	if ((wsrc + words > wdst) && (wsrc < wdst)) {
 		for (i = words-1; i>=0; i--) {
@@ -74,15 +76,11 @@ int main(int argc, char **argv)
 
 	// Case 2: Overlap in one direction.
 	initialize();
-	mymemcpy(myarray, myarray+4, 8);
-	if (mymemcmp(myarray, original+4, 8) == 0) {
+	mymemcpy(myarray, myarray+100, 200);
+	if (mymemcmp(myarray, original+100, 200) == 0) {
 		printf("Case 2: Copy success\n");
 	} else {
 		printf("Case 2: Copy failure.\n");
-		for (i=0; i<8; i++) {
-			printf("%4d", *(myarray+i));
-			printf("%4d\n", *(original+4+i));
-		}
 	}
 
 
