@@ -12,13 +12,15 @@ def printline():
 def singleTest(send, ansExp):
 	global count
 
-	child = pexpect.spawn('./p014')
+	child = pexpect.spawn('./p014', maxread=10000)
 	child.sendline('1')
 	child.expect('1')
 	child.sendline(send)
 	child.expect(send)
 
-	child.expect('[0-9]+')
+	pattern = '[0-9]{%d}' %(len(send))
+	print "Expecting %s" %pattern
+	child.expect(pattern)
 	ansGot = child.match.group()
 	printline()
 	count = count + 1
@@ -56,7 +58,7 @@ def smallDigitTests():
 def largeDigitTest1():
 	n1 = ''
 	n2 = ''
-	for i in range(100):
+	for i in range(1000):
 		n1 = n1 + '1'
 		n2 = n2 + '9'
 	singleTest(n1, n1)
@@ -77,7 +79,7 @@ def runTests():
 	largeDigitTest1()
 
 def compileP014():
-	ret = os.system('gcc -g -Wall p014_5.c -o p014')
+	ret = os.system('gcc -g -Wall p014.c -o p014')
 	if (ret != 0):
 		raise Exception("Did not compile")
 
