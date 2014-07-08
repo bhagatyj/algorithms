@@ -282,29 +282,29 @@ void operation(char *op1, char *op2, char op)
 
 void calculate(char *s)
 {
-	char *op1, *op2, *op, oper;
+	char *op1, *op2, *op, oper[2];
 	int op1Len;
 
 	op = strchr(s, '+');
 	if (!op) {
 		op = strchr(s, '-');
 	}
-	oper = op[0];
+	oper[0] = op[0];
+	oper[1] = 0;
 	if (!op) {
 		printf("Couldnt find the operators\n");
 		return;
 	}
 
-
-	op1 = strsep(&s, op);
+	//printf("Input string: %s Operation: %s\n", s, op);
+	op1 = strsep(&s, oper);
 	op2 = s;
 
-	//printf("The numbers are %s and %s\n", op1, op2);
 	strcpy(s+MAXDIGITS, op2);
 	op1Len = strlen(op1);
 	memset(op1+op1Len, 0, MAXDIGITS-op1Len-1);
 	op2 = s+MAXDIGITS;
-	operation(op1, op2, oper);
+	operation(op1, op2, oper[0]);
 }
 
 int main(int argc, char **argv)
