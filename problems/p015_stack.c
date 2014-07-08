@@ -35,6 +35,10 @@ void printStack(stack *st)
 {
 	int i, top;
 
+	if (!DEBUG) {
+		return;
+	}
+
 	top = st->top;
 	printf("Stack is: ");
 	for (i=0; i<=top; i++) {
@@ -44,7 +48,7 @@ void printStack(stack *st)
 }
 
 
-int mainTest (int argc, char **argv)
+int stackTest (int argc, char **argv)
 {
 	stack * st;
 	st = createStack(20);

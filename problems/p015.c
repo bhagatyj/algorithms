@@ -54,6 +54,8 @@ After all tokens are read, the remaining operators on stack are popped and evalu
 #define FALSE 0
 #define MAXSIZE 401
 #define MAXWORKINGSIZE 3*MAXSIZE
+
+
 char wSet[MAXWORKINGSIZE];
 
 typedef struct __queue__ {
@@ -77,6 +79,10 @@ void add(queue *q, char c)
 void printQ(queue *q)
 {
 	int i;
+
+	if (!DEBUG) {
+		return;
+	}
 	printf("Queue is : ");
 	for (i=0; i<q->top; i++) {
 		printf("%c", q->values[i]);
@@ -102,9 +108,6 @@ int popCMoreThanCurrent(char popC, char c)
 		return TRUE;
 	}
 	switch(c) {
-		case ')':
-			return !(isOneOf(popC, "("));
-			break;
 		case '+':
 			return isOneOf(popC, "-*/^");
 		case '-':
@@ -119,17 +122,37 @@ int popCMoreThanCurrent(char popC, char c)
 	return FALSE;
 }
 
+void evaluateTillParen(queue *nq, stack *ost)
+{
+	char popC;
+
+	while ((popC = pop(ost)) != 0) {
+		if (popC == '(') {
+			break;
+		}
+		add(nq, popC);
+	}
+}
+
 void evaluate(queue *nq, stack *ost, char c)
 {
 	char popC;
 
+	if (c == ')') {
+		evaluateTillParen(nq, ost);
+		return;
+	}
+
 	popC = pop(ost);
 
 	// Check for End-Reached.
-	printf("Popped %c\n", popC);
+	if (DEBUG) {
+		printf("Popped %c\n", popC);
+	}
 	if (popC == 0) {
 		return;
 	}
+
 
 	if (popCMoreThanCurrent(popC, c)) {
 		evaluate(nq, ost, popC);
@@ -153,8 +176,10 @@ void convertToRPN(char *p)
 
 	while (*p) {
 		c = *p++;
-		printf("\nEvaluating %c\n", c);
-		printQ(nq); printStack(ost);
+		if (DEBUG) {
+			printf("\nEvaluating %c\n", c);
+			printQ(nq); printStack(ost);
+		}
 		if (isalpha(c)) {
 			add(nq, c);
 			continue;
@@ -176,11 +201,13 @@ void convertToRPN(char *p)
 	printQ(nq);
 }
 
-int main(int argc, char **argv)
+void mainTest(int argc, char **argv)
 {
 	convertToRPN("(a+(b*c))");
+	convertToRPN("a*b+c");
+	convertToRPN("((a+t)*((b+(a+c))^(c+d)))");
 }
-/*
+
 int main(int argc, char **argv)
 {
 	int i, count, size;
@@ -203,4 +230,3 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
-*/
