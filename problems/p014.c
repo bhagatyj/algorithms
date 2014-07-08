@@ -55,10 +55,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define FALSE 0
 #define TRUE 1
-#define MAXSIZE 1000001
+#define MAXSIZE 1000002
+
+int isStringPallindrome(char *s)
+{
+	int len = strlen(s);
+	int i;
+
+	if (len <= 1) {
+		return TRUE;
+	}
+	i = 0;
+
+	while (i <= len/2) {
+		if ( *(s+i) == *(s+len-1-i) ) {
+			i++;
+		} else {
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
 
 int isBridgedBy9(char *s, int p1, int p2)
 {
@@ -72,20 +93,30 @@ int isBridgedBy9(char *s, int p1, int p2)
 	return TRUE;
 }
 
-int incrPos(char *s, int pos)
+int incrPos(char *s, int pos, int len)
 {
+	int i;
+
+	//printf("IncrPos str:%s pos:%d len:%d\n", s, pos, len);
+	//sleep(1);
 	// In this problem, we should never have to
 	// increment the 0th digit from 9 to 10.
 	if ((pos == 0) && (s[pos] == '9')) {
-		printf("Error Case reached\n");
-		return -1;
+		// happens in a rare case where the given string
+		// is already a pall filled with 9-s
+
+		for (i=len-1; i>=0; i--) {
+			s[i+1] = s[i];
+		}
+		s[0] = '0';
+		return incrPos(s, 1, len+1);
 	}
 	if (s[pos] != '9') {
 		s[pos] += 1;
 		return pos;
 	} else {
 		s[pos] = '0';
-		return incrPos(s, pos-1);
+		return incrPos(s, pos-1, len);
 	}
 }
 
@@ -119,7 +150,7 @@ void findNextPall(char *s, int lPos, int len)
 			return;
 		}
 		s[rPos] = s[lPos];
-		changedPosition = incrPos(s, rPos-1);
+		changedPosition = incrPos(s, rPos-1, len);
 		if (changedPosition < lPos) {
 			printf("Error case reached\n");
 			exit(-1);
@@ -132,7 +163,7 @@ void findNextPall(char *s, int lPos, int len)
 int main(int argc, char **argv)
 {
 
-	int i, count, size, len;
+	int i, count, size, len, pos;
 	char *x;
 
 	scanf("%d", &count);
@@ -148,6 +179,14 @@ int main(int argc, char **argv)
 	for (i=0; i<count; i++) {
 		char *p = x+(i*MAXSIZE);
 		len = strlen(p);
+		if (isStringPallindrome(p)) {
+			//printf("String is pall\n");
+			pos = incrPos(p, len-1, len);
+			if ((pos == 0) && (p[pos] == '1')) {
+				len = len+1;
+			}
+		}
+		//printf("String is %s\n",p);
 		findNextPall(p, 0, len);
 		printf("%s\n", p);
 	}
