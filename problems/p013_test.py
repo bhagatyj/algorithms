@@ -23,8 +23,8 @@ def singleTest(qn, ansExp):
 	count = count + 1
 	print "Test number: " + str(count)
 	print "Test input : " + qn
-	print "Expected Answer : " + ansExp
-	print "Got this Answer : " + ansGot
+	print "Expected Answer : \n" + ansExp
+	print "Got this Answer : \n" + ansGot
 	ansExp = ansExp + '\n'
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
@@ -32,13 +32,18 @@ def singleTest(qn, ansExp):
 
 
 
-def smallDigitTests():
+def singleTests():
 	singleTest('12345+67890', ' 12345\n+67890\n------\n 80235')
+	singleTest('12345+7890', ' 12345\n+ 7890\n------\n 20235')
+	singleTest('12345+0', ' 12345\n+    0\n------\n 12345')
+	singleTest('12345+90', ' 12345\n+   90\n------\n 12435')
+	singleTest('45+67890', '    45\n+67890\n------\n 67935')
+
+	singleTest('12345-90', ' 12345\n-   90\n------\n 12255')
 
 
 def runTests():
-	smallDigitTests()
-	largeDigitTest1()
+	singleTests()
 	printline()
 	print "Tests: %d\nPass: %d" %(count, passCount)
 	printline()
@@ -57,4 +62,4 @@ def testP013():
 	cleanup()
 
 
-testP014()
+testP013()
