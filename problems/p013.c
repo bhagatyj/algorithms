@@ -1,8 +1,3 @@
-
-
-
-
-
 /*
 One part of the new WAP portal is also a calculator computing expressions with 
 very long numbers. To make the output look better, the result is formated the 
@@ -94,3 +89,14 @@ Sample Output:
 4936
 
 */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define FALSE 0
+#define TRUE 1
+#define MAXSIZE 1000002
+
