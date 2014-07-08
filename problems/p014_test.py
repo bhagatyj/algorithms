@@ -1,36 +1,35 @@
-import pexpect
+from subprocess import Popen, PIPE
 import os
 
 count = 0
-
+passCount = 0
 def printline():
 	x = ''
 	for i in range(80):
 		x = x + "="
 	print x
 
-def singleTest(send, ansExp):
-	global count
 
-	child = pexpect.spawn('./p014', maxread=10000)
-	child.sendline('1')
-	child.expect('1')
-	child.sendline(send)
-	child.expect(send)
+def singleTest(qn, ansExp):
+	global count, passCount
 
-	pattern = '[0-9]{%d}' %(len(send))
-	print "Expecting %s" %pattern
-	child.expect(pattern)
-	ansGot = child.match.group()
+	child = Popen("./p014", stdin=PIPE, stdout=PIPE)
+	child.stdin.write('1\n')
+	child.stdin.write(qn + '\n')
+	#print "Waiting for read"
+	ansGot =  child.stdout.read()
+
 	printline()
 	count = count + 1
 	print "Test number: " + str(count)
-	print "Test input : " + send
+	print "Test input : " + qn
 	print "Expected Answer : " + ansExp
 	print "Got this Answer : " + ansGot
+	ansExp = ansExp + '\n'
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
-	#print ans
+	passCount = passCount + 1
+
 
 
 def smallDigitTests():
@@ -77,6 +76,9 @@ def largeDigitTest1():
 def runTests():
 	smallDigitTests()
 	largeDigitTest1()
+	printline()
+	print "Tests: %d\nPass: %d" %(count, passCount)
+	printline()
 
 def compileP014():
 	ret = os.system('gcc -g -Wall p014.c -o p014')
