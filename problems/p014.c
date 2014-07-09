@@ -160,19 +160,20 @@ void findNextPall(char *s, int lPos, int len)
 	}
 }
 
+char x[MAXSIZE*100];
 int main(int argc, char **argv)
 {
 
 	int i, count, size, len, pos;
-	char *x;
+	//char *x;
 
 	scanf("%d", &count);
 	if (count > 100) {
 		exit(1);
 	}
-	size = sizeof(char)*MAXSIZE*count;
-	x = (char *) malloc(size);
-	memset(x, 0, size);
+	//size = sizeof(char)*MAXSIZE*count;
+	//x = (char *) malloc(size);
+	//memset(x, 0, size);
 	for (i=0; i<count; i++) {
 		scanf("%s", x+(i*MAXSIZE));
 	}

@@ -16,7 +16,6 @@ def singleTest(qn, ansExp):
 	child = Popen("./p013", stdin=PIPE, stdout=PIPE)
 	child.stdin.write('1\n')
 	child.stdin.write(qn + '\n')
-	#print "Waiting for read"
 	ansGot =  child.stdout.read()
 
 	printline()

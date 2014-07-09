@@ -48,7 +48,6 @@ After all tokens are read, the remaining operators on stack are popped and evalu
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "p015_stack.h"
 
 #define TRUE 1
 #define FALSE 0

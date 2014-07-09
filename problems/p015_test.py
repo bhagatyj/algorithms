@@ -45,7 +45,7 @@ def runTests():
 
 
 def compileP014():
-	ret = os.system('gcc -g -Wall p015_2.c -o p015')
+	ret = os.system('gcc -g -Wall p015.c -o p015')
 	if (ret != 0):
 		raise Exception("Did not compile")
 
