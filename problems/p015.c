@@ -1,4 +1,6 @@
 /*
+
+
 SPOJ : Classic-P4 
 Transform the algebraic expression with brackets into RPN form (Reverse Polish Notation). 
 Two-argument operators: +, -, *, /, ^ (priority from the lowest to the highest), brackets ( ). 
@@ -42,12 +44,93 @@ After all tokens are read, the remaining operators on stack are popped and evalu
 
 
 */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+#define MAXSTACKSIZE 1000
+#define DEBUG 0
+
+typedef struct __stack__ {
+	char values[MAXSTACKSIZE];
+	int top;
+} stack;
+
+stack * createStack();
+
+void push(stack *st, char c);
+
+char pop(stack *st);
+
+void printStack(stack *st);
+
+
+stack * createStack(int size)
+{
+	stack *st = malloc(sizeof(stack));
+	memset(st, 0, sizeof(stack));
+	return st;
+}
+
+void push(stack *st, char c)
+{
+
+	if (st->top != MAXSTACKSIZE-1) {
+		st->values[++st->top] = c;
+	}
+	//printf("pushed %c\n", c);
+
+}
+
+char pop(stack *st) 
+{
+	char c;
+	int top = st->top;
+
+	if (top == 0) {
+		return 0;
+	}
+	c = st->values[top];
+	st->values[top] = 0;
+	st->top--;
+	return c;
+}
+
+void printStack(stack *st)
+{
+	int i, top;
+
+	if (!DEBUG) {
+		return;
+	}
+
+	top = st->top;
+	printf("Stack is: ");
+	for (i=0; i<=top; i++) {
+		printf("%c", st->values[i]);
+	}
+	printf("\n");
+}
+
+
+int stackTest (int argc, char **argv)
+{
+	stack * st;
+	st = createStack(20);
+
+	push(st, 'a');
+	push(st, 'n');
+	push(st, 'u');
+	push(st, 'g');
+	printStack(st);
+	printf("%c\n", pop(st));
+	printStack(st);
+
+	return 0;
+
+}
+
 
 #define TRUE 1
 #define FALSE 0
@@ -79,10 +162,7 @@ void printQ(queue *q)
 {
 	int i;
 
-	if (!DEBUG) {
-		return;
-	}
-	printf("Queue is : ");
+	//printf("Queue is : ");
 	for (i=0; i<q->top; i++) {
 		printf("%c", q->values[i]);
 	}
@@ -159,7 +239,7 @@ void evaluate(queue *nq, stack *ost, char c)
 		push(ost, popC);
 		return;
 	}
-	printf("Adding %c to queue\n", popC);
+	//printf("Adding %c to queue\n", popC);
 	add(nq, popC);
 }
 
@@ -167,10 +247,10 @@ void convertToRPN(char *p)
 {
 	stack *ost;
 	queue *nq;
-	char dst[MAXSIZE], c;
+	char c;
 
-	printf("Infix: %s\n", p);
-	ost = createStack();
+	//printf("Infix: %s\n", p);
+	ost = createStack(MAXSIZE);
 	nq = createQueue();
 
 	while (*p) {
@@ -225,7 +305,7 @@ int main(int argc, char **argv)
 	for (i=0; i<count; i++) {
 		char *p = x+(i*MAXSIZE);
 		convertToRPN(p);
-		printf("%s\n", p);
+		//printf("%s\n", p);
 	}
 	return 0;
 }
