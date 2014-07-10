@@ -16,36 +16,72 @@
 #define MAXSTACKSIZE 256
 
 typedef struct __stack__ {
-	char * lines[MAXSTACKSIZE];
+	char ** lines;
 	int top;
+	int numLines;
 } stack;
+
+stack * createStringStack(int numLines)
+{
+	stack *st;
+
+	st = (stack *)malloc(sizeof(stack));
+	st->lines = (char **)malloc(sizeof(char *) * numLines);
+	st->top = -1;
+	st->numLines = numLines;
+	return st;
+}
+
+void deleteStringStack(stack *st)
+{
+	free(st->lines);
+	free(st);
+}
 
 void push(stack *st, char *line)
 {
-	return;
+	if (st->top == st->numLines) {
+		printf("Too many lines\n");
+		return;
+	}
+	st->lines[++st->top] = line;
 }
 
 char * pop(stack *st)
 {
-	return NULL;
+	char *line;
+
+	if (st->top == -1) {
+		return NULL;
+	}
+	line = st->lines[st->top];
+	st->lines[st->top] = NULL;
+	st->top--;
+	return line;
 }
 
+int size(stack *st)
+{
+	return st->top + 1;
+}
 
 int main(int argc, char **argv)
 {
 	char *line, input[MAXCHAR], *x;
 	int len;
+	stack *st;
 
+	st = createStringStack(256);
 	x = fgets(input, MAXCHAR, stdin);
 	while (x) {
 		len = strlen(x);
 		line = (char *)malloc(sizeof(char)*len);
 		strcpy(line, x);
-		push(line);
+		push(st, line);
 		x = fgets(input, MAXCHAR, stdin);
 	}
-	while ((x = pop()) != NULL) {
-		printf("%s\n", x);
+	while ((x = pop(st)) != NULL) {
+		printf("%s", x);
 	}
 
 }

@@ -25,7 +25,8 @@ def singleTest(qn, ansExp):
 	global count
 
 	child = Popen("./exe", stdin=PIPE, stdout=PIPE)
-	child.stdin.write(qn + '\n')
+	child.stdin.write(qn)
+	child.stdin.close()
 	#print "Waiting for read"
 	#time.sleep(1)
 	ansGot =  child.stdout.read()
@@ -41,7 +42,7 @@ def singleTest(qn, ansExp):
 
 
 def smallDigitTests():
-	singleTest('Hello\nHow\nAre\nYou?\n'), 'You?\nAre\nHow\n\Hello\n')
+	singleTest('Hello\nHow\nAre\nYou?\n', 'You?\nAre\nHow\nHello\n')
 
 def runTests():
 	smallDigitTests()
