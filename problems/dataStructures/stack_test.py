@@ -76,8 +76,8 @@ def cleanup():
 
 def testP014():
 	global count
-	sources = ["stack_llar_amortized.c", "stack_llar.c", 
-			"stack_ll.c", "stack.c"]
+	sources = ["stack_ll_arr_amortized.c", "stack_ll_arr.c", 
+			"stack_ll.c", "stack_arr.c"]
 	for source in sources:
 		print
 		count = 0
