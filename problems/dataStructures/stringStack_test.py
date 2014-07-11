@@ -75,7 +75,7 @@ def cleanup():
 
 def testP014():
 	#sources = ["stringStack_ll.c", "stringStack.c"]
-	sources = ["stringStack_llar.c"]
+	sources = ["stack_llar_amortized.c"]
 	for source in sources:
 		compileCode(source)
 		runTests()
