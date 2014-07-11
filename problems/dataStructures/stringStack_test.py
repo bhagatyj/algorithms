@@ -74,7 +74,8 @@ def cleanup():
 	os.system('rm exe')
 
 def testP014():
-	sources = ["stringStack_ll.c", "stringStack.c"]
+	#sources = ["stringStack_ll.c", "stringStack.c"]
+	sources = ["stringStack_llar.c"]
 	for source in sources:
 		compileCode(source)
 		runTests()
