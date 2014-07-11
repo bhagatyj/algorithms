@@ -10,6 +10,9 @@
 // 
 #include "stack.h"
 
+#define BLOCKSIZE 16
+
+
 typedef struct __stackNode__ {
 	void * items[BLOCKSIZE];
 	struct __stackNode__ *next;
@@ -21,8 +24,7 @@ typedef struct __stack__ {
 	int allocCount;
 } stack;
 
-
-stack * createStack()
+void * createStack()
 {
 	stack *st;
 
@@ -30,13 +32,14 @@ stack * createStack()
 	st->head = NULL;
 	st->count = 0;
 	st->allocCount = 0;
-	return st;
+	return (void *)st;
 }
 
-void push(stack *st, void *item)
+void push(void *s, void *item)
 {
 	stackNode *node;
 	int slot;
+	stack *st = (stack *)s;
 
 	if ((st->count + 1) > st->allocCount) {
 		node = (stackNode *)malloc(sizeof(stackNode));
@@ -56,11 +59,12 @@ void push(stack *st, void *item)
 	st->count++;
 }
 
-void * pop(stack *st)
+void * pop(void *s)
 {
 	stackNode *node;
 	void *item;
 	int slot;
+	stack *st = (stack *)s;
 
 	if (st->count == 0) {
 		return NULL;
@@ -87,16 +91,22 @@ void * pop(stack *st)
 
 }
 
-void deleteStack(stack *st)
+
+void deleteStack(void *s)
 {
-	while (st->head) {
+	stack *st = (stack *)s;
+	while (st->count) {
 		pop(st);
+	}
+	if (st->head) {
+		free(st->head);
 	}
 	free(st);
 }
 
 
-int size(stack *st)
+int size(void *st)
 {
-	return st->count;
+	return ((stack *)st)->count;
 }
+
