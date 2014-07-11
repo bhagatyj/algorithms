@@ -65,6 +65,7 @@ def runTests():
 
 
 def compileCode(source):
+	printline();
 	print "Compiling %s" % source
 	ret = os.system('gcc -g -Wall %s -o exe' %source)
 	if (ret != 0):
@@ -74,9 +75,12 @@ def cleanup():
 	os.system('rm exe')
 
 def testP014():
-	#sources = ["stringStack_ll.c", "stringStack.c"]
-	sources = ["stack_llar_amortized.c"]
+	global count
+	sources = ["stack_llar_amortized.c", "stack_llar.c", 
+			"stack_ll.c", "stack.c"]
 	for source in sources:
+		print
+		count = 0
 		compileCode(source)
 		runTests()
 		cleanup()
