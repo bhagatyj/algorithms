@@ -5,7 +5,7 @@
 #include "queue.h"
 
 typedef struct __queue__ {
-	void *items[MAXQSIZE];
+	void *items[MAXQSIZE+1];
 	int head;
 	int tail;
 } queue;
@@ -29,7 +29,7 @@ void enqueue(void *qp, void *item)
 {
 
 	queue *q = (queue *)qp;
-	if ((q->head +1)%MAXQSIZE == q->tail) {
+	if ((q->head +1)%(MAXQSIZE+1) == q->tail) {
 		printf("Too many items\n");
 		return;
 	}
