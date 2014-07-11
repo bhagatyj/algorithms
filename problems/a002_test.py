@@ -34,22 +34,38 @@ def singleTest(qn, ansExp):
 	printline()
 	count = count + 1
 	print "Test number: " + str(count)
-	print "Test input : \n" + qn
-	print "Expected Answer :\n" + ansExp
-	print "Got this Answer :\n" + ansGot
+	# print "Test input : \n" + qn
+	# print "Expected Answer :\n" + ansExp
+	# print "Got this Answer :\n" + ansGot
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
+	else:
+		print("Passed")
 
 
 def smallDigitTests():
 	singleTest('Hello\nHow\nAre\nYou?\n', 'You?\nAre\nHow\nHello\n')
+	qn = ""
+	ans = ""
+	for i in range(256):
+		qn = qn + "x\n"
+		ans = ans + "x\n"
+	singleTest(qn, ans)
+	qn = ""
+	ans = ""
+	count = 256
+	for i in range(count):
+		qn = qn + ("%d\n" %i)
+		ans = ans + ("%d\n" %(count-1-i))
+	singleTest(qn, ans)
 
 def runTests():
 	smallDigitTests()
+	printline()
 
 
 def compileCode():
-	ret = os.system('gcc -g -Wall a002.c -o exe')
+	ret = os.system('gcc -g -Wall a002_ll.c -o exe')
 	if (ret != 0):
 		raise Exception("Did not compile")
 
