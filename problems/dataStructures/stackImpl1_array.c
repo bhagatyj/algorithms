@@ -6,21 +6,9 @@
 // UseCase
 	// Get strings from STDIN
 	// And print them in reverse order.
-// 9:25
-// 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "stack.h"
 
-#define MAXCHAR 256
-#define MAXSTACKSIZE 256
-
-typedef struct __stack__ {
-	void *items[MAXSTACKSIZE];
-	int top;
-} stack;
-
-stack * createStringStack()
+stack * createStack()
 {
 	stack *st;
 
@@ -29,7 +17,7 @@ stack * createStringStack()
 	return st;
 }
 
-void deleteStringStack(stack *st)
+void deleteStack(stack *st)
 {
 	free(st);
 }
@@ -59,25 +47,4 @@ void * pop(stack *st)
 int size(stack *st)
 {
 	return st->top;
-}
-
-int main(int argc, char **argv)
-{
-	char *line, input[MAXCHAR], *x;
-	int len;
-	stack *st;
-
-	st = createStringStack();
-	x = fgets(input, MAXCHAR, stdin);
-	while (x) {
-		len = strlen(x);
-		line = (char *)malloc(sizeof(char)*len);
-		strcpy(line, x);
-		push(st, (void *)line);
-		x = fgets(input, MAXCHAR, stdin);
-	}
-	while ((x = (char *)pop(st)) != NULL) {
-		printf("%s", x);
-	}
-
 }
