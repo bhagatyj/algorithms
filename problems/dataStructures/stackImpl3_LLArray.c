@@ -8,26 +8,10 @@
 	// And print them in reverse order.
 // 9:25
 // 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define BLOCKSIZE 16
-#define MAXCHAR 256
-
-typedef struct __stackNode__ {
-	void * items[BLOCKSIZE];
-	struct __stackNode__ *next;
-} stackNode;
-
-typedef struct __stack__ {
-	stackNode *head;
-	int count;
-	int allocCount;
-} stack;
+#include "stack.h"
 
 
-stack * createStringStack()
+stack * createStack()
 {
 	stack *st;
 
@@ -80,7 +64,7 @@ void * pop(stack *st)
 
 }
 
-void deleteStringStack(stack *st)
+void deleteStack(stack *st)
 {
 	while (st->head) {
 		pop(st);
@@ -92,27 +76,4 @@ void deleteStringStack(stack *st)
 int size(stack *st)
 {
 	return st->count;
-}
-
-// Allocating the string is the application's job.
-// Stack implementor just does push/pop.
-int main(int argc, char **argv)
-{
-	char input[MAXCHAR], *x;
-	stack *st;
-
-	st = createStringStack();
-	x = fgets(input, MAXCHAR, stdin);
-	while (x) {
-		char *line;
-		line = (char*)malloc(MAXCHAR*sizeof(char));
-		strcpy(line, x);
-		push(st, (void *)line);
-		x = fgets(input, MAXCHAR, stdin);
-	}
-	while ((x = pop(st)) != NULL) {
-		printf("%s", (char *)x);
-		free(x);
-	}
-
 }

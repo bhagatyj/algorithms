@@ -8,12 +8,7 @@
 	// And print them in reverse order.
 // 9:25
 // 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAXSTACKSIZE 256
-#define MAXCHAR 256
+#include "stack.h"
 
 typedef struct __stackNode__ {
 	void * item;
@@ -26,19 +21,20 @@ typedef struct __stack__ {
 } stack;
 
 
-stack * createStringStack()
+void * createStack()
 {
 	stack *st;
 
 	st = (stack *)malloc(sizeof(stack));
 	st->head = NULL;
 	st->count = 0;
-	return st;
+	return (void *)st;
 }
 
-void push(stack *st, void *item)
+void push(void *s, void *item)
 {
 	stackNode *node;
+	stack *st = (stack *)s;
 
 	node = (stackNode *)malloc(sizeof(stackNode));
 	node->item = item;
@@ -47,10 +43,11 @@ void push(stack *st, void *item)
 	st->count++;
 }
 
-void * pop(stack *st)
+void * pop(void *s)
 {
 	stackNode *node;
 	void *item;
+	stack *st = (stack *)s;
 
 	if (st->count == 0) {
 		return NULL;
@@ -64,8 +61,9 @@ void * pop(stack *st)
 	return item;
 }
 
-void deleteStringStack(stack *st)
+void deleteStack(void *s)
 {
+	stack *st = (stack *)s;
 	while (st->head) {
 		pop(st);
 	}
@@ -73,30 +71,7 @@ void deleteStringStack(stack *st)
 }
 
 
-int size(stack *st)
+int size(void *st)
 {
-	return st->count;
-}
-
-// Allocating the string is the application's job.
-// Stack implementor just does push/pop.
-int main(int argc, char **argv)
-{
-	char input[MAXCHAR], *x;
-	stack *st;
-
-	st = createStringStack();
-	x = fgets(input, MAXCHAR, stdin);
-	while (x) {
-		char *line;
-		line = (char*)malloc(MAXCHAR*sizeof(char));
-		strcpy(line, x);
-		push(st, (void *)line);
-		x = fgets(input, MAXCHAR, stdin);
-	}
-	while ((x = pop(st)) != NULL) {
-		printf("%s", (char *)x);
-		free(x);
-	}
-
+	return ((stack *)st)->count;
 }

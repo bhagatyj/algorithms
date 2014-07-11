@@ -8,22 +8,28 @@
 	// And print them in reverse order.
 #include "stack.h"
 
-stack * createStack()
+typedef struct __stack__ {
+	void *items[MAXSTACKSIZE];
+	int top;
+} stack;
+
+void * createStack()
 {
 	stack *st;
 
 	st = (stack *)malloc(sizeof(stack));
 	st->top = 0;
-	return st;
+	return (void *)st;
 }
 
-void deleteStack(stack *st)
+void deleteStack(void *st)
 {
-	free(st);
+	free((stack *)st);
 }
 
-void push(stack *st, void *item)
+void push(void *s, void *item)
 {
+	stack *st = (stack *)s;
 	if (st->top == MAXSTACKSIZE) {
 		printf("Too many items\n");
 		return;
@@ -31,9 +37,10 @@ void push(stack *st, void *item)
 	st->items[st->top++] = item;
 }
 
-void * pop(stack *st)
+void * pop(void *s)
 {
 	void *item;
+	stack *st = (stack *)s;
 
 	if (st->top) {
 		item = st->items[--st->top];
@@ -44,7 +51,7 @@ void * pop(stack *st)
 
 }
 
-int size(stack *st)
+int size(void *st)
 {
-	return st->top;
+	return ((stack *)st)->top;
 }

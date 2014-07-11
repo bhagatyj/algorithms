@@ -5,7 +5,7 @@ int main(int argc, char **argv)
 {
 	char *line, input[MAXCHAR], *x;
 	int len;
-	stack *st;
+	void *st;
 
 	st = createStack();
 	x = fgets(input, MAXCHAR, stdin);

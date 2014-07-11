@@ -67,7 +67,7 @@ def runTests():
 def compileCode(source):
 	printline();
 	print "Compiling %s" % source
-	ret = os.system('gcc -g -Wall %s -o exe' %source)
+	ret = os.system('gcc -g -Wall %s stackMain.c -o exe' %source )
 	if (ret != 0):
 		raise Exception("Did not compile")
 
@@ -76,8 +76,8 @@ def cleanup():
 
 def testP014():
 	global count
-	sources = ["stack_ll_arr_amortized.c", "stack_ll_arr.c", 
-			"stack_ll.c", "stack_arr.c"]
+	sources = ["stackImpl1_array.c", "stackImpl2_LL.c", 
+			"stackImpl3_LLArray.c", "stackImpl4_AmortizedLLArray.c"]
 	for source in sources:
 		print
 		count = 0
