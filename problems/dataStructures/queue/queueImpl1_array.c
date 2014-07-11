@@ -4,8 +4,12 @@
 	// And print them in reverse order.
 #include "queue.h"
 
+/* 
+ * CRITICAL
+ * Queue size has to be Desired-size + 1 <---
+*/
 typedef struct __queue__ {
-	void *items[MAXQSIZE+1];
+	void *items[MAXQSIZE+1]; // <----
 	int head;
 	int tail;
 } queue;
