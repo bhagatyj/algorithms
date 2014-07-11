@@ -16,7 +16,7 @@
 #define MAXCHAR 256
 
 typedef struct __stackNode__ {
-	char * line;
+	void * item;
 	struct __stackNode__ *next;
 } stackNode;
 
@@ -36,21 +36,21 @@ stack * createStringStack()
 	return st;
 }
 
-void push(stack *st, char *x)
+void push(stack *st, void *item)
 {
 	stackNode *node;
 
 	node = (stackNode *)malloc(sizeof(stackNode));
-	node->line = x;
+	node->item = item;
 	node->next = st->head;
 	st->head = node;
 	st->count++;
 }
 
-char * pop(stack *st)
+void * pop(stack *st)
 {
 	stackNode *node;
-	char *x;
+	void *item;
 
 	if (st->count == 0) {
 		return NULL;
@@ -59,9 +59,9 @@ char * pop(stack *st)
 	node = st->head;
 	st->head = node->next;
 	st->count--;
-	x = node->line;
+	item = node->item;
 	free(node);
-	return x;
+	return item;
 }
 
 void deleteStringStack(stack *st)
@@ -91,11 +91,11 @@ int main(int argc, char **argv)
 		char *line;
 		line = (char*)malloc(MAXCHAR*sizeof(char));
 		strcpy(line, x);
-		push(st, line);
+		push(st, (void *)line);
 		x = fgets(input, MAXCHAR, stdin);
 	}
 	while ((x = pop(st)) != NULL) {
-		printf("%s", x);
+		printf("%s", (char *)x);
 		free(x);
 	}
 
