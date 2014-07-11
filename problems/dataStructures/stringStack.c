@@ -8,61 +8,57 @@
 	// And print them in reverse order.
 // 9:25
 // 
-#define MAXCHAR 256
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#define MAXCHAR 256
 #define MAXSTACKSIZE 256
 
 typedef struct __stack__ {
-	char ** lines;
+	char *lines[MAXSTACKSIZE];
 	int top;
-	int numLines;
 } stack;
 
-stack * createStringStack(int numLines)
+stack * createStringStack()
 {
 	stack *st;
 
 	st = (stack *)malloc(sizeof(stack));
-	st->lines = (char **)malloc(sizeof(char *) * numLines);
-	st->top = -1;
-	st->numLines = numLines;
+	st->top = 0;
 	return st;
 }
 
 void deleteStringStack(stack *st)
 {
-	free(st->lines);
 	free(st);
 }
 
 void push(stack *st, char *line)
 {
-	if (st->top == st->numLines) {
+	if (st->top == MAXSTACKSIZE) {
 		printf("Too many lines\n");
 		return;
 	}
-	st->lines[++st->top] = line;
+	st->lines[st->top++] = line;
 }
 
 char * pop(stack *st)
 {
 	char *line;
 
-	if (st->top == -1) {
-		return NULL;
+	if (st->top) {
+		line = st->lines[--st->top];
+		st->lines[st->top] = NULL;
+		return line;
 	}
-	line = st->lines[st->top];
-	st->lines[st->top] = NULL;
-	st->top--;
-	return line;
+	return NULL;
+
 }
 
 int size(stack *st)
 {
-	return st->top + 1;
+	return st->top;
 }
 
 int main(int argc, char **argv)
@@ -71,7 +67,7 @@ int main(int argc, char **argv)
 	int len;
 	stack *st;
 
-	st = createStringStack(256);
+	st = createStringStack();
 	x = fgets(input, MAXCHAR, stdin);
 	while (x) {
 		len = strlen(x);

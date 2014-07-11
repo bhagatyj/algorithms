@@ -35,8 +35,8 @@ def singleTest(qn, ansExp):
 	count = count + 1
 	print "Test number: " + str(count)
 	# print "Test input : \n" + qn
-	# print "Expected Answer :\n" + ansExp
-	# print "Got this Answer :\n" + ansGot
+	print "Expected Answer :\n" + ansExp
+	print "Got this Answer :\n" + ansGot
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
 	else:
@@ -65,7 +65,9 @@ def runTests():
 
 
 def compileCode():
-	ret = os.system('gcc -g -Wall a002_ll.c -o exe')
+	source = "stringStack_ll.c"
+	print "Compiling %s" % source
+	ret = os.system('gcc -g -Wall %s -o exe' %source)
 	if (ret != 0):
 		raise Exception("Did not compile")
 

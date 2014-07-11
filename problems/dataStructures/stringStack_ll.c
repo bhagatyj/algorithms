@@ -16,7 +16,7 @@
 #define MAXCHAR 256
 
 typedef struct __stackNode__ {
-	char line[MAXCHAR];
+	char * line;
 	struct __stackNode__ *next;
 } stackNode;
 
@@ -36,26 +36,21 @@ stack * createStringStack()
 	return st;
 }
 
-void push(stack *st, char *line)
+void push(stack *st, char *x)
 {
 	stackNode *node;
-	int len;
 
 	node = (stackNode *)malloc(sizeof(stackNode));
-	len = strlen(line);
-	if (len > MAXCHAR) {
-		printf("Too Long string\n");
-		return;
-	}
-	strncpy(node->line, line, len);
+	node->line = x;
 	node->next = st->head;
 	st->head = node;
 	st->count++;
 }
 
-char * pop(stack *st, char *line)
+char * pop(stack *st)
 {
 	stackNode *node;
+	char *x;
 
 	if (st->count == 0) {
 		return NULL;
@@ -64,16 +59,15 @@ char * pop(stack *st, char *line)
 	node = st->head;
 	st->head = node->next;
 	st->count--;
-	strcpy(line, node->line);
+	x = node->line;
 	free(node);
-	return line;
+	return x;
 }
 
 void deleteStringStack(stack *st)
 {
-	char x[MAXCHAR];
 	while (st->head) {
-		pop(st, x);
+		pop(st);
 	}
 	free(st);
 }
@@ -84,23 +78,25 @@ int size(stack *st)
 	return st->count;
 }
 
+// Allocating the string is the application's job.
+// Stack implementor just does push/pop.
 int main(int argc, char **argv)
 {
 	char input[MAXCHAR], *x;
-	int len;
 	stack *st;
 
 	st = createStringStack();
 	x = fgets(input, MAXCHAR, stdin);
 	while (x) {
-		len = strlen(x);
-		push(st, x);
+		char *line;
+		line = (char*)malloc(MAXCHAR*sizeof(char));
+		strcpy(line, x);
+		push(st, line);
 		x = fgets(input, MAXCHAR, stdin);
 	}
-	//memset(input, 0, MAXCHAR);
-	while ((x = pop(st, input)) != NULL) {
+	while ((x = pop(st)) != NULL) {
 		printf("%s", x);
-		//memset(input, 0, MAXCHAR);
+		free(x);
 	}
 
 }
