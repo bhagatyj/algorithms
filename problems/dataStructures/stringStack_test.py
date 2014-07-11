@@ -65,7 +65,7 @@ def runTests():
 
 
 def compileCode():
-	source = "stringStack_ll.c"
+	source = "stringStack.c"
 	print "Compiling %s" % source
 	ret = os.system('gcc -g -Wall %s -o exe' %source)
 	if (ret != 0):

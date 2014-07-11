@@ -16,7 +16,7 @@
 #define MAXSTACKSIZE 256
 
 typedef struct __stack__ {
-	char *lines[MAXSTACKSIZE];
+	void *items[MAXSTACKSIZE];
 	int top;
 } stack;
 
@@ -34,23 +34,23 @@ void deleteStringStack(stack *st)
 	free(st);
 }
 
-void push(stack *st, char *line)
+void push(stack *st, void *item)
 {
 	if (st->top == MAXSTACKSIZE) {
-		printf("Too many lines\n");
+		printf("Too many items\n");
 		return;
 	}
-	st->lines[st->top++] = line;
+	st->items[st->top++] = item;
 }
 
-char * pop(stack *st)
+void * pop(stack *st)
 {
-	char *line;
+	void *item;
 
 	if (st->top) {
-		line = st->lines[--st->top];
-		st->lines[st->top] = NULL;
-		return line;
+		item = st->items[--st->top];
+		st->items[st->top] = NULL;
+		return item;
 	}
 	return NULL;
 
@@ -73,10 +73,10 @@ int main(int argc, char **argv)
 		len = strlen(x);
 		line = (char *)malloc(sizeof(char)*len);
 		strcpy(line, x);
-		push(st, line);
+		push(st, (void *)line);
 		x = fgets(input, MAXCHAR, stdin);
 	}
-	while ((x = pop(st)) != NULL) {
+	while ((x = (char *)pop(st)) != NULL) {
 		printf("%s", x);
 	}
 
