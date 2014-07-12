@@ -76,7 +76,8 @@ def cleanup():
 
 def testP014():
 	global count
-	sources = ["queueImpl1_array.c", "queueImpl2_ll.c", "queueImpl3_LlArray.c"]
+	#sources = ["queueImpl1_array.c", "queueImpl2_ll.c", "queueImpl3_LlArray.c"]
+	sources = ["queueImpl3_LlArray.c"]
 	for source in sources:
 		print
 		count = 0

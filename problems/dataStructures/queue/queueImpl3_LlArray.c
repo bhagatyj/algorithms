@@ -70,7 +70,7 @@ typedef struct __queue__ {
 	int headIdx;
 	int tailIdx;
 	int count;
-	int allocCount;
+	int numBlocks;
 } queue;
 
 
@@ -81,10 +81,10 @@ void * createQueue()
 	q = (queue *) malloc(sizeof(queue));
 	q->headBlock = NULL;
 	q->tailBlock = NULL;
-	q->headIdx;
-	q->tailIdx;
-	q->count = 0;
-	q->allocCount = 0;
+	q->headIdx = 0;
+	q->tailIdx = 0;
+	q->count =  0;
+	q->numBlocks = 0;
 	return (void *)q;
 }
 
@@ -95,10 +95,11 @@ void enqueue(void *qp, void *item)
 	queue *q = (queue *)qp;
 	int slot;
 
-	if ((q->count + 1) > q->allocCount) {
+	if (q->headIdx == 0) {
+		// Need more slots
 		block = (block_t *) malloc(sizeof(block_t));
 		block->next = NULL;
-		q->allocCount += BLOCKSIZE;
+		q->numBlocks++;
 
 		if (q->headBlock) {
 			q->headBlock->next = block;
@@ -108,13 +109,14 @@ void enqueue(void *qp, void *item)
 		if (q->tailBlock == NULL) {
 			q->tailBlock = block;
 		}
+		q->headIdx = 0;
 	} else {
 		block = q->headBlock;
 	}
 
-	slot = q->count % BLOCKSIZE;
+	slot = q->headIdx % BLOCKSIZE;
 	block->items[slot] = item;
-
+	q->headIdx = (q->headIdx + 1) % BLOCKSIZE;
 	q->count++;
 }
 
@@ -130,17 +132,24 @@ void * dequeue(void *qp)
 	}
 
 	block = q->tailBlock;
-	slot = (q->count - 1) % BLOCKSIZE;
+	slot = q->tailIdx % BLOCKSIZE;
 	item = block->items[slot];
 	block->items[slot] = NULL;
 
-	if (slot == 0) {
-		q->tailBlock = block->next;
+	q->tailIdx++;
+	if (q->tailIdx == BLOCKSIZE) {
+		if (q->tailBlock != q->headBlock) {
+			// headBlock has advanced.
+			// we can also advance.
+			q->tailBlock = block->next;
 
-		if (q->headBlock == block) {
-			q->headBlock = NULL;
+			if (q->headBlock == block) {
+				q->headBlock = NULL;
+			}
+			free(block);
+			q->numBlocks--;
 		}
-		free(block);
+		q->tailIdx = 0;
 	}
 
 	q->count--;
@@ -151,7 +160,7 @@ void * dequeue(void *qp)
 void deleteQueue(void *qp)
 {
 	queue *q = (queue *)qp;
-	while (q->headBlock) {
+	while (q->count) {
 		dequeue(q);
 	}
 	free(q);
