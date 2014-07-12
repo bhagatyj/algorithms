@@ -3,6 +3,8 @@
 
 Queue using Linked Lists:
 
+As the dequeue follows the enqueue, these blocks are amortized by definition.
+
 
   --------
  | headB  |-----> NULL
