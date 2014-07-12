@@ -35,8 +35,8 @@ def singleTest(qn, ansExp):
 	count = count + 1
 	print "Test number: " + str(count)
 	# print "Test input : \n" + qn
-	#print "Expected Answer :\n" + ansExp
-	#print "Got this Answer :\n" + ansGot
+	print "Expected Answer :\n" + ansExp
+	print "Got this Answer :\n" + ansGot
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
 	else:
@@ -76,7 +76,7 @@ def cleanup():
 
 def testP014():
 	global count
-	sources = ["queueImpl1_array.c", "queueImpl2_ll.c"]
+	sources = ["queueImpl1_array.c", "queueImpl2_ll.c", "queueImpl3_LlArray.c"]
 	for source in sources:
 		print
 		count = 0

@@ -1,26 +1,77 @@
-// Stacks
-	// stack * createStringStack(int N)
-	// void push (stack *st, char *line)
-	// char * pop(stack *st)
-	// int isStackEmpty(stack *st)
-// UseCase
-	// Get strings from STDIN
-	// And print them in reverse order.
-// 9:25
-// 
+
+/*
+
+Stack using Linked Lists:
+
+
+  --------
+ |  headBlock  |-----> NULL
+  --------
+
+
+ 
+  -------- 
+ |  headBlock  |-----.
+  --------      |
+                v
+              --------
+             |  next  | ---> NULL
+             |--------|
+             |  it 1  |
+              --------
+             |  it 2  |
+              --------
+             |  ....  |
+              --------
+             |  ....  |
+              --------
+             |  it N  |
+              --------
+
+
+  -------- 
+ |  headBlock  |-----.
+  --------      |
+                v 
+              --------       --------
+             |  next  |---->|  next  | ---> NULL
+             |--------|     |--------|
+             |  it 1  |     | it N+1 |
+              --------       --------
+             |  it 2  |     | it N+2 |
+              --------       --------
+             |  ....  |     |  ....  |
+              --------       --------
+             |  ....  |     |  ....  |
+              --------       --------
+             |  it N  |     |  it 2N |
+              --------       --------
+
+
+The "headBlock" field keeps track of the "headNode" or the headBlock-Allocation-unit.
+It doesn't really keeptrack of the headBlock item. In this implementation, the
+headIdx value is used as the headBlock.
+
+That is not a good idea in terms of debugging.
+I should revise and re-implement this using different field names.
+
+Use "headBlock" to denote the headBlock-item
+Use headBlock to denote the headBlock-Block of items.
+
+*/
 #include "stack.h"
 
 #define BLOCKSIZE 16
 
-typedef struct __stackNode__ {
+typedef struct __block_t__ {
 	void * items[BLOCKSIZE];
-	struct __stackNode__ *next;
-} stackNode;
+	struct __block_t__ *next;
+} block_t;
 
 typedef struct __stack__ {
-	stackNode *head;
-	int count;
-	int allocCount;
+	block_t *headBlock;
+	int headIdx;
+	int numBlocks;
 } stack;
 
 
@@ -29,52 +80,53 @@ void * createStack()
 	stack *st;
 
 	st = (stack *)malloc(sizeof(stack));
-	st->head = NULL;
-	st->count = 0;
-	st->allocCount = 0;
+	st->headBlock = NULL;
+	st->headIdx = 0;
+	st->numBlocks = 0;
 	return (void *)st;
 }
 
 void push(void *s, void *item)
 {
-	stackNode *node;
+	block_t *node;
 	int slot;
 	stack *st = (stack *)s;
 
-	if ((st->count + 1) > st->allocCount) {
-		node = (stackNode *)malloc(sizeof(stackNode));
-		st->allocCount += BLOCKSIZE;
-		node->next = st->head;
-		st->head = node;
+	if ((st->headIdx + 1) > (st->numBlocks * BLOCKSIZE)) {
+		node = (block_t *)malloc(sizeof(block_t));
+		st->numBlocks += 1;
+		node->next = st->headBlock;
+		st->headBlock = node;
 	} else {
-		node = st->head;
+		node = st->headBlock;
 	}
-	slot = st->count % BLOCKSIZE;
+	slot = st->headIdx % BLOCKSIZE;
 	node->items[slot] = item;
-	st->count++;
+	st->headIdx++;
 }
 
 void * pop(void *s)
 {
-	stackNode *node;
+	block_t *node;
 	void *item;
 	int slot;
 	stack *st = (stack *)s;
 
-	if (st->count == 0) {
+	if (st->headIdx == 0) {
 		return NULL;
 	}
 
-	node = st->head;
-	slot = (st->count - 1) % BLOCKSIZE;
+	node = st->headBlock;
+	slot = (st->headIdx - 1) % BLOCKSIZE;
 	item = node->items[slot];
+	node->items[slot] = NULL;
 
 	if (slot == 0) {
-		st->head = node->next;
+		st->headBlock = node->next;
 		free(node);
-		st->allocCount -= BLOCKSIZE;
+		st->numBlocks -= 1;
 	}
-	st->count--;
+	st->headIdx--;
 	return item;
 
 }
@@ -82,7 +134,7 @@ void * pop(void *s)
 void deleteStack(void *s)
 {
 	stack *st = (stack *)s;
-	while (st->head) {
+	while (st->headBlock) {
 		pop(st);
 	}
 	free(st);
@@ -91,5 +143,5 @@ void deleteStack(void *s)
 
 int size(void *st)
 {
-	return ((stack *)st)->count;
+	return ((stack *)st)->headIdx;
 }

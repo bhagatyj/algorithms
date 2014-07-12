@@ -1,3 +1,9 @@
+// This should be split into
+// stack-interface
+// Various classes that implement that interface
+// Each of these classes should support stacks of Templates.
+// A main program that can 
+
 #include <iostream>
 using namespace std;
 

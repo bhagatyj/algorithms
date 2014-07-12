@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 #define MAXCHAR 256
+
+
 #define MAXQSIZE 256
 
 void * createQueue();
