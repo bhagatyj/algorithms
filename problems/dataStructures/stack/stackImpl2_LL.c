@@ -1,13 +1,37 @@
-// Stacks
-	// stack * createStringStack(int N)
-	// void push (stack *st, char *line)
-	// char * pop(stack *st)
-	// int isStackEmpty(stack *st)
-// UseCase
-	// Get strings from STDIN
-	// And print them in reverse order.
-// 9:25
-// 
+
+/*
+
+Stack using Linked Lists:
+
+
+  --------
+ |  head  |-----> NULL
+  --------
+
+
+  --------
+ |  head  |---------.
+  -------- 			|
+				    V
+			  --------
+			 |  next  | ---> NULL
+			 |--------|
+			 |  it 1  |
+			  --------
+
+
+  --------
+ |  head  |-------.
+  -------- 		  |
+				  V
+			  --------		 --------
+			 |  next  |---->|  next  | ---> NULL
+			 |--------|		|--------|
+			 |  it 2  |		|  it 1  |
+			  --------		 --------
+
+
+*/
 #include "stack.h"
 
 typedef struct __stackNode__ {
