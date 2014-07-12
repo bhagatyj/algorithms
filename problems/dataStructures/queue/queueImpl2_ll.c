@@ -1,40 +1,4 @@
 
-// Stacks
-	// queue * createStringStack(int N)
-	// void push (queue *q, char *line)
-	// char * pop(queue *q)
-	// int isStackEmpty(queue *q)
-// UseCase
-	// Get strings from STDIN
-	// And print them in reverse order.
-// 9:25
-// 
-#include "queue.h"
-
-typedef struct __queueNode__ {
-	void * item;
-	struct __queueNode__ *next;
-} queueNode;
-
-typedef struct __queue__ {
-	queueNode *head;
-	queueNode *tail;
-	int count;
-} queue;
-
-
-void * createQueue()
-{
-	queue *q;
-
-	q = (queue *)malloc(sizeof(queue));
-	q->head = NULL;
-	q->tail = NULL;
-	q->count = 0;
-	return (void *)q;
-}
-
-
 /*
 
   --------
@@ -71,6 +35,33 @@ void * createQueue()
 
 
 */
+
+#include "queue.h"
+
+typedef struct __queueNode__ {
+	void * item;
+	struct __queueNode__ *next;
+} queueNode;
+
+typedef struct __queue__ {
+	queueNode *head;
+	queueNode *tail;
+	int count;
+} queue;
+
+
+void * createQueue()
+{
+	queue *q;
+
+	q = (queue *)malloc(sizeof(queue));
+	q->head = NULL;
+	q->tail = NULL;
+	q->count = 0;
+	return (void *)q;
+}
+
+
 void enqueue(void *qp, void *item)
 {
 	queueNode *node;
