@@ -65,7 +65,7 @@ typedef struct __block_t__ {
 typedef struct __stack__ {
 	block_t *headBlock;
 	int headIdx;
-	int numSlots;
+	int numBlocks;
 } stack;
 
 void * createStack()
@@ -75,7 +75,7 @@ void * createStack()
 	st = (stack *)malloc(sizeof(stack));
 	st->headBlock = NULL;
 	st->headIdx = 0;
-	st->numSlots = 0;
+	st->numBlocks = 0;
 	return (void *)st;
 }
 
@@ -85,13 +85,13 @@ void push(void *s, void *item)
 	int slot;
 	stack *st = (stack *)s;
 
-	if ((st->headIdx + 1) > st->numSlots) {
+	if ((st->headIdx + 1) > (st->numBlocks * BLOCKSIZE )) {
 		node = (block_t *)malloc(sizeof(block_t));
-		st->numSlots += BLOCKSIZE;
+		st->numBlocks += 1;
 		node->next = st->headBlock;
 		st->headBlock = node;
 	} else {
-		if ((st->headIdx + BLOCKSIZE) < st->numSlots) {
+		if ((st->headIdx + BLOCKSIZE) < (st->numBlocks *BLOCKSIZE)) {
 			node = st->headBlock->next;
 		} else {
 			node = st->headBlock;
@@ -114,7 +114,7 @@ void * pop(void *s)
 		return NULL;
 	}
 
-	if (st->headIdx + BLOCKSIZE > st->numSlots) {
+	if (st->headIdx + BLOCKSIZE > (st->numBlocks * BLOCKSIZE)) {
 		node = st->headBlock;
 		slot = (st->headIdx - 1) % BLOCKSIZE;
 		item = node->items[slot];
@@ -127,7 +127,7 @@ void * pop(void *s)
 		if (slot == 0) {
 			free(st->headBlock);
 			st->headBlock = node;
-			st->numSlots -= BLOCKSIZE;
+			st->numBlocks -= 1;
 		}
 	}
 	st->headIdx--;
