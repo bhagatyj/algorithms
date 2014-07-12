@@ -5,16 +5,16 @@ Queue using Linked Lists:
 
 
   --------
- |  headBlock  |-----> NULL
+ | headB  |-----> NULL
  |--------|
- |  tailBlock  |-----> NULL
+ | tailB  |-----> NULL
   --------
 
 
   --------
- |  headBlock  |---------.
+ | headB  |---------.
  |--------|         |
- |  tailBlock  |-----.   |
+ | tailB  |-----.   |
   --------      |   |
                 v   V
               --------
@@ -33,9 +33,9 @@ Queue using Linked Lists:
 
 
   --------
- |  headBlock  |---------------------.
+ | headB  |---------------------.
  |--------|                     |
- |  tailBlock  |-----.               |
+ | tailB  |-----.               |
   --------      |               |
                 v               V
               --------       --------
