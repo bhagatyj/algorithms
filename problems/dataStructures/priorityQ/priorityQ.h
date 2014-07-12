@@ -1,13 +1,15 @@
 #include <stdio.h>
 
+// Use typedef for the function pointer
+
 // Create a PQ.
-void * createPriorityQ(void);
+void * createPriorityQ(int (*compareKeys) (void *, void *));
 
 // Create a PQ of initial capacity max.
-void * createPriorityQ(int max);
+void * createPriorityQ(int max, int (*compareKeys) (void *, void *));
 
 // Create a PQ from the keys in the array.
-void * createPriorityQ(int *arr, int count);
+void * createPriorityQ(int *arr, int count, int (*compareKeys) (void *, void *));
 
 // Insert a key into the PQ.
 void insert(void *pq, void *item);
