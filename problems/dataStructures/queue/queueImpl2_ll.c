@@ -1,9 +1,9 @@
 
 // Stacks
-	// stack * createStringStack(int N)
-	// void push (stack *st, char *line)
-	// char * pop(stack *st)
-	// int isStackEmpty(stack *st)
+	// queue * createStringStack(int N)
+	// void push (queue *q, char *line)
+	// char * pop(queue *q)
+	// int isStackEmpty(queue *q)
 // UseCase
 	// Get strings from STDIN
 	// And print them in reverse order.
@@ -11,68 +11,121 @@
 // 
 #include "queue.h"
 
-typedef struct __node__ {
+typedef struct __queueNode__ {
 	void * item;
-	struct __stackNode__ *next;
-} node;
+	struct __queueNode__ *next;
+} queueNode;
 
 typedef struct __queue__ {
-	stackNode *head;
+	queueNode *head;
+	queueNode *tail;
 	int count;
 } queue;
 
 
-void * createStack()
+void * createQueue()
 {
-	stack *st;
+	queue *q;
 
-	st = (stack *)malloc(sizeof(stack));
-	st->head = NULL;
-	st->count = 0;
-	return (void *)st;
+	q = (queue *)malloc(sizeof(queue));
+	q->head = NULL;
+	q->tail = NULL;
+	q->count = 0;
+	return (void *)q;
 }
 
-void push(void *s, void *item)
-{
-	stackNode *node;
-	stack *st = (stack *)s;
 
-	node = (stackNode *)malloc(sizeof(stackNode));
+/*
+
+  --------
+ |  head  |-----> NULL
+ |--------|
+ |  tail  |-----> NULL
+  --------
+
+
+  --------
+ |  head  |---------.
+ |--------|			|
+ |  tail  |-----.	|
+  --------		|	|
+				v   V
+			  --------
+			 |  next  | ---> NULL
+			 |--------|
+			 |  item  |
+			  --------
+
+
+  --------
+ |  head  |---------------------.
+ |--------|						|
+ |  tail  |-----.				|
+  --------		|				|
+				v   			V
+			  --------		 --------
+			 |  next  |---->|  next  | ---> NULL
+			 |--------|		|--------|
+			 |  item  |		| item   |
+			  --------		 --------
+
+
+*/
+void enqueue(void *qp, void *item)
+{
+	queueNode *node;
+	queue *q = (queue *)qp;
+
+	node = (queueNode *) malloc(sizeof(queueNode));
 	node->item = item;
-	node->next = st->head;
-	st->head = node;
-	st->count++;
+	node->next = NULL;
+
+	if (q->head) {
+		q->head->next = node;
+	}
+	q->head = node;
+	if (q->tail == NULL) {
+		q->tail = node;
+	}
+
+	q->count++;
 }
 
-void * pop(void *s)
+void * dequeue(void *qp)
 {
-	stackNode *node;
+	queueNode *node;
 	void *item;
-	stack *st = (stack *)s;
+	queue *q = (queue *)qp;
 
-	if (st->count == 0) {
+	if (q->count == 0) {
 		return NULL;
 	}
 
-	node = st->head;
-	st->head = node->next;
-	st->count--;
+	node = q->tail;
+	q->tail = node->next;
+
+	if (q->head == node) {
+		q->head = NULL;
+	}
+
+	q->count--;
 	item = node->item;
 	free(node);
+
 	return item;
 }
 
-void deleteStack(void *s)
+void deleteQueue(void *qp)
 {
-	stack *st = (stack *)s;
-	while (st->head) {
-		pop(st);
+	queue *q = (queue *)qp;
+	while (q->head) {
+		dequeue(q);
 	}
-	free(st);
+	free(q);
 }
 
 
-int size(void *st)
+int size(void *qp)
 {
-	return ((stack *)st)->count;
+	return ((queue *)qp)->count;
 }
