@@ -1,27 +1,71 @@
-// Stacks
-	// stack * createStringStack(int N)
-	// void push (stack *st, char *line)
-	// char * pop(stack *st)
-	// int isStackEmpty(stack *st)
-// UseCase
-	// Get strings from STDIN
-	// And print them in reverse order.
-// 9:25
-// 
+
+/*
+
+Stack using Linked Lists:
+
+
+  --------
+ |  headB|-----> NULL
+  --------
+
+
+ 
+  -------- 
+ |  headB|-----.
+  --------      |
+                v
+              --------
+             |  next  | ---> NULL
+             |--------|
+             |  it 1  |
+              --------
+             |  it 2  |
+              --------
+             |  ....  |
+              --------
+             |  ....  |
+              --------
+             |  it N  |
+              --------
+
+
+  -------- 
+ |  headB|-----.
+  --------      |
+                v 
+              --------       --------
+             |  next  |---->|  next  | ---> NULL
+             |--------|     |--------|
+             |  it 1  |     | it N+1 |
+              --------       --------
+             |  it 2  |     | it N+2 |
+              --------       --------
+             |  ....  |     |  ....  |
+              --------       --------
+             |  ....  |     |  ....  |
+              --------       --------
+             |  it N  |     |  it 2N |
+              --------       --------
+
+
+The "headBlock" field keeps track of the "headNode" or the headBlock-Allocation-unit.
+
+
+*/
 #include "stack.h"
 
 #define BLOCKSIZE 16
 
 
-typedef struct __stackNode__ {
+typedef struct __block_t__ {
 	void * items[BLOCKSIZE];
-	struct __stackNode__ *next;
-} stackNode;
+	struct __block_t__ *next;
+} block_t;
 
 typedef struct __stack__ {
-	stackNode *head;
-	int count;
-	int allocCount;
+	block_t *headBlock;
+	int headIdx;
+	int numSlots;
 } stack;
 
 void * createStack()
@@ -29,64 +73,64 @@ void * createStack()
 	stack *st;
 
 	st = (stack *)malloc(sizeof(stack));
-	st->head = NULL;
-	st->count = 0;
-	st->allocCount = 0;
+	st->headBlock = NULL;
+	st->headIdx = 0;
+	st->numSlots = 0;
 	return (void *)st;
 }
 
 void push(void *s, void *item)
 {
-	stackNode *node;
+	block_t *node;
 	int slot;
 	stack *st = (stack *)s;
 
-	if ((st->count + 1) > st->allocCount) {
-		node = (stackNode *)malloc(sizeof(stackNode));
-		st->allocCount += BLOCKSIZE;
-		node->next = st->head;
-		st->head = node;
+	if ((st->headIdx + 1) > st->numSlots) {
+		node = (block_t *)malloc(sizeof(block_t));
+		st->numSlots += BLOCKSIZE;
+		node->next = st->headBlock;
+		st->headBlock = node;
 	} else {
-		if ((st->count + BLOCKSIZE) < st->allocCount) {
-			node = st->head->next;
+		if ((st->headIdx + BLOCKSIZE) < st->numSlots) {
+			node = st->headBlock->next;
 		} else {
-			node = st->head;
+			node = st->headBlock;
 		}
 	}
 
-	slot = st->count % BLOCKSIZE;
+	slot = st->headIdx % BLOCKSIZE;
 	node->items[slot] = item;
-	st->count++;
+	st->headIdx++;
 }
 
 void * pop(void *s)
 {
-	stackNode *node;
+	block_t *node;
 	void *item;
 	int slot;
 	stack *st = (stack *)s;
 
-	if (st->count == 0) {
+	if (st->headIdx == 0) {
 		return NULL;
 	}
 
-	if (st->count + BLOCKSIZE > st->allocCount) {
-		node = st->head;
-		slot = (st->count - 1) % BLOCKSIZE;
+	if (st->headIdx + BLOCKSIZE > st->numSlots) {
+		node = st->headBlock;
+		slot = (st->headIdx - 1) % BLOCKSIZE;
 		item = node->items[slot];
 	} else {
-		// there is an extra block at the head
-		node = st->head->next;
-		slot = (st->count - 1) % BLOCKSIZE;
+		// there is an extra block at the headBlock
+		node = st->headBlock->next;
+		slot = (st->headIdx - 1) % BLOCKSIZE;
 		item = node->items[slot];
 
 		if (slot == 0) {
-			free(st->head);
-			st->head = node;
-			st->allocCount -= BLOCKSIZE;
+			free(st->headBlock);
+			st->headBlock = node;
+			st->numSlots -= BLOCKSIZE;
 		}
 	}
-	st->count--;
+	st->headIdx--;
 	return item;
 
 }
@@ -95,11 +139,11 @@ void * pop(void *s)
 void deleteStack(void *s)
 {
 	stack *st = (stack *)s;
-	while (st->count) {
+	while (st->headIdx) {
 		pop(st);
 	}
-	if (st->head) {
-		free(st->head);
+	if (st->headBlock) {
+		free(st->headBlock);
 	}
 	free(st);
 }
@@ -107,6 +151,6 @@ void deleteStack(void *s)
 
 int size(void *st)
 {
-	return ((stack *)st)->count;
+	return ((stack *)st)->headIdx;
 }
 

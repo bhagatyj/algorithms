@@ -5,13 +5,13 @@ Stack using Linked Lists:
 
 
   --------
- |  headBlock  |-----> NULL
+ | headB |-----> NULL
   --------
 
 
  
   -------- 
- |  headBlock  |-----.
+ | headB |-----.
   --------      |
                 v
               --------
@@ -30,7 +30,7 @@ Stack using Linked Lists:
 
 
   -------- 
- |  headBlock  |-----.
+ | headB |-----.
   --------      |
                 v 
               --------       --------
