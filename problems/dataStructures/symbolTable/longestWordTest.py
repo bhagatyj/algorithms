@@ -1,14 +1,3 @@
-#  Input:
-#  N
-#  U:p,q
-#  U:x,y
-#  .....
-#  U:a,b
-#  C:a,y
-#  Output:
-#  TRUE/FALSE
-
-
 import os
 from subprocess import Popen, PIPE
 import time
@@ -59,7 +48,7 @@ def runTests():
 def compileCode(source):
 	printline();
 	print "Compiling %s" % source
-	ret = os.system('gcc -g -Wall %s frequencyCounter.c -o exe' %source )
+	ret = os.system('gcc -g -Wall %s wordReader.c -o exe' %source )
 	if (ret != 0):
 		raise Exception("Did not compile")
 
@@ -68,7 +57,7 @@ def cleanup():
 
 def test():
 	global count
-	sources = ["wordReader.c"]
+	sources = ["frequencyCounter.c"]
 	for source in sources:
 		print
 		count = 0
