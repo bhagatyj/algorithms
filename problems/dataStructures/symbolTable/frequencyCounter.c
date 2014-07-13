@@ -20,7 +20,7 @@ int mystrcmp(void *v1, void *v2)
 int main(int argc, char **argv)
 {
 	char word[WORDSIZE];
-	int total = 0;
+	int total = 0, value;
 	void *symbolTable;
 	void *node;
 
@@ -33,5 +33,6 @@ int main(int argc, char **argv)
 			// process word
 		}
 	}
-	dfs(symbolTable);
+	value = getValue(symbolTable, "the");
+	printf("the is present %d times\n", value);
 }

@@ -78,9 +78,28 @@ void addNodeToST(void *stPtr, void *nodePtr) {
 	st->root = addNode(node, newNode, st->compare_fn);
 }
 
-int getValue(void *st, void *key)
+int getValue(void *stPtr, void *key)
 {
-	return 0;
+
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+	int ret;
+	node_t *node;
+
+	node = st->root;
+	while (node) {
+		ret = st->compare_fn(node->key, key);
+		if (ret == 0) {
+			break;
+		}
+		if (ret > 0) {
+			node = node->left;
+		} else {
+			node = node->right;
+		}
+	}
+
+	return (ret ? 0 : node->value);
+
 }
 
 void printPreorder(node_t *node)
