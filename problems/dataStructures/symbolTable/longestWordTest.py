@@ -34,12 +34,16 @@ def singleTest(qn, ansExp):
 
 
 def smallTests():
+	content = "I wonder how many housewives who may read this little book have ever dried sweet corn for winter use."
+	singleTest(content, "Longest word is housewives\n");
+
+def largeTests():
 	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/8190/pg8190.txt").read()
 	singleTest(content, 'Longest word is Idiopsychological\n')
 
 	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/10554/pg10554.txt").read()
 	singleTest(content, 'Longest word is misunderstandings\n')
-	
+
 def runTests():
 	smallTests()
 	printline()
@@ -57,7 +61,7 @@ def cleanup():
 
 def test():
 	global count
-	sources = ["frequencyCounter.c"]
+	sources = ["longestWord.c"]
 	for source in sources:
 		print
 		count = 0

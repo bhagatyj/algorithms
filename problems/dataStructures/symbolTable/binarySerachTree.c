@@ -35,6 +35,52 @@ void * createST(compare_fn_t compare_fn)
 
 void addNodeToST(void *stPtr, void *nodePtr) {
 
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+	node_t * newNode = (node_t *)nodePtr;
+	node_t *node;
+	int ret;
+
+	node = st->root;
+	st->root = addNode(node, newNode, st->compare_fn);
+}
+
+void addNode(node *main, node *newNode, compare_fn_t compare_fn_t)
+{
+
+	if (!main) {
+		return newNode;
+	}
+
+	ret = st->compare_fn(newNode, node);
+	if (ret == 0) {
+		// repeated node
+		node->value = newNode->value;
+		free(newNode);
+	}
+	if (ret < 0) {
+		main->left = addNode(main->left, newNode, compare_fn);
+	} else {
+		main->right = addNode(main->right, newNode, compare_fn);
+	}
+	return main;
 }
 
 int getValue(void *st, void *key);
+{
+
+}
+
+void printPreorder(node_t *node)
+{
+	if (node == NULL) {
+		return;
+	}
+	printf("%s\n"node->key);
+	
+}
+void dfs(void *stPtr)
+{
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+
+	printPreorder(st->node);
+}

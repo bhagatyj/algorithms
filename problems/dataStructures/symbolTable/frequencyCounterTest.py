@@ -34,6 +34,10 @@ def singleTest(qn, ansExp):
 
 
 def smallTests():
+	content = "I wonder how many housewives who may read this little book have ever dried sweet corn for winter use."
+	singleTest(content, "housewives");
+
+def largeTests():
 	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/8190/pg8190.txt").read()
 	singleTest(content, 'Longest word is Idiopsychological\n')
 
