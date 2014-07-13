@@ -1,3 +1,4 @@
+#include "symbolTable.h"
 #include "wordReader.h"
 /*
  * This use-case of the symbol Table API is going to work on the following
