@@ -14,14 +14,17 @@ typedef struct __symbol_table_t__ {
 
 } symbol_table_t;
 
-void createNode(void *key, int value)
+void * createNode(void *key, int value)
 {
-	node_t *node = (node *t)malloc(sizeof(node_t));
+	node_t *node = (node_t *)malloc(sizeof(node_t));
 
-	node->key = key;
+	//printf("Create node for %s\n", key);
+	node->key = strdup(key);
 	node->left = NULL;
 	node->right = NULL;
 	node->value = value;
+
+	return (void *)node;
 }
 
 void * createST(compare_fn_t compare_fn)
@@ -31,6 +34,38 @@ void * createST(compare_fn_t compare_fn)
 	st = (symbol_table_t *)malloc(sizeof(symbol_table_t));
 	st->root = NULL;
 	st->compare_fn = compare_fn;
+
+	return (void *)st;
+}
+
+
+node_t * addNode(node_t *main, node_t *newNode, compare_fn_t compare_fn)
+{
+	int ret;
+
+	if (!main) {
+		return newNode;
+	}
+
+	ret = compare_fn(main->key, newNode->key);
+	if (ret == 0) {
+		// repeated node
+		main->value += newNode->value;
+		free(newNode);
+		return main;
+	}
+	if (ret > 0) {
+		if (!main->left) {
+			//printf("Adding %s to left of %s\n", newNode->key, main->key);
+		}
+		main->left = addNode(main->left, newNode, compare_fn);
+	} else {
+		if (!main->right) {
+			//printf("Adding %s to right of %s\n", newNode->key, main->key);
+		}
+		main->right = addNode(main->right, newNode, compare_fn);
+	}
+	return main;
 }
 
 void addNodeToST(void *stPtr, void *nodePtr) {
@@ -38,36 +73,14 @@ void addNodeToST(void *stPtr, void *nodePtr) {
 	symbol_table_t *st = (symbol_table_t *)stPtr;
 	node_t * newNode = (node_t *)nodePtr;
 	node_t *node;
-	int ret;
 
 	node = st->root;
 	st->root = addNode(node, newNode, st->compare_fn);
 }
 
-void addNode(node *main, node *newNode, compare_fn_t compare_fn_t)
+int getValue(void *st, void *key)
 {
-
-	if (!main) {
-		return newNode;
-	}
-
-	ret = st->compare_fn(newNode, node);
-	if (ret == 0) {
-		// repeated node
-		node->value = newNode->value;
-		free(newNode);
-	}
-	if (ret < 0) {
-		main->left = addNode(main->left, newNode, compare_fn);
-	} else {
-		main->right = addNode(main->right, newNode, compare_fn);
-	}
-	return main;
-}
-
-int getValue(void *st, void *key);
-{
-
+	return 0;
 }
 
 void printPreorder(node_t *node)
@@ -75,12 +88,14 @@ void printPreorder(node_t *node)
 	if (node == NULL) {
 		return;
 	}
-	printf("%s\n"node->key);
-	
+	printPreorder(node->left);
+	printf("%d:%s\n", node->value, (char *) node->key);
+	printPreorder(node->right);
 }
+
 void dfs(void *stPtr)
 {
 	symbol_table_t *st = (symbol_table_t *)stPtr;
 
-	printPreorder(st->node);
+	printPreorder(st->root);
 }

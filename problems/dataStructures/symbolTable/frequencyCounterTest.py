@@ -25,8 +25,8 @@ def singleTest(qn, ansExp):
 	count = count + 1
 	print "Test number: " + str(count)
 	# print "Test input : \n" + qn
-	print "Expected Answer :\n" + ansExp
-	print "Got this Answer :\n" + ansGot
+	# print "Expected Answer :\n" + ansExp
+	# print "Got this Answer :\n" + ansGot
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
 	else:
@@ -34,8 +34,9 @@ def singleTest(qn, ansExp):
 
 
 def smallTests():
-	content = "I wonder how many housewives who may read this little book have ever dried sweet corn for winter use."
-	singleTest(content, "housewives");
+	content = "now is the time for all good men to come to the aid of their party"
+	singleTest(content, "1:aid\n1:all\n1:come\n1:for\n1:good\n1:is\n1:men\n"+
+		"1:now\n1:of\n1:party\n2:the\n1:their\n1:time\n2:to\n");
 
 def largeTests():
 	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/8190/pg8190.txt").read()
@@ -43,7 +44,7 @@ def largeTests():
 
 	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/10554/pg10554.txt").read()
 	singleTest(content, 'Longest word is misunderstandings\n')
-	
+
 def runTests():
 	smallTests()
 	printline()
@@ -52,7 +53,7 @@ def runTests():
 def compileCode(source):
 	printline();
 	print "Compiling %s" % source
-	ret = os.system('gcc -g -Wall %s wordReader.c -o exe' %source )
+	ret = os.system('gcc -g -Wall %s binarySerachTree.c wordReader.c -o exe' %source )
 	if (ret != 0):
 		raise Exception("Did not compile")
 

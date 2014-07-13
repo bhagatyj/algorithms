@@ -5,10 +5,12 @@
 typedef int (* compare_fn_t) (void *k1, void *k2);
 
 // If node already exists, createNode would change the value.
-void * createNode(void *key, int value);
+void * createNode(void *, int);
 
-void * createST(compare_fn_t compare_fn);
+void * createST(compare_fn_t);
 
-void addNodeToST(void *st, void *node);
+void addNodeToST(void *, void *);
 
-int getValue(void *st, void *key);
+int getValue(void *, void *);
+
+void dfs(void *);
