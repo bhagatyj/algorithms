@@ -20,11 +20,9 @@ int main(int argc, char **argv)
 	while (getword(word, WORDSIZE) != EOF) {
 		if (isalpha(word[0])) {
 			total++;
-			if (strlen(word) > longest) {
-				longest = strlen(word);
-				longestWord = strdup(word);
-			} 
+
 			// process word
+			
 		}
 	}
 	printf("Longest word is %s\n", longestWord);
