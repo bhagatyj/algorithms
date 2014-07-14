@@ -50,10 +50,17 @@ def runTests():
 	printline()
 
 
+
 def compileCode(source):
 	printline();
+	command = "gcc %s -I ../../wordTree/ -I ../../words/ -I ../../trees/ \
+../../wordTree/wordTreeBuilder.c ../../words/wordReader.c \
+../../trees/bst/binarySearchTree.c -o exe"
+
 	print "Compiling %s" % source
-	ret = os.system('gcc -g -Wall %s binarySerachTree.c wordReader.c wordTreeBuilder.c -o exe' %source )
+	command = command %source
+	print command
+	ret = os.system(command)
 	if (ret != 0):
 		raise Exception("Did not compile")
 
