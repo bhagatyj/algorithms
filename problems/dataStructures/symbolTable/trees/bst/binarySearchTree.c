@@ -1,5 +1,8 @@
 #include "binarySearchTree.h"
 
+
+void addNodeToST(void *, void *);
+
 void * createNode(void *key, int value)
 {
 	node_t *node = (node_t *)malloc(sizeof(node_t));
@@ -146,6 +149,7 @@ void * createST(compare_fn_t compare_fn, genValue_fn_t gen_fn)
 	st->dfsPrintPostOrder = dfsPrintPostOrder;
 	st->addNode = addNodeToST;
 	st->getValue = getValue;
+	st->fnCreateNode = createNode;
 	return (void *)st;
 }
 

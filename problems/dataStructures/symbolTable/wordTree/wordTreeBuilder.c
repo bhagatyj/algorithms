@@ -9,20 +9,20 @@ void * buildTheWordTree(genValue_fn_t genValue)
 {
 	char word[WORDSIZE];
 	int total = 0;
-	void *symbolTable;
+	symbol_table_t *st;
 	void *node;
 	int value;
 
-	symbolTable = createST(mystrcmp, genValue);
+	st = createST(mystrcmp, genValue);
 	while (getword(word, WORDSIZE) != EOF) {
 		if (isalpha(word[0])) {
 			total++;
 			value = genValue(word, 0);
-			node = createNode(word, value);
-			addNodeToST(symbolTable, node);
+			node = st->fnCreateNode(word, value);
+			st->addNode(st, node);
 			// process word
 		}
 	}
-	return symbolTable;
+	return st;
 
 }
