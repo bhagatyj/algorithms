@@ -9,13 +9,20 @@
  * 4) Print out the most occuring ten words.
 */
 
+/*
+
+*/
+int freqValue (void *key, int currentValue)
+{
+	return (currentValue + 1);
+}
 
 int main(int argc, char **argv)
 {
 	int value;
 	void *st;
 
-	st = buildTheWordTree();
+	st = buildTheWordTree(freqValue);
 	value = getValue(st, "the");
 	printf("the is present %d times\n", value);
 }

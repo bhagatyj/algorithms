@@ -1,4 +1,4 @@
-#include "symbolTable.h"
+#include "symbolTableInterface.h"
 
 typedef struct __node_t__ {
 	void *key;
@@ -14,5 +14,6 @@ typedef struct __symbol_table_t__ {
 	printTree_fn_t  dfsPrintInOrder;
 	printTree_fn_t  dfsPrintPostOrder;
 	getValue_fn_t   getValue;
+	genValue_fn_t   genValue;
 	addNode_fn_t    addNode;
 } symbol_table_t;

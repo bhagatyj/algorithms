@@ -68,7 +68,7 @@ void dfsPrintPostOrder(void *stPtr)
 }
 
 
-node_t * addNode(node_t *main, node_t *newNode, compare_fn_t compare_fn)
+node_t * addNode(node_t *main, node_t *newNode, symbol_table_t *st)
 {
 	int ret;
 
@@ -76,10 +76,10 @@ node_t * addNode(node_t *main, node_t *newNode, compare_fn_t compare_fn)
 		return newNode;
 	}
 
-	ret = compare_fn(main->key, newNode->key);
+	ret = st->compare_fn(main->key, newNode->key);
 	if (ret == 0) {
 		// repeated node
-		main->value += newNode->value;
+		main->value = st->genValue(main->key, main->value);
 		free(newNode);
 		return main;
 	}
@@ -87,12 +87,12 @@ node_t * addNode(node_t *main, node_t *newNode, compare_fn_t compare_fn)
 		if (!main->left) {
 			//printf("Adding %s to left of %s\n", newNode->key, main->key);
 		}
-		main->left = addNode(main->left, newNode, compare_fn);
+		main->left = addNode(main->left, newNode, st);
 	} else {
 		if (!main->right) {
 			//printf("Adding %s to right of %s\n", newNode->key, main->key);
 		}
-		main->right = addNode(main->right, newNode, compare_fn);
+		main->right = addNode(main->right, newNode, st);
 	}
 	return main;
 }
@@ -104,7 +104,7 @@ void addNodeToST(void *stPtr, void *nodePtr) {
 	node_t *node;
 
 	node = st->root;
-	st->root = addNode(node, newNode, st->compare_fn);
+	st->root = addNode(node, newNode, st);
 }
 
 
@@ -133,13 +133,14 @@ int getValue(void *stPtr, void *key)
 }
 
 
-void * createST(compare_fn_t compare_fn)
+void * createST(compare_fn_t compare_fn, genValue_fn_t gen_fn)
 {
 	symbol_table_t *st;
 
 	st = (symbol_table_t *)malloc(sizeof(symbol_table_t));
 	st->root = NULL;
 	st->compare_fn = compare_fn;
+	st->genValue = gen_fn;
 	st->dfsPrintPreOrder = dfsPrintPreOrder;
 	st->dfsPrintInOrder = dfsPrintInOrder;
 	st->dfsPrintPostOrder = dfsPrintPostOrder;

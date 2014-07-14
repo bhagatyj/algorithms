@@ -1,5 +1,5 @@
-#include "wordReader.h"
-#include "symbolTable.h"
+#include "wordReaderInterface.h"
+#include "symbolTableInterface.h"
 /*
  * This use-case of the symbol Table API is going to work on the following
  * problem.
@@ -11,4 +11,4 @@
 */
 
 #define WORDSIZE 200
-void * buildTheWordTree(void);
+void * buildTheWordTree(genValue_fn_t);
