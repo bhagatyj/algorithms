@@ -53,8 +53,6 @@ def largeTests():
 	urlTheCount["http://www.gutenberg.org/cache/epub/10554/pg10554.txt"] = 3326
 	for url in urlTheCount:
 		largeTest(url, urlTheCount[url]) 
-	# content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/10554/pg10554.txt").read()
-	# singleTest(content, 'the is present 3326 times\n')
 
 def runTests():
 	smallTests()
