@@ -1,5 +1,7 @@
 #include "wordTreeBuilder.h"
 
+#define WORDSIZE 200
+
 int mystrcmp(void *v1, void *v2)
 {
 	return (strcmp((char *)v1, (char *)v2));
