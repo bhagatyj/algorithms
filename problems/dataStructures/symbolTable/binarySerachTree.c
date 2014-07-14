@@ -1,18 +1,4 @@
-
-#include "symbolTable.h"
-
-typedef struct __node_t__ {
-	void *key;
-	int value;
-	struct __node_t__ *left;
-	struct __node_t__ *right;
-} node_t;
-
-typedef struct __symbol_table_t__ {
-	compare_fn_t compare_fn;
-	node_t *root;
-
-} symbol_table_t;
+#include "binarySearchTree.h"
 
 void * createNode(void *key, int value)
 {
@@ -27,15 +13,58 @@ void * createNode(void *key, int value)
 	return (void *)node;
 }
 
-void * createST(compare_fn_t compare_fn)
+void printPreorder(node_t *node)
 {
-	symbol_table_t *st;
+	if (node == NULL) {
+		return;
+	}
+	printf("%d:%s\n", node->value, (char *) node->key);
+	printPreorder(node->left);
+	printPreorder(node->right);
+}
 
-	st = (symbol_table_t *)malloc(sizeof(symbol_table_t));
-	st->root = NULL;
-	st->compare_fn = compare_fn;
+void printInorder(node_t *node)
+{
+	if (node == NULL) {
+		return;
+	}
+	printInorder(node->left);
+	printf("%d:%s\n", node->value, (char *) node->key);
+	printInorder(node->right);
+}
 
-	return (void *)st;
+void printPostorder(node_t *node)
+{
+	if (node == NULL) {
+		return;
+	}
+	printInorder(node->left);
+	printInorder(node->right);
+	printf("%d:%s\n", node->value, (char *) node->key);
+}
+
+void dfsPrintPreOrder(void *stPtr)
+{
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+
+	printf("Nodes in pre-order...\n");
+	printPreorder(st->root);
+}
+
+void dfsPrintInOrder(void *stPtr)
+{
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+
+	printf("Nodes in in-order...\n");
+	printInorder(st->root);
+}
+
+void dfsPrintPostOrder(void *stPtr)
+{
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+
+	printf("Nodes in post-order...\n");
+	printPostorder(st->root);
 }
 
 
@@ -78,6 +107,7 @@ void addNodeToST(void *stPtr, void *nodePtr) {
 	st->root = addNode(node, newNode, st->compare_fn);
 }
 
+
 int getValue(void *stPtr, void *key)
 {
 
@@ -102,44 +132,20 @@ int getValue(void *stPtr, void *key)
 
 }
 
-void printPreorder(node_t *node)
+
+void * createST(compare_fn_t compare_fn)
 {
-	if (node == NULL) {
-		return;
-	}
-	printf("%d:%s\n", node->value, (char *) node->key);
-	printPreorder(node->left);
-	printPreorder(node->right);
+	symbol_table_t *st;
+
+	st = (symbol_table_t *)malloc(sizeof(symbol_table_t));
+	st->root = NULL;
+	st->compare_fn = compare_fn;
+	st->dfsPrintPreOrder = dfsPrintPreOrder;
+	st->dfsPrintInOrder = dfsPrintInOrder;
+	st->dfsPrintPostOrder = dfsPrintPostOrder;
+	st->addNode = addNodeToST;
+	st->getValue = getValue;
+	return (void *)st;
 }
 
-void printInorder(node_t *node)
-{
-	if (node == NULL) {
-		return;
-	}
-	printInorder(node->left);
-	printf("%d:%s\n", node->value, (char *) node->key);
-	printInorder(node->right);
-}
 
-void printPostorder(node_t *node)
-{
-	if (node == NULL) {
-		return;
-	}
-	printInorder(node->left);
-	printInorder(node->right);
-	printf("%d:%s\n", node->value, (char *) node->key);
-}
-
-void dfs(void *stPtr)
-{
-	symbol_table_t *st = (symbol_table_t *)stPtr;
-
-	printf("Nodes in pre-order...\n");
-	printPreorder(st->root);
-	printf("Nodes in in-order...\n");
-	printInorder(st->root);
-	printf("Nodes in post-order...\n");
-	printPostorder(st->root);
-}
