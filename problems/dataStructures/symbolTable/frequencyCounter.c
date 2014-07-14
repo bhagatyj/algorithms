@@ -1,5 +1,4 @@
-#include "wordReader.h"
-#include "symbolTable.h"
+#include "wordTreeBuilder.h"
 /*
  * This use-case of the symbol Table API is going to work on the following
  * problem.
@@ -10,29 +9,13 @@
  * 4) Print out the most occuring ten words.
 */
 
-#define WORDSIZE 200
-
-int mystrcmp(void *v1, void *v2)
-{
-	return (strcmp((char *)v1, (char *)v2));
-}
 
 int main(int argc, char **argv)
 {
-	char word[WORDSIZE];
-	int total = 0, value;
-	void *symbolTable;
-	void *node;
+	int value;
+	void *st;
 
-	symbolTable = createST(mystrcmp);
-	while (getword(word, WORDSIZE) != EOF) {
-		if (isalpha(word[0])) {
-			total++;
-			node = createNode(word, 1);
-			addNodeToST(symbolTable, node);
-			// process word
-		}
-	}
-	value = getValue(symbolTable, "the");
+	st = buildTheWordTree();
+	value = getValue(st, "the");
 	printf("the is present %d times\n", value);
 }

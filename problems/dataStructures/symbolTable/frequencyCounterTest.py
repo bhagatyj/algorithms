@@ -53,7 +53,7 @@ def runTests():
 def compileCode(source):
 	printline();
 	print "Compiling %s" % source
-	ret = os.system('gcc -g -Wall %s binarySerachTree.c wordReader.c -o exe' %source )
+	ret = os.system('gcc -g -Wall %s binarySerachTree.c wordReader.c wordTreeBuilder.c -o exe' %source )
 	if (ret != 0):
 		raise Exception("Did not compile")
 

@@ -107,14 +107,39 @@ void printPreorder(node_t *node)
 	if (node == NULL) {
 		return;
 	}
-	printPreorder(node->left);
 	printf("%d:%s\n", node->value, (char *) node->key);
+	printPreorder(node->left);
 	printPreorder(node->right);
+}
+
+void printInorder(node_t *node)
+{
+	if (node == NULL) {
+		return;
+	}
+	printInorder(node->left);
+	printf("%d:%s\n", node->value, (char *) node->key);
+	printInorder(node->right);
+}
+
+void printPostorder(node_t *node)
+{
+	if (node == NULL) {
+		return;
+	}
+	printInorder(node->left);
+	printInorder(node->right);
+	printf("%d:%s\n", node->value, (char *) node->key);
 }
 
 void dfs(void *stPtr)
 {
 	symbol_table_t *st = (symbol_table_t *)stPtr;
 
+	printf("Nodes in pre-order...\n");
 	printPreorder(st->root);
+	printf("Nodes in in-order...\n");
+	printInorder(st->root);
+	printf("Nodes in post-order...\n");
+	printPostorder(st->root);
 }

@@ -18,11 +18,15 @@ int main(int argc, char **argv)
 	int total = 0;
 	int longest = 0;
 
+	longestWord = NULL;
 	while (getword(word, WORDSIZE) != EOF) {
 		if (isalpha(word[0])) {
 			total++;
 			if (strlen(word) > longest) {
 				longest = strlen(word);
+				if (longestWord) {
+					free(longestWord);
+				}
 				longestWord = strdup(word);
 			} 
 			// process word
