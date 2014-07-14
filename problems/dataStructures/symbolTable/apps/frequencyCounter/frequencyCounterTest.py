@@ -1,7 +1,7 @@
 import os
 from subprocess import Popen, PIPE
 import time
-import urllib2
+import urllib
 
 count = 0
 
@@ -37,12 +37,24 @@ def smallTests():
 	content = "now is the time for all good men to come to the aid of their party"
 	singleTest(content, "the is present 2 times\n");
 
-def largeTests():
-	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/8190/pg8190.txt").read()
-	singleTest(content, 'the is present 1590 times\n')
+def largeTest(url, count):
+	filename = url.split("/")[-1]
+	if ( not os.path.isfile(filename)):
+		testfile = urllib.URLopener()
+		testfile.retrieve(url, filename)
+	f = open(filename, 'r');
+	content = f.read()
+	result = 'the is present %d times\n' %count
+	singleTest(content, result)
 
-	content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/10554/pg10554.txt").read()
-	singleTest(content, 'the is present 3326 times\n')
+def largeTests():
+	urlTheCount = dict()
+	urlTheCount["http://www.gutenberg.org/cache/epub/8190/pg8190.txt"] = 1590
+	urlTheCount["http://www.gutenberg.org/cache/epub/10554/pg10554.txt"] = 3326
+	for url in urlTheCount:
+		largeTest(url, urlTheCount[url]) 
+	# content = urllib2.urlopen("http://www.gutenberg.org/cache/epub/10554/pg10554.txt").read()
+	# singleTest(content, 'the is present 3326 times\n')
 
 def runTests():
 	smallTests()

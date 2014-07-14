@@ -10,17 +10,6 @@ typedef void (* addNode_fn_t) (void *stPtr, void *nodePtr);
 typedef int (* genValue_fn_t) (void *key, int currentValue);
 typedef void * (*createNode_fn_t) (void *key, int value);
 
-
-// If node already exists, createNode would change the value.
-void * createNode(void *, int);
-
-void * createST(compare_fn_t, genValue_fn_t);
-
-
-int getValue(void *, void *);
-
-void dfs(void *);
-
 typedef struct __symbol_table_t__ {
 	void           *root;
 	createNode_fn_t fnCreateNode;
@@ -32,3 +21,6 @@ typedef struct __symbol_table_t__ {
 	genValue_fn_t   genValue;
 	addNode_fn_t    addNode;
 } symbol_table_t;
+
+
+void * createST(compare_fn_t, genValue_fn_t);

@@ -20,9 +20,9 @@ int freqValue (void *key, int currentValue)
 int main(int argc, char **argv)
 {
 	int value;
-	void *st;
+	symbol_table_t *st;
 
 	st = buildTheWordTree(freqValue);
-	value = getValue(st, "the");
+	value = st->getValue(st, "the");
 	printf("the is present %d times\n", value);
 }
