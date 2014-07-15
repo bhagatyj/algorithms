@@ -41,8 +41,8 @@ void printPostorder(node_t *node)
 	if (node == NULL) {
 		return;
 	}
-	printInorder(node->left);
-	printInorder(node->right);
+	printPostorder(node->left);
+	printPostorder(node->right);
 	printf("%d:%s\n", node->value, (char *) node->key);
 }
 

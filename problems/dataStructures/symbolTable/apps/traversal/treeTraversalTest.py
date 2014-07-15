@@ -35,7 +35,10 @@ def singleTest(qn, ansExp):
 
 def smallTests():
 	content = "now is the time for all good men to come to the aid of their party"
-	result = "Nodes in pre-order...\n3:now\n2:is\n3:for\n3:all\n3:aid\n4:come\n4:good\n3:men\n3:the\n2:of\n5:party\n4:time\n5:their\n2:to\n"
+	preResult = "Nodes in pre-order...\n3:now\n2:is\n3:for\n3:all\n3:aid\n4:come\n4:good\n3:men\n3:the\n2:of\n5:party\n4:time\n5:their\n2:to\n"
+	inResult = "Nodes in in-order...\n3:aid\n3:all\n4:come\n3:for\n4:good\n2:is\n3:men\n3:now\n2:of\n5:party\n3:the\n5:their\n4:time\n2:to\n"
+	postResult = "Nodes in post-order...\n3:aid\n4:come\n3:all\n4:good\n3:for\n3:men\n2:is\n5:party\n2:of\n5:their\n2:to\n4:time\n3:the\n3:now\n"
+	result = preResult + inResult + postResult
 	singleTest(content, result);
 
 def runTests():

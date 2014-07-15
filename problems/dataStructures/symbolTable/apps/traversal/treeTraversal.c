@@ -23,4 +23,6 @@ int main(int argc, char **argv)
 
 	st = buildTheWordTree(lenValue);
 	st->dfsPrintPreOrder(st);
+	st->dfsPrintInOrder(st);
+	st->dfsPrintPostOrder(st);
 }
