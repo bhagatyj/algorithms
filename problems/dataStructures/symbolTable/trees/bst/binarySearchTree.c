@@ -87,14 +87,8 @@ node_t * addNode(node_t *main, node_t *newNode, symbol_table_t *st)
 		return main;
 	}
 	if (ret > 0) {
-		if (!main->left) {
-			//printf("Adding %s to left of %s\n", newNode->key, main->key);
-		}
 		main->left = addNode(main->left, newNode, st);
 	} else {
-		if (!main->right) {
-			//printf("Adding %s to right of %s\n", newNode->key, main->key);
-		}
 		main->right = addNode(main->right, newNode, st);
 	}
 	return main;

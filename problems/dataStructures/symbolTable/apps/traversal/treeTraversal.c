@@ -1,4 +1,5 @@
-#include "wordTreeBuilder.h"
+#include "wordTreeInterface.h"
+#include "symbolTableInterface.h"
 /*
  * This use-case of the symbol Table API is going to work on the following
  * problem.
@@ -9,12 +10,17 @@
  * 4) Print out the most occuring ten words.
 */
 
+int lenValue (void *key, int currentValue)
+{
+	return (strlen(key));
+}
+
 
 int main(int argc, char **argv)
 {
 	int value;
-	void *st;
+	symbol_table_t *st;
 
-	st = buildTheWordTree();
-	st->dfs();
+	st = buildTheWordTree(lenValue);
+	st->dfsPrintPreOrder(st);
 }
