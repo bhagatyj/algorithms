@@ -1,10 +1,11 @@
+#ifndef __symbolTableInterface_h__
+#define __symbolTableInterface_h__
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-#ifndef __symbolTableInterface_h__
-#define __symbolTableInterface_h__
 
 typedef void * (* createNode_fn_t) (void *key, int value);
 typedef int    (* compare_fn_t) (void *k1, void *k2);

@@ -1,3 +1,6 @@
+
+#ifndef __wordTreeInterface_h__
+#define __wordTreeInterface_h__
 #include "symbolTableInterface.h"
 /*
  * This use-case of the symbol Table API is going to work on the following
@@ -10,3 +13,5 @@
 */
 
 void * buildTheWordTree(genValue_fn_t);
+
+#endif // __wordTreeInterface_h__
