@@ -10,5 +10,4 @@
  * 4) Print out the most occuring ten words.
 */
 
-#define WORDSIZE 200
 void * buildTheWordTree(genValue_fn_t);
