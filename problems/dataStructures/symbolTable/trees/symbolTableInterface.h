@@ -11,8 +11,8 @@ typedef void * (* createNode_fn_t) (void *key, int value);
 typedef int    (* compare_fn_t) (void *k1, void *k2);
 typedef void   (* addNode_fn_t) (void *stPtr, void *nodePtr);
 
-typedef int    (* getValue_fn_t) (void *stPtr, void *key);
-typedef int    (* genValue_fn_t) (void *key, int currentValue);
+typedef unsigned long    (* getValue_fn_t) (void *stPtr, void *key);
+typedef unsigned long    (* genValue_fn_t) (void *key, int currentValue);
 
 typedef void   (* printTree_fn_t) (void *stPtr);
 

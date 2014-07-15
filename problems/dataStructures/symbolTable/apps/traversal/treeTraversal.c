@@ -10,7 +10,7 @@
  * 4) Print out the most occuring ten words.
 */
 
-int lenValue (void *key, int currentValue)
+unsigned long lenValue (void *key, int currentValue)
 {
 	return (strlen(key));
 }

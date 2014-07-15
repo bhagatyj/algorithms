@@ -12,7 +12,7 @@
 /*
 
 */
-int freqValue (void *key, int currentValue)
+unsigned long freqValue (void *key, int currentValue)
 {
 	return (currentValue + 1);
 }

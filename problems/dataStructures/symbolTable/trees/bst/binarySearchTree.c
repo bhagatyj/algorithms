@@ -21,7 +21,7 @@ void printPreorder(node_t *node)
 	if (node == NULL) {
 		return;
 	}
-	printf("%d:%s\n", node->value, (char *) node->key);
+	printf("%-24s:%lu\n", (char *) node->key, node->value);
 	printPreorder(node->left);
 	printPreorder(node->right);
 }
@@ -32,7 +32,7 @@ void printInorder(node_t *node)
 		return;
 	}
 	printInorder(node->left);
-	printf("%d:%s\n", node->value, (char *) node->key);
+	printf("%-24s:%lu\n", (char *) node->key, node->value);
 	printInorder(node->right);
 }
 
@@ -43,7 +43,7 @@ void printPostorder(node_t *node)
 	}
 	printPostorder(node->left);
 	printPostorder(node->right);
-	printf("%d:%s\n", node->value, (char *) node->key);
+	printf("%-24s:%lu\n", (char *) node->key, node->value);
 }
 
 void dfsPrintPreOrder(void *stPtr)
@@ -105,7 +105,7 @@ void addNodeToST(void *stPtr, void *nodePtr) {
 }
 
 
-int getValue(void *stPtr, void *key)
+unsigned long getValue(void *stPtr, void *key)
 {
 
 	symbol_table_t *st = (symbol_table_t *)stPtr;

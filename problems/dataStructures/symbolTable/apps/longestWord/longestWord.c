@@ -11,7 +11,7 @@
 
 #define WORDSIZE 200
 
-int lenValue (void *key, int currentValue)
+unsigned long lenValue (void *key, int currentValue)
 {
 	return (strlen(key));
 }
