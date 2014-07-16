@@ -50,7 +50,9 @@ def largeTests():
 	urlTheCount = dict()
 	urlTheCount["http://www.gutenberg.org/cache/epub/8190/pg8190.txt"] = "Idiopsychological:  17\n"
 	urlTheCount["http://www.gutenberg.org/cache/epub/10554/pg10554.txt"] = "misunderstandings:  17\n"
+	urlTheCount["http://www.gutenberg.org/cache/epub/8178/pg8178.txt"] = "unenthusiastically:  18\n"
 	for url in urlTheCount:
+		print url
 		largeTest(url, urlTheCount[url]) 
 
 
