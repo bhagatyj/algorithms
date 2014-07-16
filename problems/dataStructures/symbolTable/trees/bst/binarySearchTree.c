@@ -182,6 +182,27 @@ int walkTreeOrder(void *stPtr, walk_fn_t walk_fn, onEachNode_fn_t onEachNode_fn)
 	return (walk_fn(node, onEachNode_fn));
 }
 
+/*
+	This function is meant for generic users who do not 
+	differentiate between Pre/In/Post order methods of 
+	printing the nodes.
+
+	Can be used by a genric Application that needs to run
+	a function through all the nodes of a SymbolTable.
+
+	It uses the In-order routine.
+*/
+int walkTreeFn(void *stPtr, onEachNode_fn_t onEachNode_fn)
+{
+
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+	int ret;
+	node_t *node;
+
+	node = st->root;
+	return (walkNodeInorder(node, onEachNode_fn));
+}
+
 int printNode (void *key, unsigned long value)
 {
 	printf("%-24s:%lu\n", (char *)key, value);
@@ -220,6 +241,7 @@ void * createST(compare_fn_t compare_fn, genValue_fn_t gen_fn)
 	st->addNode = addNodeToST;
 	st->getValue = getValue;
 	st->fnCreateNode = createNode;
+	st->walkTreeFn = walkTreeFn;
 	return (void *)st;
 }
 
