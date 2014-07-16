@@ -7,3 +7,4 @@ typedef struct __node_t__ {
 	struct __node_t__ *right;
 } node_t;
 
+typedef int    (* walk_fn_t) (node_t *, onEachNode_fn_t);

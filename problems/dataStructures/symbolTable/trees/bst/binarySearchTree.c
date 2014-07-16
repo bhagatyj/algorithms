@@ -46,29 +46,28 @@ void printPostorder(node_t *node)
 	printf("%-24s:%lu\n", (char *) node->key, node->value);
 }
 
-void dfsPrintPreOrder(void *stPtr)
-{
-	symbol_table_t *st = (symbol_table_t *)stPtr;
+// void dfsPrintPreOrder(void *stPtr)
+// {
+// 	symbol_table_t *st = (symbol_table_t *)stPtr;
 
-	printf("Nodes in pre-order...\n");
-	printPreorder(st->root);
-}
+// 	printf("Nodes in pre-order...\n");
+// 	printPreorder(st->root);
+// }
 
-void dfsPrintInOrder(void *stPtr)
-{
-	symbol_table_t *st = (symbol_table_t *)stPtr;
+// // void dfsPrintInOrder(void *stPtr)
+// // {
+// // 	symbol_table_t *st = (symbol_table_t *)stPtr;
 
-	printf("Nodes in in-order...\n");
-	printInorder(st->root);
-}
+// // 	printInorder(st->root);
+// // }
 
-void dfsPrintPostOrder(void *stPtr)
-{
-	symbol_table_t *st = (symbol_table_t *)stPtr;
+// void dfsPrintPostOrder(void *stPtr)
+// {
+// 	symbol_table_t *st = (symbol_table_t *)stPtr;
 
-	printf("Nodes in post-order...\n");
-	printPostorder(st->root);
-}
+// 	printf("Nodes in post-order...\n");
+// 	printPostorder(st->root);
+// }
 
 
 node_t * addNode(node_t *main, node_t *newNode, symbol_table_t *st)
@@ -129,6 +128,83 @@ unsigned long getValue(void *stPtr, void *key)
 
 }
 
+
+int walkNodeInorder(node_t *node, onEachNode_fn_t onEachNode_fn)
+{
+	int ret;
+
+	if (node == NULL) {
+		return FALSE;
+	}
+	ret += walkNodeInorder(node->left, onEachNode_fn);
+	ret += onEachNode_fn(node->key, node->value);
+	ret += walkNodeInorder(node->right, onEachNode_fn);
+
+	return ret;
+}
+
+int walkNodePreorder(node_t *node, onEachNode_fn_t onEachNode_fn)
+{
+	int ret;
+
+	if (node == NULL) {
+		return FALSE;
+	}
+	ret += onEachNode_fn(node->key, node->value);
+	ret += walkNodePreorder(node->left, onEachNode_fn);
+	ret += walkNodePreorder(node->right, onEachNode_fn);
+
+	return ret;
+}
+
+int walkNodePostorder(node_t *node, onEachNode_fn_t onEachNode_fn)
+{
+	int ret;
+
+	if (node == NULL) {
+		return FALSE;
+	}
+	ret += walkNodePostorder(node->left, onEachNode_fn);
+	ret += walkNodePostorder(node->right, onEachNode_fn);
+	ret += onEachNode_fn(node->key, node->value);
+
+	return ret;
+}
+
+int walkTreeOrder(void *stPtr, walk_fn_t walk_fn, onEachNode_fn_t onEachNode_fn)
+{
+
+	symbol_table_t *st = (symbol_table_t *)stPtr;
+	int ret;
+	node_t *node;
+
+	node = st->root;
+	return (walk_fn(node, onEachNode_fn));
+}
+
+int printNode (void *key, unsigned long value)
+{
+	printf("%-24s:%lu\n", (char *)key, value);
+	return FALSE;
+}
+
+void dfsPrintPreOrder(void *stPtr)
+{
+	printf("Nodes in pre-order...\n");
+	walkTreeOrder(stPtr, walkNodePreorder, printNode);
+}
+
+void dfsPrintInOrder(void *stPtr)
+{
+	printf("Nodes in in-order...\n");
+	walkTreeOrder(stPtr, walkNodeInorder, printNode);
+}
+
+void dfsPrintPostOrder(void *stPtr)
+{
+	printf("Nodes in post-order...\n");
+	walkTreeOrder(stPtr, walkNodePostorder, printNode);
+}
 
 void * createST(compare_fn_t compare_fn, genValue_fn_t gen_fn)
 {

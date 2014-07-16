@@ -7,9 +7,13 @@
 #include <ctype.h>
 
 
+#define TRUE 1
+#define FALSE 0
+
 typedef void * (* createNode_fn_t) (void *key, int value);
 typedef int    (* compare_fn_t) (void *k1, void *k2);
 typedef void   (* addNode_fn_t) (void *stPtr, void *nodePtr);
+typedef int    (* onEachNode_fn_t) (void *key, unsigned long value);
 
 typedef unsigned long    (* getValue_fn_t) (void *stPtr, void *key);
 typedef unsigned long    (* genValue_fn_t) (void *key, int currentValue);
