@@ -16,43 +16,28 @@ unsigned long lenValue (void *key, int currentValue)
 	return (strlen(key));
 }
 
+static unsigned long currentLongestValue = 0;
+static char *currentLongestKey;
+
+
+int findLongestWord (void *key, unsigned long value)
+{
+
+	if (value > currentLongestValue) {
+		currentLongestValue = value;
+		currentLongestKey = key; 
+	}
+	return currentLongestValue;
+}
+
+
 int main(int argc, char **argv)
 {
 	int value;
-	void *st;
+	symbol_table_t *st;
 
 	st = buildTheWordTree(lenValue);
-
-	// The word tree has been built with length values.
-	// Need to implement searching the tree 
-	// to find the longest word.
-	// Next requirements are
-	// Search-tree-by-key
-	// Search-tree-by-value (first match)
-	// Search-tree-by-value (continue beyond first match)
-	// Search-tree-for-condition (for e.g. largest value)
-
+	st->walkTreeFn(st, findLongestWord);
+	printf("%s:%4lu\n", currentLongestKey, strlen(currentLongestKey));
+	return 0;
 }
-
-// int main(int argc, char **argv)
-// {
-// 	char word[WORDSIZE], *longestWord;
-// 	int total = 0;
-// 	int longest = 0;
-
-// 	longestWord = NULL;
-// 	while (getword(word, WORDSIZE) != EOF) {
-// 		if (isalpha(word[0])) {
-// 			total++;
-// 			if (strlen(word) > longest) {
-// 				longest = strlen(word);
-// 				if (longestWord) {
-// 					free(longestWord);
-// 				}
-// 				longestWord = strdup(word);
-// 			} 
-// 			// process word
-// 		}
-// 	}
-// 	printf("Longest word is %s\n", longestWord);
-// }
