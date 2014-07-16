@@ -26,7 +26,7 @@ def singleTest(qn, ansExp):
 	print "Test number: " + str(count)
 	# print "Test input : \n" + qn
 	#print "Expected Answer :\n" + ansExp
-	print "Got this Answer :\n" + ansGot
+	# print "Got this Answer :\n" + ansGot
 	if (ansExp != ansGot):
 		raise Exception('Test failed')
 	else:
@@ -97,7 +97,6 @@ def compileCode(source):
 
 	print "Compiling %s" % source
 	command = command %source
-	print command
 	ret = os.system(command)
 	if (ret != 0):
 		raise Exception("Did not compile")
