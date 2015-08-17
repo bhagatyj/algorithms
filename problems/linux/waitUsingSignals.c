@@ -43,44 +43,58 @@ int main(int ac, char *av[])
 {
    pid_t pid; 
    int ret;
+   struct sigaction action;
 
    init();
+
+   // Install an action to ignore the signal SIGUSR1. 
+   // We don't really want to handle the signal. Just
+   // receiving the signal is information enough.
+   action.sa_handler = SIG_IGN;
+   sigaction(SIGUSR1, &action, NULL);
+
    if ( (pid = fork() ) < 0 ) {
       syserr("Forking failed\n");
    } else if (pid == 0 ) {
       // Child process
       sigset_t waitset;
-      siginfo_t info;
       struct timespec delay;
-      int sig, ret;
+      int ret;
 
       sleep(3);
       printf("Child: Let me print first\n");
       sem_post(sem);
-      sigemptyset( &waitset );
+
+	  // Now, it is my turn to go to sleep.
+	  // Parent will let me know after it finishes
+	  // its printing. 
+	  sigprocmask( SIG_BLOCK, NULL, &waitset);
       sigaddset( &waitset, SIGUSR1);
-      //ret = sigwait( &waitset, &sig); 
-      delay.tv_sec = 0;
-      delay.tv_nsec = 1000;
-      ret = sigtimedwait( &waitset, &info, &delay);
-      if (ret == 0) {
-          printf("sigwait returned sig %d\n", sig);
-          if (sig == SIGUSR1) {
+      delay.tv_sec = 40;
+      delay.tv_nsec = 10000;
+	  sigprocmask( SIG_BLOCK, &waitset, NULL);
+      ret = sigtimedwait( &waitset, NULL, &delay);
+	  printf("Returned from timed wait\n");
+      if (ret >= 0) {
+          if ( ret == SIGUSR1) {
               printf("Child: Thanks...\n");
           }
       } else {
-          printf("sigwait returned %d\n", ret);
+          printf("sigwait retcode %d \n", ret);
       }
+	  // Sending the signal below would kill 
+	  // if the dst process did not have a signal handler.
+	  // But we have installed one.
+      kill(pid, SIGUSR1);
+
    } else {
       sem_wait(sem);
       printf("Parent: Ok I will wait \n");
-      // Unlink marks the file in /dev/shm/ for removal after all processes
-      // close it. It can be called by this process - even before closing the
-      // file descriptor.
-      sleep(3);
+	  sleep(1);
       kill(pid, SIGUSR1);
       ret = sem_unlink(SEM_NAME);
       printf("Ret code of unlink is %d\n", ret);
+	  sleep(10);
    }
    sem_close(sem);
 }
