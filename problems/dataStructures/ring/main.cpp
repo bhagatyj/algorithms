@@ -1,5 +1,7 @@
 #include "ring.h"
 
+using namespace std;
+
 int main(int argc, char **argv) {
 
     Example::Ring *myRing = new Example::Ring(100);
@@ -8,6 +10,6 @@ int main(int argc, char **argv) {
         myRing->push(i);
     }
     for (int i=0; i<99; i++) {
-        printf("%d\n", myRing->pop() );
+        cout << myRing->pop() << endl;
     }
 }
