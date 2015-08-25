@@ -42,7 +42,10 @@ int main(void)
    struct sigaction mySigAction;
 
    // sigaction() system call is used to change the action taken by a
-   // process on receipt of a specific signal
+   // process on receipt of a specific signal.
+   // We use it for handling SIGFPE. The handler returns 1,
+   // thereby printing an Encountered SIGFPE message and continuing
+   // with the loop.
    mySigAction.sa_handler = handler;
    sigaction(SIGFPE, &mySigAction, NULL);
 
