@@ -7,6 +7,10 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
+ * Buffer to save the environment (exection context)
+ * of the process
+ */
 sigjmp_buf jmpbuf;
 
 /*
