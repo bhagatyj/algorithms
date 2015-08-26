@@ -1,15 +1,3 @@
-// # sudo ./a.out
-// Parent: Starting loop
-// Parent: Ending loop
-// Child Exit
-// Parent: value 0xf
-// Parent: delta total:1499186 oneOp:14
-// Child: delta total:289068 oneOp:2
-// Parent: Example delta 14 usec
-// Child: Example delta 2 usec
-// # 
-//
-
 #include <fcntl.h>
 #include <stdio.h>
 #include <stddef.h>
