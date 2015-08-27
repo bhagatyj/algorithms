@@ -50,6 +50,8 @@ int main(int ac, char *av[])
    } else if (pid == 0 ) {
       // Child process
       sigset_t waitset;
+      siginfo_t info;
+      struct timespec delay;
       int sig, ret;
 
       sleep(3);
@@ -57,7 +59,10 @@ int main(int ac, char *av[])
       sem_post(sem);
       sigemptyset( &waitset );
       sigaddset( &waitset, SIGUSR1);
-      ret = sigwait( &waitset, &sig); 
+      //ret = sigwait( &waitset, &sig); 
+      delay.tv_sec = 0;
+      delay.tv_nsec = 1000;
+      ret = sigtimedwait( &waitset, &info, &delay);
       if (ret == 0) {
           printf("sigwait returned sig %d\n", sig);
           if (sig == SIGUSR1) {
