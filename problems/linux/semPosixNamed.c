@@ -43,6 +43,7 @@ int main(int ac, char *av[])
       syserr("Forking failed\n");
    } else if (pid == 0 ) {
       // Child process
+	  // Parent will wait till I wake up
       sleep(3);
       printf("Child: Let me print first\n");
       sem_post(sem);
