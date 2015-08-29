@@ -68,6 +68,7 @@ int main(int ac, char *av[])
 	  // Now, it is my turn to go to sleep.
 	  // Parent will let me know after it finishes
 	  // its printing. 
+      // Get the current waitset and add SIGUSR1 to it.
 	  sigprocmask( SIG_BLOCK, NULL, &waitset);
       sigaddset( &waitset, SIGUSR1);
       delay.tv_sec = 40;
