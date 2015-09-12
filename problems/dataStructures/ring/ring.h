@@ -13,6 +13,9 @@ class Ring {
         Ring( int size );
         ~Ring();
         int push( int value );
+        int incrementIndex( int index );
+        bool isEmpty();
+        bool isFull();
         int pop();
 };
 }
