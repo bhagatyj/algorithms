@@ -8,7 +8,7 @@ main: .lib/libring.a
 	ar rcs ./.lib/libring.a ./.lib/ring.o
 
 .lib/ring.o:
-	mkdir ./.lib
+	mkdir -p ./.lib
 	g++ -c ring.cpp -o ./.lib/ring.o
 
 clean:
