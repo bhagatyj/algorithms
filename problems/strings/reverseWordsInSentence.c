@@ -3,6 +3,21 @@
 #include <string.h>
 #include <assert.h>
 
+/*
+ * This function assumes space as the delimiter
+ * It also assumes that the delimiter occurs 
+ * exactly once between words.
+ *
+ * The first word is a special case, because there is 
+ * no delimiter in front of it. So, when looking for 
+ * the delimiter, it is important to make sure that 
+ * we do not go before the first char in the sentence.
+ *
+ * lastPos is used to find the length of the current word.
+ * Depending on whether it is first word or not, there could
+ * be an off-by-one issue in calculating the length.
+ *
+ */
 char * reverse( char *src ) {
     char *dst, *dstPos, *srcPos, *lastPos;
     int len, wordLen;
