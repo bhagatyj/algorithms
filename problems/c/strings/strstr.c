@@ -4,7 +4,7 @@
 #include <assert.h>
 
 
-int myStrstr( char *src, char *search ) {
+int myStrstr2( char *src, char *search ) {
 
     char *posLine, *posSearch, *end, *endSearch, *start;
 
@@ -29,6 +29,23 @@ int myStrstr( char *src, char *search ) {
         // Couldnt find search in this start position.
         // Try the next one.
         start++;
+    }
+    return -1;
+}
+
+int myStrstr( char *line, char *s ) {
+    int i, j, llen, slen;
+
+    llen = strlen(line); slen = strlen(s);
+
+    for ( i=0; i<llen; i++ ) {
+        for ( j=0; j<slen; j++ ) {
+            if ( i+j >= llen ) { break; }
+            if ( line[i+j] != s[j] ) { break; }
+        }
+        if ( j == slen ) {
+            return i;
+        }
     }
     return -1;
 }
