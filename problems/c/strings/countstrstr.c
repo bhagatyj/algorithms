@@ -8,9 +8,8 @@ int countStrStr( char *line, char *s ) {
 
     llen = strlen(line); slen = strlen(s); count = 0;
 
-    for ( i=0; i<llen; i++ ) {
+    for ( i=0; i<=llen-slen; i++ ) {
         for ( j=0; j<slen; j++ ) {
-            if ( i+j >= llen ) { break; }
             if ( line[i+j] != s[j] ) { break; }
         }
         if ( j == slen ) {

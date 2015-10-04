@@ -3,36 +3,14 @@
 #include <string.h>
 #include <assert.h>
 
-
-int myStrstr2( char *src, char *search ) {
-
-    char *posLine, *posSearch, *end, *endSearch, *start;
-
-    start = src;
-    end = start + strlen(start);
-    endSearch = search + strlen(search);
-
-    while ( start < end ) {
-        posLine = start;
-        posSearch = search;
-        while ( posSearch < endSearch ) {
-            if ( *posSearch != *posLine ) {
-                break;
-            }
-            posSearch++; posLine++;
-        }
-        // match has been found if we are at the end
-        // of the search string (null char)
-        if ( posSearch == endSearch ) {
-            return ( start - src );
-        }
-        // Couldnt find search in this start position.
-        // Try the next one.
-        start++;
-    }
-    return -1;
-}
-
+// Notes:
+// The first loop needs to go till <= llen-slen.
+// There is no need to go further than that as the
+// second string would not fit after that...
+// 
+// The check for match is simply if inner loop reached
+// its end.
+// 
 int myStrstr( char *line, char *s ) {
     int i, j, llen, slen;
 
