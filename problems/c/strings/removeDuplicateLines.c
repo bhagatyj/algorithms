@@ -14,6 +14,11 @@
  * variable for this helps re-use the same space for successive strings
  * and makes the logic look easier.
  *
+ * Increasing the number of hash buckets increases the storage
+ * space slightly, but can cause very high increase in performance.
+ *
+ * The hash function used is a simple summation of all the char values.
+ *
  */
 
 typedef struct line_data_t_ {
