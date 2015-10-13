@@ -13,8 +13,10 @@ int mstrncmp( int n, char *p, char *q ) {
     while ( n ) {
 
         if ( ( *p == '\0' ) && ( *q == '\0' ) ) { return 0; }
-        if ( *p == '\0' ) { return -1; }
-        if ( *q == '\0' ) { return 1; }
+        // The below two commented lines are not needed 
+        // as the same test is done by the next two lines.
+        //if ( *p == '\0' ) { return -1; }
+        //if ( *q == '\0' ) { return 1; }
         if ( *p < *q ) { return -1; }
         if ( *p > *q ) { return 1; }
         if ( *p == *q ) { 
@@ -27,6 +29,9 @@ int mstrncmp( int n, char *p, char *q ) {
 int main (int argc, char **argv) {
 
     assert( mstrncmp( 0, "", "") == 0 );
+    assert( mstrncmp( 1, "", "") == 0 );
+    assert( mstrncmp( 4, "help", "hel") == 1 );
+    assert( mstrncmp( 4, "hel", "help") == -1 );
     assert( mstrncmp( 3, "hello", "help") == 0 );
     assert( mstrncmp( 4, "hello", "help") == -1 );
     assert( mstrncmp( 4, "help", "hello") == 1 );
