@@ -1,5 +1,8 @@
 /*
  * Problem: Detect any loops in the LL.
+ *
+ * Additional Readup : Check out Floyd's cycle finding algorithm
+ *
  */
 
 #include <stdio.h>
