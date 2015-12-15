@@ -34,20 +34,25 @@ int detectLoop( void ){
     node_t *fp, *sp;
 
     fp = sp = head;
-    while (fp) {
-        if ( fp->next ) {
-            fp = fp->next->next;
-        } else {
-            break;
+    while ( fp && sp ) {
+        // Check at all possible points. 
+        // Faster detection.
+        // Move fp once, check
+        // Move fp again, check
+        // Move sp once, check
+        fp = fp->next;
+        if ( fp == sp ) {
+            printf("Loop detected\n");
+            return 1;
+        }
+        if ( fp ) {
+            fp = fp->next;
+        } 
+        if ( fp == sp ) {
+            printf("Loop detected\n");
+            return 1;
         }
         sp = sp->next;
-
-        if ( fp == sp ) {
-            break;
-        }
-    }
-
-    if ( fp->next ) {
         if ( fp == sp ) {
             printf("Loop detected\n");
             return 1;
