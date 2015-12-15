@@ -24,7 +24,6 @@ Node::getData( void ) {
 
 Stack::Stack() {
 	head = NULL;
-	tail = NULL;
 }
 
 int
@@ -40,10 +39,9 @@ Stack::push( int value ) {
 		head = newNode;
 		tail = newNode;
 	} else {
-		// insert at tail
-		assert( tail );
-		tail->setNext( newNode );
-		tail = newNode;
+		// insert at head
+		newNode->setNext( head );
+		head = newNode;
 	}
 	return 0;
 }
@@ -58,9 +56,6 @@ Stack::pop( void ) {
 	Node *popNode = head;
 	head = head->getNext();
 
-	if (head == NULL) {
-		tail = NULL;
-	}
 	int value = popNode->getData();
 	delete popNode;
 

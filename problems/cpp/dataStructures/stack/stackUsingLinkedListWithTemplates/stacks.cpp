@@ -1,5 +1,6 @@
 #include "stacks.h"
 #include <assert.h>
+
 using namespace std;
 
 template <class T>
@@ -29,7 +30,6 @@ Node<T>::getData( void ) {
 template <class T>
 Stack<T>::Stack() {
 	head = NULL;
-	tail = NULL;
 }
 
 template <class T>
@@ -44,12 +44,10 @@ Stack<T>::push( T value ) {
 
 	if ( head == NULL) {
 		head = newNode;
-		tail = newNode;
 	} else {
-		// insert at tail
-		assert( tail );
-		tail->setNext( newNode );
-		tail = newNode;
+		// insert at head
+		newNode->setNext( head );
+		head = newNode;
 	}
 	return 0;
 }
@@ -65,9 +63,6 @@ Stack<T>::pop( void ) {
 	Node<T> *popNode = head;
 	head = head->getNext();
 
-	if (head == NULL) {
-		tail = NULL;
-	}
 	T value = popNode->getData();
 	delete popNode;
 

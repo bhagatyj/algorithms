@@ -20,7 +20,6 @@ template <class T>
 class Stack {
 private:
 	class Node<T> *head;
-	class Node<T> *tail;
 
 public:
 	int push( T value);

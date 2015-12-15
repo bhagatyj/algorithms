@@ -15,7 +15,6 @@ public:
 class Stack {
 private:
 	class Node *head;
-	class Node *tail;
 
 public:
 	int push( int value);
