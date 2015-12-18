@@ -8,9 +8,8 @@
  * CRITICAL
  * Queue size has to be Desired-size + 1 <---
 */
-#define MAXQSIZE (MAXELEMENTS+1) // <---
 typedef struct __queue__ {
-	void *items[MAXQSIZE]; 
+	void **items; 
 	int head;
 	int tail;
 } queue;
@@ -22,6 +21,7 @@ void * createQueue()
 	q = (queue *)malloc(sizeof(queue));
 	q->head = 0;
 	q->tail = 0;
+	q->items = (void **)malloc(sizeof(void *) *MAXQSIZE);
 	return (void *)q;
 }
 
