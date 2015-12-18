@@ -14,7 +14,7 @@ public:
 	 * The below functions are pure virtual.
 	 * They are not implemented in the base class.
 	 */
-	virtual unsigned enqueue( int data) = 0;
+	virtual void enqueue( int data) = 0;
 	virtual int dequeue() = 0;
 };
 
@@ -27,7 +27,7 @@ protected:
 	unsigned incr_index(unsigned index);
 
 public:
-	unsigned enqueue( int data);
+	void enqueue( int data);
 	int dequeue();
 	ArrayQueue(int size=QUEUE_DEFAULT_SIZE);
 	~ArrayQueue();

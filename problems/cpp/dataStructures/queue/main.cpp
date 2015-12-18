@@ -1,6 +1,8 @@
 #include "queue.h"
 #include <stdexcept>
 
+using namespace std;
+
 int main(int argc, char **argv) {
 	unsigned i;
 
@@ -10,7 +12,7 @@ int main(int argc, char **argv) {
 	}
 	int value = myq.dequeue();
 	while ( value != -1 ) {
-		std::cout << value << std::endl; 
+		cout << value << endl; 
 		value = myq.dequeue();
 	}
 
@@ -20,7 +22,7 @@ int main(int argc, char **argv) {
 		}
 	}
 	catch (std::exception &e) {
-		//std::cout << "Hello" << std::endl;
+		// Debug
 		//std::cout << e.what() << std::endl;
 	}
 

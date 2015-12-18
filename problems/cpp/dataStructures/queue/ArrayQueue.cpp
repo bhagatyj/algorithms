@@ -13,16 +13,14 @@ ArrayQueue::~ArrayQueue() {
 	delete __store;
 }
 
-
-unsigned 
+void 
 ArrayQueue::enqueue( int data) {
 	if (incr_index(__head) == __tail) {
 		throw std::overflow_error("Q is Full");
-		return -1;
+		return;
 	}
 	__store[__head] = data;
 	__head = incr_index(__head);
-	return 0;
 }
 
 unsigned
