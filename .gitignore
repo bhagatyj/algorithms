@@ -1,5 +1,6 @@
 # Object files
 a.out
+main
 *.o
 *.ko
 *.obj

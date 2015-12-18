@@ -1,0 +1,4 @@
+
+Problem: Find the mid-point of a link-list
+Solution: Use two pointers for traversal. One moving twice as fast.
+When faster one reaches the end, other one is at mid.
