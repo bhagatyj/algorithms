@@ -5,7 +5,7 @@
 #define MAXCHAR 256
 
 
-#define MAXQSIZE 256
+#define MAX_ELEMENTS 256
 
 void * createQueue();
 void deleteQueue(void *st);
