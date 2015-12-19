@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#define MAXCHAR 256
+#define MAXCHAR 257
 
 
-#define MAXQSIZE 256
+#define MAXQSIZE 900
 
 void * createQueue();
 void deleteQueue(void *st);

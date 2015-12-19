@@ -9,7 +9,7 @@
  * Queue size has to be Desired-size + 1 <---
 */
 typedef struct __queue__ {
-	void *items[MAXQSIZE+1]; // <----
+	void **items; 
 	int head;
 	int tail;
 } queue;
@@ -21,6 +21,7 @@ void * createQueue()
 	q = (queue *)malloc(sizeof(queue));
 	q->head = 0;
 	q->tail = 0;
+	q->items = (void **)malloc(sizeof(void *) *MAXQSIZE);
 	return (void *)q;
 }
 
@@ -33,7 +34,7 @@ void enqueue(void *qp, void *item)
 {
 
 	queue *q = (queue *)qp;
-	if ((q->head +1)%(MAXQSIZE+1) == q->tail) {
+	if ((q->head +1)%(MAXQSIZE) == q->tail) {
 		printf("Too many items\n");
 		return;
 	}
@@ -61,6 +62,6 @@ int size(void *qp)
 	if (q->head >= q->tail) {
 		return (q->head - q->tail);
 	} else {
-		return ((MAXQSIZE - q->tail) + q->head + 1);
+		return ((MAXQSIZE - q->tail) + q->head );
 	}
 }
