@@ -1,3 +1,4 @@
+// g++ main.cpp  sLStore.cpp store.cpp
 #include "sLStore.h"
 
 int main (int argc, char **argv) {
