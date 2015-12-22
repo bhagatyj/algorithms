@@ -1,4 +1,10 @@
 
+# Problem
+#  Create a circular buffer
+
+# Solution:
+# Allocate a buffer of fixed size.
+
 class CircularBuffer:
     def __init__(self, size):
         self.buffer = [None] *size
