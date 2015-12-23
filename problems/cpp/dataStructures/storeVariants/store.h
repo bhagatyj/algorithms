@@ -25,7 +25,6 @@ class Store {
     public:
         virtual int add ( int key, string data) = 0;
         virtual string get( int key ) = 0;
-        virtual int update( int key, string data) = 0;
         virtual int remove( int key ) = 0;
         virtual void print( void ) = 0;
 };

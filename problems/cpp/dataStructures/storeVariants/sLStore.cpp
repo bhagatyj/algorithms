@@ -10,23 +10,14 @@ SLStore::SLStore() {
 	head = NULL;
 }
 
-int 
-SLStore::add ( int key, string data ) {
-
-	SLNode *n = new SLNode(key, data, head);
-	head = n;
-
-	return 0;
-}
-
-string 
-SLStore::get( int key ) {
+SLNode *
+SLStore::find ( int key) {
 	SLNode *n;
 
 	n = head;
 	while (n) {
 		if (n->__key == key) {
-			return n->__data;
+			return n;
 		}
 		n = n->__next;
 	}
@@ -34,10 +25,28 @@ SLStore::get( int key ) {
 }
 
 int 
-SLStore::update( int key, string data ) {
+SLStore::add ( int key, string data ) {
+	SLNode *n;
 
+	if ((n = find(key)) != NULL) {
+		n->__data = data;
+	} else {
+		n = new SLNode(key, data, head);
+		head = n;
+	}
 	return 0;
 }
+
+string 
+SLStore::get( int key ) {
+
+	SLNode *n = find(key);
+	if (n) {
+		return n->__data;
+	}
+	return NULL;
+}
+
         
 int 
 SLStore::remove( int key ) {

@@ -24,9 +24,9 @@ public:
     SLStore();
     int add ( int key, string data);
     string get( int key );
-    int update( int key, string data);
     int remove( int key );
     void print( void );
+    SLNode * find ( int key);
 };
 
 #endif
