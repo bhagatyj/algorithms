@@ -14,9 +14,30 @@ public:
     ~MergeSorter( );
     void printStore2();
     void swapStore();
-    void merge( int src[], int dst[], int start_left, int start_right, int end_right);
+    void merge( int src[], int dst[], 
+                int start_left, int start_right, int end_right);
 };
 
+// Merge sort works by selectively picking elements from two smaller sorted arrays
+// (left, right) to form a bigger sorted array.
+// 
+// The unsorted array can be considered as multiple single element arrays that are
+// already sorted. So, the first job is to form two element arrays that are sorted.
+// And then four element arrays that are sorted and so on...until original size is
+// reached.
+// 
+// As the array size might not be a power-of-two, it is important to note that the
+// left array and right array may not be of equal size during sorting. (Look at the
+// comments in function sortIt).
+//
+// As the outer loop grows in width size by doubling up, it contributes a logn factor.
+// The inner loop goes through all the elements, thus bringing the algo to
+// O(nlogn)
+//
+// While working it needs a place to store the elements. Hence, we have a constructor
+// that allocates a secondary store.
+//
+// 
 MergeSorter::MergeSorter( int size ) : Sort::Sort( size ) {
     int i;
     __store2 = new int[__size];

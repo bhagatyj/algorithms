@@ -1,3 +1,6 @@
+# Data files
+*.txt
+*.swp
 # Object files
 a.out
 main
@@ -6,7 +9,7 @@ main
 *.obj
 *.elf
 Info.plist
-
+exe
 # Libraries
 *.lib
 *.a
