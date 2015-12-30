@@ -14,6 +14,15 @@ BubbleSort::BubbleSort( int size ) : Sort::Sort( size ) {
     
 }
 
+//
+// Optimized Bubble sort...
+// It is advantageous to keep track of the number of swaps in the inner loop.
+// If no swaps are done in inner loop, list is sorted and there is no need to 
+// continue further.
+// Also, it is advantageous to keep track of last swapped element. In the
+// next run, there is no need to scan elements greater than last swapped 
+// element in the next run.
+// 
 void
 BubbleSort::sortIt() {
     unsigned last_swapped, i, end;
