@@ -52,6 +52,9 @@ void
 Sort::swap(unsigned i, unsigned j) {
     assert(i<__size);
     assert(j<__size);
+    if (i == j) {
+        return;
+    }
     int tmp = __store[i];
     __store[i] = __store[j];
     __store[j] = tmp;

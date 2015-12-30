@@ -2,11 +2,13 @@
 #include <assert.h>
 #include "bubbleSort.h"
 #include "mergeSort.h"
+#include "quickSort.h"
 #include <ctime>
 using namespace std;
 
 int main(int argc, char **argv) {
     time_t t1, t2;
+/*
     Sort s = Sort(5);
     s.sortIt();
     cout << (s.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
@@ -25,4 +27,10 @@ int main(int argc, char **argv) {
     //ms.print();
     cout << t2-t1 << endl;
     cout << (ms.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
+*/
+    QuickSorter qs = QuickSorter(5);
+    qs.print();
+    qs.sortIt();
+    cout << (qs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
+    qs.print();
 }
