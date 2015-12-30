@@ -1,6 +1,6 @@
 # Contains a dictionary of words.
 # Which can be retrieved by giving the frequency of letters in them
-import word
+from word import Word
 import reader
 import time
 import itertools
@@ -10,17 +10,17 @@ class Dictionary:
         self.words = dict()
 
     def addWord(self, newWord):
-        w = word.Word(newWord)
-        key = w.key
+        word = Word(newWord)
+        key = word.key
         #print "Adding word ", w, "at key ", key
         if key in self.words.keys():
-            if w in self.words[key]:
+            if word in self.words[key]:
                 pass
                 # increase the frequency for the word
             else:
-                self.words[key].append(w)
+                self.words[key].append(word)
         else:
-            self.words[key] = [w]
+            self.words[key] = [word]
 
     def findWord(self, characters):
         foundWord = None
@@ -38,7 +38,7 @@ class Dictionary:
 if __name__ == "__main__":
     d = Dictionary()
     print time.clock()
-    r = reader.Reader("http://www.gutenberg.org/cache/epub/35/pg35.txt")
+    r = reader.UrlReader("http://www.gutenberg.org/cache/epub/35/pg35.txt")
     for newWord in r:
         d.addWord(newWord)
     print time.clock()
