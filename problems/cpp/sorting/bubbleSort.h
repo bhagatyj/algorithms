@@ -16,19 +16,20 @@ BubbleSort::BubbleSort( int size ) : Sort::Sort( size ) {
 
 void
 BubbleSort::sortIt() {
-    unsigned swapped, i, end;
+    unsigned last_swapped, i, end;
 
-    end = __size;
+    last_swapped = __size;
     do {
-        swapped = false;
+        end = last_swapped;
+        last_swapped = 0;
         for (i=1; i<end; i++) {
             if ( __store[i] < __store[i-1] ) {
                 swap( i, i-1 );
-                swapped = true;
+                last_swapped = i;
             }
         }
         end--;
-    } while (swapped);
+    } while (last_swapped);
 }
 #endif
 

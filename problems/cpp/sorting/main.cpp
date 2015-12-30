@@ -11,17 +11,18 @@ int main(int argc, char **argv) {
     s.sortIt();
     cout << (s.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
 
-    BubbleSort bs = BubbleSort(80000);
+    BubbleSort bs = BubbleSort(800);
     t1 = time(NULL);
     bs.sortIt();
     t2 = time(NULL);
+    //bs.print();
     cout << t2-t1 << endl;
     cout << (bs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     MergeSorter ms = MergeSorter(9);
     t1 = time(NULL);
     ms.sortIt();
     t2 = time(NULL);
-    ms.print();
+    //ms.print();
     cout << t2-t1 << endl;
     cout << (ms.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
 }
