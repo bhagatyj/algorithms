@@ -3,6 +3,7 @@
 #include "bubbleSort.h"
 #include "mergeSort.h"
 #include "quickSort.h"
+#include "selectionSort.h"
 #include <ctime>
 using namespace std;
 
@@ -27,10 +28,16 @@ int main(int argc, char **argv) {
     //ms.print();
     cout << t2-t1 << endl;
     cout << (ms.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
-*/
+
     QuickSorter qs = QuickSorter(5);
     qs.print();
     qs.sortIt();
     cout << (qs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     qs.print();
+*/
+    SelectionSorter ss = SelectionSorter(50);
+    ss.print();
+    ss.sortIt();
+    cout << (ss.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
+    ss.print();
 }

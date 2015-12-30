@@ -5,6 +5,7 @@ main
 *.ko
 *.obj
 *.elf
+Info.plist
 
 # Libraries
 *.lib
