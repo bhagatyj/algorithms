@@ -1,0 +1,14 @@
+sorting
+=======
+Sorting algorithms in python. 
+This is a list of sorting programs written in Python.
+
+To Run
+=======
+Run "sort.py" to get a comparison of all average taken by the 
+various sorting algorithms on random data.
+
+
+Test
+=====
+Has been tested in Py 2.7.5
