@@ -13,8 +13,15 @@ Sort::Sort( int size ) {
         return;
     }
     __size = size;
+    memset( __store, 0, size*sizeof(int) );
+}
+
+void
+Sort::fillRandom() {
+    unsigned i;
+
     srand (time(NULL));
-    for (i=0; i<size; i++) {
+    for (i=0; i<__size; i++) {
         __store[i] = rand();
     }
         

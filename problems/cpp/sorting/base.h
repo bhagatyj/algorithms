@@ -13,6 +13,7 @@ class Sort {
     public:
         Sort( int size=DEFAULT_SIZE );
         int is_sorted();
+        void fillRandom();
         virtual void sortIt();
         void print();
         void swap(unsigned i, unsigned j);

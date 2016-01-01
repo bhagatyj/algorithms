@@ -4,11 +4,13 @@
 #include "mergeSort.h"
 #include "quickSort.h"
 #include "selectionSort.h"
+#include "heapSort.h"
 #include <ctime>
 using namespace std;
 
 int main(int argc, char **argv) {
     time_t t1, t2;
+    int value;
 /*
     Sort s = Sort(5);
     s.sortIt();
@@ -34,10 +36,27 @@ int main(int argc, char **argv) {
     qs.sortIt();
     cout << (qs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     qs.print();
-*/
     SelectionSorter ss = SelectionSorter(50);
     ss.print();
     ss.sortIt();
     cout << (ss.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     ss.print();
+*/
+    Heap hp = Heap(100);
+    hp.add(2);
+    hp.add(3);
+    hp.add(1);
+    hp.add(4);
+    hp.add(9);
+    hp.add(8);
+    hp.add(6);
+    hp.add(5);
+    hp.add(7);
+    hp.print();
+    value = hp.delHead();
+    while ( value != -1 ) {
+        cout << "Value .. " << value << endl;
+        value = hp.delHead();
+
+    }
 }
