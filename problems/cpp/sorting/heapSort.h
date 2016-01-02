@@ -5,7 +5,52 @@
 using namespace std;
 
 /*
+ * The Heap class ...
+ * The Heap maintains the minHeap property - 
+ * Value at child nodes is always more than parent's value.
  *
+ * Index "0" is reserved to simplyfy the index math. 
+ * With index-0 reserved, the node at index "x" has two children
+ * at indices "2x" and "2x+1".
+ *
+ * 
+ * Below are the indices of the nodes that are used to form the tree 
+ * structure.
+ * 
+ *                          1
+ *
+ *                2                   3
+ *
+ *         4           5         6           7
+ *
+ *    8           9         10        11          12
+ *
+ * 13    14   15     16  17    18  19     20   21     22
+ * 
+ * Thus, walking through the array is equivalent of performing a level-walk
+ * in a binary tree with the minHeap property.
+ *  
+ * The heap maintains itself (and even balances well) by implementing the 
+ * "swim" and "sink" methods.
+ *
+ * Consider the "swim" method as used by nodes that have small key value. If
+ * at any point (happens at insertions - especially tail insertion), a small 
+ * node finds itself below large nodes, it swims up as much as it can 
+ * (until it sees smaller parent above itself).
+ *
+ * Similarly, if at any point ( happens at deletion - especially during head deletion), 
+ * a node finds that it is heavy, it sinks as much as it can - until both children are
+ * larger than itself. In this case, care needs to be taken for cases such as 
+ * (a) detect that the node is already a leaf - no more children
+ * (b) detect that there is only one child, and check only that one.
+ * (c) if there are two children, both should be checked and the node should sink
+ *     in the direction of whichever child is less.
+ * 
+ * Head deletion is used to pick the smallest element in the minHeap. To re-arrange the
+ * tree to a balanced structure, a neat technique can be used. Once the head element is
+ * removed, the last element in the array is placed at the head and it is allowed to sink
+ * as much as it can. This balances the tree and maintains minimal depth at all times.
+ *  
  */
 class Heap : public Sort {
 public:
@@ -122,29 +167,30 @@ class HeapSort : public Sort {
 public:
     void sortIt();
     HeapSort( int size );
+protected:
+    Heap *__heap;
 };
 
-HeapSort::HeapSort( int size ) : Sort::Sort( size ) { }
+HeapSort::HeapSort( int size ) : Sort::Sort( size ) {
+    __heap = new Heap(size+1);
+}
 
 //
 // 
 void
 HeapSort::sortIt() {
-    unsigned last_swapped, i, end;
+    unsigned i, value;
 
-    last_swapped = __size;
-    do {
-        end = last_swapped;
-        last_swapped = 0;
-        for (i=1; i<end; i++) {
-            if ( __store[i] < __store[i-1] ) {
-                swap( i, i-1 );
-                last_swapped = i;
-            }
-        }
-        end--;
-    } while (last_swapped);
+    for (i=0; i<__size; i++) {
+        __heap->add(__store[i]);
+    }
+
+    value = __heap->delHead();
+    i = 0;
+    while (value != -1) {
+        __store[i++] = value;
+        value = __heap->delHead();
+    }
 }
-
 #endif
 

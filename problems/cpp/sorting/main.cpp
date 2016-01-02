@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     ss.sortIt();
     cout << (ss.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     ss.print();
-*/
+
     Heap hp = Heap(100);
     hp.add(2);
     hp.add(3);
@@ -59,4 +59,11 @@ int main(int argc, char **argv) {
         value = hp.delHead();
 
     }
+    */
+    HeapSort hs = HeapSort(5000);
+    hs.fillRandom();
+    //hs.print();
+    hs.sortIt();
+    cout << (hs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
+    hs.print();
 }
