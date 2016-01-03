@@ -1,4 +1,39 @@
 #include <iostream>
+#include <queue>
+//
+// LEVEL Order Traversal
+// 
+// For the below example,
+//
+//                        10
+//           5                         15
+//    2            9              14            
+// 1      4                   12
+// 
+// the output should be:
+// 10, 5, 15, 2, 9, 14, 1, 4, 12.
+//
+// In a binary tree, to perform a level order traversal, we need to be
+// able to remember more than one node. 
+// 
+//  To get to node 15 after visiting 5, we push all children nodes of 10 to a queue
+// when visiting 10 and pop them one after another and visit them.
+//
+// So the strategy used is storing all the elements in level "L+1" when walking
+// visiting level "L".
+// Follow this strategy across all levels. 
+//
+// There are two stages to the level tree traversal algorithm:
+//  (1) Discovering the nodes
+//  (2) Visiting the nodes
+// When visiting nodes at level "L", discover their children and push the children's
+// addresses to the queue.
+// By the time all nodes of level "L" are complete, all nodes at level "L+1" have
+// been discovered too. Now we can start visiting the nodes at level "L+1".
+// 
+// To store nodes at level L+1 and retreieve them in order later, we need some FIFO
+// mechanism like c++ queue.
+//
 using namespace std;
 
 class Node {
@@ -28,19 +63,40 @@ class Tree {
         void addNode( int k, int v);
         Tree ( Node *n);
         Tree ( void );
+        void preOrderPrint( Node *n);
         void inOrderPrint( Node *n);
+        void postOrderPrint( Node *n);
+        void levelOrderPrint() ;
         void printTree() ;
+        void printRoot();
     private:
         Node *root;
         Node *insert( Node *n, int k, int v);
 };
         
+void
+Tree::printRoot() {
+    cout << "Printing the root element" << endl;
+    root->printData();
+    cout << endl;
+}
+
 Tree::Tree( Node *n) {
     root = n;
 }
 
 Tree::Tree( void ) {
     root = NULL;
+}
+
+void Tree::preOrderPrint( Node *n) {
+    n->printData();
+    if (n->left) {
+        preOrderPrint(n->left);
+    }
+    if (n->right) {
+        preOrderPrint(n->right);
+    }
 }
 
 void Tree::inOrderPrint( Node *n) {
@@ -53,9 +109,34 @@ void Tree::inOrderPrint( Node *n) {
     }
 }
 
+void Tree::postOrderPrint( Node *n) {
+    if (n->left) {
+        preOrderPrint(n->left);
+    }
+    if (n->right) {
+        preOrderPrint(n->right);
+    }
+    n->printData();
+}
+
 void
 Tree::printTree( void ) {
+
+    cout << "Printing the tree in preorder" << endl;
+    preOrderPrint(root);
+    cout << endl;
+
+    cout << "Printing the tree in inorder" << endl;
     inOrderPrint(root);
+    cout << endl;
+
+    cout << "Printing the tree in postorder" << endl;
+    postOrderPrint(root);
+    cout << endl;
+
+    cout << "Level Order Traversal" << endl;
+    levelOrderPrint();
+    cout << endl;
 }
         
 Node * Tree::insert( Node *n, int k, int v) {
@@ -66,7 +147,8 @@ Node * Tree::insert( Node *n, int k, int v) {
     } else if ( k > n->key ) {
         n->right = insert( n->right, k, v );
     } else {
-        // replace data.
+        // Found a node with the same key.
+        // Replace data.
         n->value = v;
     }
     return n;
@@ -80,12 +162,39 @@ void  Tree::addNode( int k, int v) {
     insert( root, k, v );
 }
 
+void Tree::levelOrderPrint() {
+    queue<Node *> printQ;
+    Node * n;
+
+    if (root == NULL) { return; }
+
+    printQ.push(root);
+    while ( !printQ.empty() ) {
+        Node *n = printQ.front();
+        n->printData();
+        if (n->left) { 
+            printQ.push(n->left);
+        }
+        if (n->right) {
+            printQ.push(n->right);
+        }
+        printQ.pop();
+    }
+}
+
+// As this is a simple bst and not a balanced bst,
+// the order in which elements are added determines
+// the structure of the tree.
+// 
 int main(int argc, char **argv) {
+    int i, max;
     Tree *t = new Tree( );
-    t->addNode(1, 1);
-    t->addNode(2, 4);
-    t->addNode(3, 8);
-    t->addNode(3, 9);
-    t->addNode(4, 16);
+    max = 5;
+    for ( i=0; i<= max; i++) {
+        t->addNode(i, i*i);
+    }
+    for ( i=-1*max; i< 0; i++) {
+        t->addNode(i, i*i);
+    }
     t->printTree();
 }
