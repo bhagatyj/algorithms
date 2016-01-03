@@ -34,3 +34,12 @@ int main(int argc, char **argv) {
     test1();
     test2();
 }
+
+
+/* 
+ * Solution:
+ * Put is an interesting method. When the buffer has space for the 
+ * new item, it needs to move only the head. But when the buffer 
+ * does n't have enough space for the new item or it is already 
+ * full, then the tail also needs to move.
+ */

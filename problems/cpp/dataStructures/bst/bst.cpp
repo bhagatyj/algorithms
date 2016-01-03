@@ -1,7 +1,7 @@
 #include <iostream>
 #include <queue>
 //
-// LEVEL Order Traversal
+// Level Order Traversal
 // 
 // For the below example,
 //
@@ -33,6 +33,12 @@
 // 
 // To store nodes at level L+1 and retreieve them in order later, we need some FIFO
 // mechanism like c++ queue.
+//
+// Finding the height of the tree.
+// The height of the tree is the max length between tree and leaf nodes. One way to
+// get the height is to perform a treaversal of the nodes. At any time that you meet
+// a leaf node, compare the height of the node to the max height found so far and then
+// update the max if necessary.
 //
 using namespace std;
 
@@ -67,13 +73,42 @@ class Tree {
         void inOrderPrint( Node *n);
         void postOrderPrint( Node *n);
         void levelOrderPrint() ;
-        void printTree() ;
+        void printTree();
         void printRoot();
+        int height();
     private:
         Node *root;
         Node *insert( Node *n, int k, int v);
+        int findHeight( Node *n, int &maxHeight );
 };
         
+int 
+Tree::height() {
+    int maxHeight = 0;
+    findHeight(root, maxHeight);
+    return maxHeight;
+}
+
+int 
+Tree::findHeight( Node *n, int &maxHeight ) {
+    int leftHeight=0, rightHeight=0, currentHeight;
+
+    if ( ( ! n->left ) && ( ! n->right ) ) {
+       return 0;
+    }
+    if ( n->left ) {
+        leftHeight = findHeight( n->left, maxHeight ) + 1;
+    }
+    if ( n->right ) {
+        rightHeight = findHeight( n->right, maxHeight ) + 1;
+    }
+    currentHeight = max(leftHeight, rightHeight);
+    maxHeight = max(currentHeight, maxHeight);
+    cout << "At node " << n->key << " height is " << currentHeight << endl;
+    return currentHeight;
+
+}
+
 void
 Tree::printRoot() {
     cout << "Printing the root element" << endl;
@@ -197,4 +232,5 @@ int main(int argc, char **argv) {
         t->addNode(i, i*i);
     }
     t->printTree();
+    cout << "Height of the tree is " << t->height() << endl;
 }

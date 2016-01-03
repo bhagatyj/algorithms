@@ -21,6 +21,26 @@ LogBuffer::move_tail( unsigned size ) {
     _tail = ( _tail + size ) % _size;
 }
 
+unsigned
+LogBuffer::space_left( void ) {
+    if ( _tail > _head ) {
+        return ( _tail - _head );
+    } else {
+        return ( _size - _head + _tail );
+    }
+}
+/*
+ * Put is an interesting method. When the buffer has space for the 
+ * new item, it needs to move only the head. But when the buffer 
+ * does n't have enough space for the new item or it is already 
+ * full, then the tail also needs to move.
+ * 
+ * If the buffer is already full, tail has to move the same distance
+ * as head.
+ *
+ * If the buffer will become full, tail has to move less distance -
+ * based on the space left.
+ */
 void
 LogBuffer::put( std::string line )
 {
