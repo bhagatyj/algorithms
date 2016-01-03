@@ -1,8 +1,10 @@
 #include <iostream>
 #include <queue>
 //
-// Level Order Traversal
+// ## Level Order Traversal
+// ## Height of tree
 // 
+// ## Level Order Traversal
 // For the below example,
 //
 //                        10
@@ -40,6 +42,14 @@
 // a leaf node, compare the height of the node to the max height found so far and then
 // update the max if necessary.
 //
+// ## Height of tree
+//
+// Height of a node is defined as the number of edges from a node to the 
+// farthest leaf descendant. If a node has no children, then, it's height is 0.
+// Thus the number of levels is a tree is equal to its height.
+// By extension, if the root is NULL, the height is -1.
+// The height of a node is the max of the heights of its left, right sub-trees.
+// 
 using namespace std;
 
 class Node {
@@ -65,6 +75,10 @@ Node::printData(void) {
 }
 
 class Tree {
+    private:
+        Node *root;
+        Node *insert( Node *n, int k, int v);
+        int findHeight( Node *n);
     public:
         void addNode( int k, int v);
         Tree ( Node *n);
@@ -76,37 +90,28 @@ class Tree {
         void printTree();
         void printRoot();
         int height();
-    private:
-        Node *root;
-        Node *insert( Node *n, int k, int v);
-        int findHeight( Node *n, int &maxHeight );
 };
         
-int 
+int
 Tree::height() {
-    int maxHeight = 0;
-    findHeight(root, maxHeight);
-    return maxHeight;
+    return findHeight( root );
 }
 
+// Height of the tree is -1 if the root node is NULL.
+// For a root node with no children, it is 0.
+// and so on..
 int 
-Tree::findHeight( Node *n, int &maxHeight ) {
-    int leftHeight=0, rightHeight=0, currentHeight;
+Tree::findHeight( Node *n) {
+    int leftHeight, rightHeight, currHeight;
 
-    if ( ( ! n->left ) && ( ! n->right ) ) {
-       return 0;
+    if ( !n ) {
+       return -1;
     }
-    if ( n->left ) {
-        leftHeight = findHeight( n->left, maxHeight ) + 1;
-    }
-    if ( n->right ) {
-        rightHeight = findHeight( n->right, maxHeight ) + 1;
-    }
-    currentHeight = max(leftHeight, rightHeight);
-    maxHeight = max(currentHeight, maxHeight);
-    cout << "At node " << n->key << " height is " << currentHeight << endl;
-    return currentHeight;
+    leftHeight = findHeight( n->left );
+    rightHeight = findHeight( n->right );
+    currHeight = max(leftHeight, rightHeight) + 1;
 
+    return currHeight;
 }
 
 void
@@ -224,7 +229,7 @@ void Tree::levelOrderPrint() {
 int main(int argc, char **argv) {
     int i, max;
     Tree *t = new Tree( );
-    max = 5;
+    max = 1;
     for ( i=0; i<= max; i++) {
         t->addNode(i, i*i);
     }
