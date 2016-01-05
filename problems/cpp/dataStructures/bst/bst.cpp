@@ -4,6 +4,11 @@
 // ## Level Order Traversal
 // ## Height of tree
 // ## Deletion of node in bst
+// ## Check if a binart tree is BST - Method 1
+// check if each node falls within expected range
+// ## Check if a binart tree is BST - Method 2 
+// (in order traversal - check sorted order)
+// ##
 // 
 //
 using namespace std;
