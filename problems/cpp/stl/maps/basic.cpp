@@ -21,6 +21,10 @@ int main(int argc, char **argv) {
     alphabets[1] = 'B';
     // As the method at returns a reference, it can be used for assignment.
     alphabets.at(2) = 'C';
+    // at can also be used to get a const reference.
+    const char &x = alphabets.at(3);
+    cout << x << endl;
+
     alphabets.erase(0);
     alphabets.insert( pair<int, char>( 0, 'A') );
 
@@ -57,6 +61,12 @@ int main(int argc, char **argv) {
     }
     cout << "Number of elements in cubes is " << cubes.size() << endl;
     cubes.erase(cubes.begin());
+    map<int, int>::iterator it_low, it_up;
+
+    it_low = cubes.lower_bound(3);
+    it_up = cubes.upper_bound(8); // actually points to 9.
+    cubes.erase(it_low, it_up);
+
     cout << "Number of elements in cubes is " << cubes.size() << endl;
     cout << (cubes.empty() ? "Cubes is Empty" : "Cubes is not empty") << endl;
 }
