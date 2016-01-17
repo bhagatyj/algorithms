@@ -17,6 +17,7 @@ class Node {
     public:
         int key;
         int value;
+        int height;
         Node *left;
         Node *right;
 
@@ -39,7 +40,7 @@ Node::printData(void) {
 }
 
 class Tree {
-    private:
+    protected:
         Node *root;
         Node *insert( Node *n, int k, int v);
         int findHeight( Node *n);
@@ -58,6 +59,18 @@ class Tree {
         void printRoot();
         int height();
 };
+
+/*
+class AvlTree : Tree {
+    protected:
+        Node *insert( Node *n, int k, int v);
+        Node *_removeNode( Node *root, int key);
+    public:
+        void addNode( int k, int v);
+        void removeNode( int k);
+};
+*/
+
         
 int
 Tree::height() {
