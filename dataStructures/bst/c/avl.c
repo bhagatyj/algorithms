@@ -1,12 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>
+#include"ptrQ.h"
+#include"ptrStack.h"
  
 typedef struct node_t_ {
     int key;
     struct node_t_ *left;
     struct node_t_ *right;
     int height;
+    int level;
 } node_t;
  
 // Node Height
@@ -31,6 +34,8 @@ node_t* newNode(int key)
     n->right  = NULL;
     // new node is initially added at leaf
     n->height = 0;  
+    // Initialize with level of the root
+    n->level = 0;  
     return (n);
 }
  
@@ -142,47 +147,68 @@ node_t* insert(node_t* node, int key)
     return node;
 }
  
-// A utility function to print preorder traversal of the tree.
-// The function also prints height of every node
+void printNode(node_t *n) {
+    printf("Height:%d Value:%d ", n->height, n->key);
+    if (n->left) {
+        printf("Left: %4d ", n->left->key);
+    } else {
+        printf("Left: Null ");
+    }
+    if (n->right) {
+        printf("Right: %4d ", n->right->key);
+    } else {
+        printf("Right: Null ");
+    }
+    printf("\n");
+}
+ 
 void preOrder(node_t *root)
 {
-    if(root != NULL)
-    {
-        printf("Value:%d Height:%d ", root->key, root->height);
-        if (root->left) {
-            printf("Left: %d ", root->left->key);
-        }
-        if (root->right) {
-            printf("Right: %d ", root->right->key);
-        }
-        printf("\n");
+    if(root != NULL) {
+        printNode(root);
         preOrder(root->left);
         preOrder(root->right);
     }
 }
- 
+void inOrder(node_t *root) {
+    if(root != NULL) {
+        inOrder(root->left);
+        printNode(root);
+        inOrder(root->right);
+    }
+}
+
+void levelTraversal(node_t *root) {
+    ptrQ_t *st;
+    st = (ptrQ_t *)malloc(sizeof(ptrQ_t));
+    if (st == NULL) {
+        printf("No memory\n");
+    }
+    ptrQ_init(st);
+    ptrQ_enq(st, root);
+    while ( ! is_ptrQ_empty(st) ) {
+        node_t *n = (node_t *)ptrQ_deq(st);
+        printNode(n);
+        if (n->left) ptrQ_enq(st, n->left);
+        if (n->right) ptrQ_enq(st, n->right);
+    }
+}
 int main()
 {
   node_t *root = NULL;
+  int i;
  
-  root = insert(root, 10);
-  root = insert(root, 35);
-  root = insert(root, 20);
-  root = insert(root, 30);
-  root = insert(root, 23);
-  root = insert(root, 47);
-  root = insert(root, 50);
-  root = insert(root, 29);
-  root = insert(root, 49);
-  root = insert(root, 51);
-  root = insert(root, 25);
-  root = insert(root, 24);
-  root = insert(root, 22);
-  root = insert(root, 21);
+  for (i=0; i<10; i+=1) {
+      root = insert(root, i);
+  }
+  for (i=1; i<100; i+=2) {
+      //root = insert(root, i);
+  }
+ 
+  printf("Level order traversal of the constructed AVL tree is \n");
+  //inOrder(root);
+  levelTraversal(root);
   printf("Height is %d\n", height(root) );
- 
-  printf("Pre order traversal of the constructed AVL tree is \n");
-  preOrder(root);
  
   return 0;
 }
