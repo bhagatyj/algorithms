@@ -177,14 +177,41 @@ void inOrder(node_t *root) {
         inOrder(root->right);
     }
 }
+void postOrder(node_t *root) {
+    if(root != NULL) {
+        postOrder(root->left);
+        postOrder(root->right);
+        printNode(root);
+    }
+}
+
+void preOrder_nonRecursive(node_t *root) {
+
+    ptrStack_t *pS = get_new_ptrStack();
+
+    if (pS == NULL) { return; }
+    if ( !root ) { return; }
+
+    while (1) {
+        while (root) {
+            // Process current node
+            printNode(root);
+            ptrStack_push(pS, root);
+            root = root->left;
+        }
+        if ( is_ptrStack_empty(pS) ) {
+            break;
+        }
+        root = ptrStack_pop(pS);
+        root = root->right;
+    }
+    free(pS);
+}
 
 void levelTraversal(node_t *root) {
-    ptrQ_t *st;
-    st = (ptrQ_t *)malloc(sizeof(ptrQ_t));
-    if (st == NULL) {
-        printf("No memory\n");
-    }
-    ptrQ_init(st);
+    ptrQ_t *st = get_new_ptrQ();
+    if (st == NULL) { return; }
+
     ptrQ_enq(st, root);
     while ( ! is_ptrQ_empty(st) ) {
         node_t *n = (node_t *)ptrQ_deq(st);
@@ -192,6 +219,8 @@ void levelTraversal(node_t *root) {
         if (n->left) ptrQ_enq(st, n->left);
         if (n->right) ptrQ_enq(st, n->right);
     }
+    free(st);
+
 }
 int main()
 {
@@ -201,13 +230,13 @@ int main()
   for (i=0; i<10; i+=1) {
       root = insert(root, i);
   }
-  for (i=1; i<100; i+=2) {
-      //root = insert(root, i);
-  }
  
   printf("Level order traversal of the constructed AVL tree is \n");
-  //inOrder(root);
   levelTraversal(root);
+  printf("Pre order traversal of the constructed AVL tree is \n");
+  preOrder(root);
+  printf("Pre order traversal of the constructed AVL tree is \n");
+  preOrder_nonRecursive(root);
   printf("Height is %d\n", height(root) );
  
   return 0;
