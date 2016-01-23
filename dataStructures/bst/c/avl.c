@@ -208,6 +208,63 @@ void preOrder_nonRecursive(node_t *root) {
     free(pS);
 }
 
+void inOrder_nonRecursive(node_t *root) {
+
+    ptrStack_t *pS = get_new_ptrStack();
+
+    if (pS == NULL) { return; }
+    if ( !root ) { return; }
+
+    while (1) {
+        while (root) {
+            // Process current node
+            ptrStack_push(pS, root);
+            root = root->left;
+        }
+        if ( is_ptrStack_empty(pS) ) {
+            break;
+        }
+        root = ptrStack_pop(pS);
+        printNode(root);
+        root = root->right;
+    }
+    free(pS);
+}
+
+/*
+ * Post order is more tricky than pre and in order 
+ * traversal.
+ */
+void postOrder_nonRecursive(node_t *root) {
+
+    ptrStack_t *pS1 = get_new_ptrStack();
+    ptrStack_t *pS2 = get_new_ptrStack();
+
+    if (pS1 == NULL) { return; }
+    if (pS2 == NULL) { return; }
+    if ( !root ) { return; }
+
+    ptrStack_push(pS1, root);
+    while (! is_ptrStack_empty(pS1) ) {
+
+        node_t *n = (node_t *)ptrStack_pop(pS1);
+        ptrStack_push(pS2, n);
+
+        if (n->left) {
+            ptrStack_push(pS1, n->left);
+        }
+        if (n->right) {
+            ptrStack_push(pS1, n->right);
+        }
+    }
+    while ( ! is_ptrStack_empty(pS2) ) {
+        node_t *n = (node_t *) ptrStack_pop(pS2);
+        printNode(n);
+    }
+    free(pS1);
+    free(pS2);
+}
+
 void levelTraversal(node_t *root) {
     ptrQ_t *st = get_new_ptrQ();
     if (st == NULL) { return; }
@@ -233,10 +290,10 @@ int main()
  
   printf("Level order traversal of the constructed AVL tree is \n");
   levelTraversal(root);
-  printf("Pre order traversal of the constructed AVL tree is \n");
-  preOrder(root);
-  printf("Pre order traversal of the constructed AVL tree is \n");
-  preOrder_nonRecursive(root);
+  printf("Post order traversal of the constructed AVL tree is \n");
+  postOrder(root);
+  printf("Post order traversal of the constructed AVL tree is \n");
+  postOrder_nonRecursive(root);
   printf("Height is %d\n", height(root) );
  
   return 0;

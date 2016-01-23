@@ -28,16 +28,50 @@ QuickSorter::QuickSorter( int size ) : Sort::Sort( size ) {
 // 
 // We start the Iteration with the following:
 //   ____________________________________________________________
-//   |<chosen-  |                                       |       |
-//   |-Pivot-   |    Unknowns....                       | Pivot |   
-//   |-position>|                                       |       |
+//   |<guessed- |                                       |       |
+//   |-Pivot-   |    Unknowns....                       | Value |   
+//   |-position>|                                       |  V1   |
 //   ------------------------------------------------------------
+//  
+// We find the pivot's proper position
+//   ____________________________________________________________
+//   |                            |     |               |       |
+//   |                            |Pivot|               | Value |   
+//   |                            | V2  |               |  V1   |
+//   ------------------------------------------------------------
+//
+// As we try to find the pivot's position, use swapping to move 
+// values less than the pivot to the left hand side. This work
+// will benefit us and reduce future work.
+//  
+// We swap the pivot value with the pivot's postion.
+//   ____________________________________________________________
+//   |                            |     |               |       |
+//   |                            |Pivot|               | Value |   
+//   |                            | V1  |               |  V2   |
+//   ------------------------------------------------------------
+//    low<------------------->high|     |low<-------------->high|
+//
+// Now, one element has come to its place. Continue with the rest
+// of the elements. Split the array into two parts (left and right
+// side of the pivot).
+//
+// In some ways, we can think of this as place selection for one
+// item in the array + cutting the array into two parts. If it is
+// pure place selection for the pivot, this would continue to be
+// n-square problem as we find places for the rest of the items.
+// Thankfully, we did more work while finding the pivot's place.
+// We also moved every item that is larger than the pivot to its
+// right. This implies that when looking for the right position 
+// for any item in the right side, we do not have to visit the
+// left side at all - thereby reducing the number of iterations
+// in finding the right position.
 
 // Once the iteration is completed, we get the structure
 //   ____________________________________________________________
 //   |                            |     |                       |
 //   |<----less-than-pivot------->|Pivot|<---more-than-pivot--->|
-//   |                            |     |                       |
+//   |                            | V1  |                       |
 //   ------------------------------------------------------------
 //  
 //   Now that one iteration is complete, we can recursively quick-sort
@@ -47,44 +81,45 @@ QuickSorter::QuickSorter( int size ) : Sort::Sort( size ) {
 // is the last element. 
 // 
 // To achieve goals (c) and (d) above, we scan through the array - having
-// a chosenPivotPosition. If all the elements in the array are greater than
-// the pivot, the pivot can easily go to the chosenPivotPosition. 
+// an initial guessedPivotIndex of the begining of the array. If all 
+// the elements in the array are greater than the pivot, the pivot can be
+// placed at the guessedPivotIndex. 
 // 
-// If there are elements that are less than the pivot, then the chosenPivotPosition
+// If there are elements that are less than the pivot, then the guessedPivotIndex
 // has to move to the right, leaving space for those elements.
 // 
 // So, the for loop has to look for less-than-pivot elements
-// (1) swap the less-than-pivot element with the chosenPivotPosition
-// (2) increment the chosenPivotPosition by 1
+// (1) swap the less-than-pivot element with the guessedPivotIndex
+// (2) increment the guessedPivotIndex by 1
 // After the loop is complete,
-// the pivot has to be brought to the chosenPivotPosition by swapping 
-// the high position with the chosenPivotPosition.
+// the pivot has to be brought to the guessedPivotIndex by swapping 
+// the high position with the guessedPivotIndex.
 
 int
 QuickSorter::partition(int low, int high) {
-    int pivot = __store[high];
-    int chosenPivotPosition = low;
+    int pivotValue = __store[high];
+    int guessedPivotIndex = low;
     int i;
 
     for ( i=low; i<high; i++) {
-        if ( __store[i] <= pivot ) {
-            swap( chosenPivotPosition, i );
-            chosenPivotPosition++;
+        if ( __store[i] <= pivotValue ) {
+            swap( guessedPivotIndex, i );
+            guessedPivotIndex++;
         }
     }
-    swap(chosenPivotPosition, high);
-    cout << chosenPivotPosition << endl;
-    return chosenPivotPosition;
+    swap(guessedPivotIndex, high);
+    cout << guessedPivotIndex << endl;
+    return guessedPivotIndex;
 }
 
 void
 QuickSorter::quicksort(int low, int high) {
-    int pivot;
+    int pivotIndex;
 
     if (low < high) {
-        pivot = partition(low, high);
-        quicksort(low, pivot-1);
-        quicksort(pivot+1, high);
+        pivotIndex = partition(low, high);
+        quicksort(low, pivotIndex-1);
+        quicksort(pivotIndex+1, high);
     }
 }
 // 

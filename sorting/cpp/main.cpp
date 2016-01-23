@@ -11,11 +11,11 @@ using namespace std;
 int main(int argc, char **argv) {
     time_t t1, t2;
     int value;
-/*
     Sort s = Sort(5);
     s.sortIt();
     cout << (s.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
 
+/*
     BubbleSort bs = BubbleSort(800);
     t1 = time(NULL);
     bs.sortIt();
@@ -30,18 +30,21 @@ int main(int argc, char **argv) {
     //ms.print();
     cout << t2-t1 << endl;
     cout << (ms.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
-
+*/
     QuickSorter qs = QuickSorter(5);
+	qs.fillRandom();
     qs.print();
     qs.sortIt();
     cout << (qs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     qs.print();
+
     SelectionSorter ss = SelectionSorter(50);
+	ss.fillRandom();
     ss.print();
     ss.sortIt();
     cout << (ss.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     ss.print();
-
+/*
     Heap hp = Heap(100);
     hp.add(2);
     hp.add(3);
@@ -59,11 +62,11 @@ int main(int argc, char **argv) {
         value = hp.delHead();
 
     }
-    */
     HeapSort hs = HeapSort(5000);
     hs.fillRandom();
     //hs.print();
     hs.sortIt();
     cout << (hs.is_sorted() ? "Sorted" : "Not Sorted")  << endl;
     hs.print();
+*/
 }
