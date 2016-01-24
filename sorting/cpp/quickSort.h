@@ -41,8 +41,8 @@ QuickSorter::QuickSorter( int size ) : Sort::Sort( size ) {
 //   ------------------------------------------------------------
 //
 // As we try to find the pivot's position, use swapping to move 
-// values less than the pivot to the left hand side. This work
-// will benefit us and reduce future work.
+// values less than the pivot to the left hand side of the pivot
+// position. This work will benefit us and reduce future work.
 //  
 // We swap the pivot value with the pivot's postion.
 //   ____________________________________________________________
@@ -94,6 +94,30 @@ QuickSorter::QuickSorter( int size ) : Sort::Sort( size ) {
 // After the loop is complete,
 // the pivot has to be brought to the guessedPivotIndex by swapping 
 // the high position with the guessedPivotIndex.
+//
+// # Considerations that make the code look elegant
+// ==================================================
+// 1. The terminating condition happens when there is only one element.
+// When the high variable is the index of the last element (as opposed to
+// (index_of_last + 1), it is elegant to express the terminating condition as
+//  	if ( low == high ) { return; }
+//
+// This also makes the recursive calls to look with symmetric looking values:
+// 		quicksort(low, pivotIndex-1);
+// 		quicksort(pivotIndex+1, high);
+// 	
+//
+// # Pitfalls..
+// ============
+// 1. Do not miss the terminating condition (low == high). It is better to
+// write it explicitly.
+//
+// 2. It is easy to miss the last swap in the partition function. This swap
+// brings the pivot to its rightful location.
+//
+// Note: The critical difference between the last swap and the swaps done inside
+// the for loop is - guessedPivotIndex is not incremented in the last swap. This
+// is why the last swap is written separately.
 
 int
 QuickSorter::partition(int low, int high) {
@@ -107,8 +131,8 @@ QuickSorter::partition(int low, int high) {
             guessedPivotIndex++;
         }
     }
+    cout << "high: " << high << endl;
     swap(guessedPivotIndex, high);
-    cout << guessedPivotIndex << endl;
     return guessedPivotIndex;
 }
 
@@ -116,11 +140,12 @@ void
 QuickSorter::quicksort(int low, int high) {
     int pivotIndex;
 
-    if (low < high) {
-        pivotIndex = partition(low, high);
-        quicksort(low, pivotIndex-1);
-        quicksort(pivotIndex+1, high);
-    }
+    if (low == high) {
+		return;
+	}
+    pivotIndex = partition(low, high);
+    quicksort(low, pivotIndex-1);
+    quicksort(pivotIndex+1, high);
 }
 // 
 void
