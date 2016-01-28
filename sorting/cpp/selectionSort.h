@@ -36,20 +36,20 @@ SelectionSorter::SelectionSorter( int size ) : Sort::Sort( size ) {
 //
 void
 SelectionSorter::sortIt() {
-    unsigned  i, j, nextPositionToFill, indexOfMinValue;
+    unsigned  i, j, nextPositionToFill, indexOfMinAmongRemaining;
 
     for (i =0; i<__size; i++) {
         // find the postion of the min element in the unsorted part
         nextPositionToFill = i;
-        indexOfMinValue = i;
+        indexOfMinAmongRemaining = i;
         for (j = i+1; j<__size; j++) {
-            if ( __store[j] < __store[indexOfMinValue] ) {
-                indexOfMinValue = j;
+            if ( __store[j] < __store[indexOfMinAmongRemaining] ) {
+                indexOfMinAmongRemaining = j;
             }
         }
-        // If indexOfMinValue is same as nextPositionToFill,
+        // If indexOfMinAmongRemaining is same as nextPositionToFill,
         // the swap would just return.
-        swap(indexOfMinValue, nextPositionToFill);
+        swap(indexOfMinAmongRemaining, nextPositionToFill);
     }
 
 }
