@@ -55,6 +55,7 @@ class Tree {
         void inOrderPrint( Node *n);
         void postOrderPrint( Node *n);
         void levelOrderPrint() ;
+        void levelOrderMarkerPrint() ;
         void printTree();
         void printRoot();
         int height();
@@ -347,6 +348,49 @@ void Tree::levelOrderPrint() {
     }
 }
 
+void Tree::levelOrderMarkerPrint() {
+    queue<Node *> printQ;
+    Node * n;
+	Node *marker;
+	int level = 0;
+	int nodes_at_this_level = 0;
+
+    if (root == NULL) { return; }
+
+	marker = (Node *) malloc(sizeof(Node));
+    printQ.push(root);
+    printQ.push(marker);
+
+	printf("Level %d ...\n", level);
+    while ( !printQ.empty() ) {
+        Node *n = printQ.front();
+
+		if ( n == marker) { 
+			if ( nodes_at_this_level == 0 ) {
+				printf("No nodes in level %d \n\n", level);
+				break;
+			}
+			printf("Number of nodes in level %d is %d\n\n", 
+					level, nodes_at_this_level);
+			level++;
+			printf("Level %d ...\n", level);
+			printQ.pop();
+			printQ.push(marker);
+			nodes_at_this_level = 0;
+			continue;
+		}
+		nodes_at_this_level++;
+        n->printData();
+        if (n->left) { 
+            printQ.push(n->left);
+        }
+        if (n->right) {
+            printQ.push(n->right);
+        }
+        printQ.pop();
+    }
+}
+
 // As this is a simple bst and not a balanced bst,
 // the order in which elements are added determines
 // the structure of the tree.
@@ -372,4 +416,5 @@ int main(int argc, char **argv) {
     t->removeNode(-5);
     cout << "Height of the tree is " << t->height() << endl;
     t->printTree();
+    t->levelOrderMarkerPrint();
 }
