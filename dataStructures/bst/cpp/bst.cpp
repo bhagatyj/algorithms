@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 //
 // ## Level Order Traversal
 // ## Height of tree
@@ -54,6 +55,9 @@ class Tree {
         void preOrderPrint( Node *n);
         void inOrderPrint( Node *n);
         void postOrderPrint( Node *n);
+		void preOrderIterativePrint( Node *n);
+		void inOrderIterativePrint( Node *n);
+		void postOrderIterativePrint( Node *n);
         void levelOrderPrint() ;
         void levelOrderMarkerPrint() ;
         void printTree();
@@ -224,6 +228,70 @@ Tree::Tree( void ) {
     root = NULL;
 }
 
+void Tree::preOrderIterativePrint( Node *n) {
+
+	stack<Node *> printStack;
+	
+	if (!n) { return; }
+
+	while (1) {
+		while (n) {
+			n->printData();
+			printStack.push(n);
+			n = n->left;
+		}
+		if ( printStack.empty() ) { break; }
+		n = printStack.top();
+		printStack.pop();
+		n = n->right;
+	}
+}
+void Tree::inOrderIterativePrint( Node *n) {
+
+	stack<Node *> printStack;
+	
+	if (!n) { return; }
+
+	while (1) {
+		while (n) {
+			printStack.push(n);
+			n = n->left;
+		}
+		if ( printStack.empty() ) { break; }
+		n = printStack.top();
+		printStack.pop();
+		n->printData();
+		n = n->right;
+	}
+}
+
+void Tree::postOrderIterativePrint( Node *n) {
+	stack<Node *> pS1, pS2;
+
+	if (!n) { return; }
+
+	pS1.push(n);
+	while ( ! pS1.empty() ) {
+		n = pS1.top();
+		pS1.pop();
+		pS2.push(n);
+
+		if (n->left) {
+			pS1.push(n->left);
+		}
+		if (n->right) {
+			pS1.push(n->right);
+		}
+	}
+
+	while ( !pS2.empty() ) {
+		n = pS2.top();
+		pS2.pop();
+		n->printData();
+	}
+
+}
+
 void Tree::preOrderPrint( Node *n) {
     n->printData();
     if (n->left) {
@@ -246,10 +314,10 @@ void Tree::inOrderPrint( Node *n) {
 
 void Tree::postOrderPrint( Node *n) {
     if (n->left) {
-        preOrderPrint(n->left);
+        postOrderPrint(n->left);
     }
     if (n->right) {
-        preOrderPrint(n->right);
+        postOrderPrint(n->right);
     }
     n->printData();
 }
@@ -259,14 +327,20 @@ Tree::printTree( void ) {
 
     cout << "Printing the tree in preorder" << endl;
     preOrderPrint(root);
+	cout << "Printing again using iterative proc" << endl;
+	preOrderIterativePrint(root);
     cout << endl;
 
     cout << "Printing the tree in inorder" << endl;
     inOrderPrint(root);
+	cout << "Printing again using iterative proc" << endl;
+	inOrderIterativePrint(root);
     cout << endl;
 
     cout << "Printing the tree in postorder" << endl;
     postOrderPrint(root);
+	cout << "Printing again using iterative proc" << endl;
+	postOrderIterativePrint(root);
     cout << endl;
 
     cout << "Level Order Traversal" << endl;
@@ -277,24 +351,24 @@ Tree::printTree( void ) {
 Node * Tree::insert( Node *n, int k, int v) {
     if ( ! n ) {
         n = new Node(k, v);
-    } else if ( k < n->key ) {
+		return n;
+    } 
+	if ( k < n->key ) {
         n->left = insert( n->left, k, v );
-    } else if ( k > n->key ) {
+		return n;
+    } 
+	if ( k > n->key ) {
         n->right = insert( n->right, k, v );
-    } else {
-        // Found a node with the same key.
-        // Replace data.
-        n->value = v;
-    }
+		return n;
+	}
+    // Found a node with the same key.
+    // Replace data.
+    n->value = v;
     return n;
 }
 
 void  Tree::addNode( int k, int v) {
-    if ( ! root ) {
-        root = new Node(k, v);
-        return;
-    }
-    insert( root, k, v );
+    root = insert( root, k, v );
 }
 
 // ## Level Order Traversal
@@ -348,6 +422,7 @@ void Tree::levelOrderPrint() {
     }
 }
 
+#define MAGIC_NODE 0xdeadbeef
 void Tree::levelOrderMarkerPrint() {
     queue<Node *> printQ;
     Node * n;
@@ -357,7 +432,7 @@ void Tree::levelOrderMarkerPrint() {
 
     if (root == NULL) { return; }
 
-	marker = (Node *) malloc(sizeof(Node));
+	marker = (Node *) MAGIC_NODE;
     printQ.push(root);
     printQ.push(marker);
 
@@ -398,7 +473,7 @@ void Tree::levelOrderMarkerPrint() {
 int main(int argc, char **argv) {
     int i, max;
     Tree *t = new Tree( );
-    max = 5;
+    max = 3;
     for ( i=0; i<= max; i++) {
         t->addNode(i, i*i);
     }

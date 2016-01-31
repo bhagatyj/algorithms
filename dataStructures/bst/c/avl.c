@@ -50,6 +50,8 @@ node_t *rightRotate(node_t *n)
     leftChildsRight = leftChild->right;
 
     // Perform rotation
+    // I become my Left child-s right child
+    // My left child-s right child becomes my left.
     leftChild->right = n;
     n->left = leftChildsRight;
  
@@ -73,6 +75,8 @@ node_t *leftRotate(node_t *n)
     rightChildsLeft = rightChild->left;
  
     // Perform rotation
+    // I become my Right child-s left child
+    // My right child-s left child becomes my right
     rightChild->left = n;
     n->right = rightChildsLeft;;
  
