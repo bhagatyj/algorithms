@@ -35,8 +35,8 @@ Node::Node( int k, int v) {
 void 
 Node::printData(void) {
     cout << "Key:" << key << " Val:" << value ;
-    cout << "\t\tLeft : " << ((left) ? (left->key) : NULL) ;
-    cout << "\t\tRight : " << ((right) ? (right->key) : NULL);
+    cout << "\t\tLeft : " << ((left) ? (left->key) : 0xFFFF) ;
+    cout << "\t\tRight : " << ((right) ? (right->key) : 0xFFFF);
     cout << endl;
 }
 
@@ -275,12 +275,15 @@ void Tree::postOrderIterativePrint( Node *n) {
 		n = pS1.top();
 		pS1.pop();
 		pS2.push(n);
+		cout << "Pushed " << n->key << " into ps2" << endl;
 
 		if (n->left) {
 			pS1.push(n->left);
+			cout << "Pushed " << n->left->key << " into ps1" << endl;
 		}
 		if (n->right) {
 			pS1.push(n->right);
+			cout << "Pushed " << n->right->key << " into ps1" << endl;
 		}
 	}
 
@@ -482,13 +485,13 @@ int main(int argc, char **argv) {
     }
     cout << "Height of the tree is " << t->height() << endl;
     cout << "Removing keys 2 and -3" << endl;
-    t->removeNode(2);
-    t->removeNode(-3);
+    //t->removeNode(2);
+    //t->removeNode(-3);
     cout << "Height of the tree is " << t->height() << endl;
     cout << "Removing key 0" << endl;
-    t->removeNode(0);
+    //t->removeNode(0);
     cout << "Height of the tree is " << t->height() << endl;
-    t->removeNode(-5);
+    //t->removeNode(-5);
     cout << "Height of the tree is " << t->height() << endl;
     t->printTree();
     t->levelOrderMarkerPrint();
