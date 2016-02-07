@@ -25,7 +25,7 @@ typedef struct memo_queue_t_ {
 
 struct TreeNode *makeNewNode( int value ) {
 	struct TreeNode *t = (struct TreeNode *) malloc(sizeof(struct TreeNode));
-	assert(t != NULL);
+	//assert(t != NULL);
 	t->val = value;
 	t->left = NULL;
 	t->right = NULL;
@@ -34,33 +34,10 @@ struct TreeNode *makeNewNode( int value ) {
 
 memo_t *makeMemo( struct TreeNode *value ) {
 	memo_t *m = (memo_t *)malloc(sizeof(memo_t));
-	assert(m);
+	//assert(m);
 	m->val = value;
 	m->next = NULL;
 	return m;
-}
-
-void printNode(struct TreeNode *n) {
-    printf("Value:%4d ", n->val);
-    if (n->left) {
-        printf("Left: %4d ", n->left->val);
-    } else {
-        printf("Left: Null ");
-    }
-    if (n->right) {
-        printf("Right: %4d ", n->right->val);
-    } else {
-        printf("Right: Null ");
-    }
-    printf("\n");
-}
-
-void inOrder(struct TreeNode *root) {
-    if(root != NULL) {
-        inOrder(root->left);
-        printNode(root);
-        inOrder(root->right);
-    }
 }
 
 void enqueue_memo_tail(memo_queue_t *q, memo_t *m) {
@@ -99,36 +76,6 @@ bool empty_memo_queue(memo_queue_t *q) {
 	}
 }
 
-void
-print_memo_queue(memo_queue_t *q) {
-	memo_t *tmp = q->head;
-
-	printf("The Queue is \n");
-	while (tmp) {
-		printf(" memo %p \n", tmp);
-		tmp = tmp->next;
-	}
-	
-}
-void queue_tester() {
-	memo_queue_t *memo_queue;
-	memo_queue = (memo_queue_t *)malloc(sizeof(memo_queue_t));
-	memset(memo_queue, 0, sizeof(memo_queue_t));
-
-	struct TreeNode *n = makeNewNode(5);
-	memo_t *m1 = makeMemo(n);
-	memo_t *m2 = makeMemo(n);
-	memo_t *m3 = makeMemo(n);
-
-	enqueue_memo_tail(memo_queue, m1);
-	enqueue_memo_tail(memo_queue, m2);
-	enqueue_memo_tail(memo_queue, m3);
-	print_memo_queue(memo_queue);
-	memo_t *mx = dequeue_memo(memo_queue);
-	printf("Dequeued %p\n", mx);
-
-	print_memo_queue(memo_queue);
-}
 
 struct TreeNode *
 deserialize( char *src ) {
@@ -138,15 +85,19 @@ deserialize( char *src ) {
 	struct TreeNode *root;
 	memo_queue_t *memo_queue;
 
+	if ( src == NULL ) { return NULL; }
 	data = strdup(src);
 	memo_queue = (memo_queue_t *)malloc(sizeof(memo_queue_t));
 	memset(memo_queue, 0, sizeof(memo_queue_t));
 	word = strtok(data, ",");
+	if (word == NULL ) { return NULL; }
 	if ( sscanf(word, "%d", &value) ) {
-		printf("Processing %s\n", word);
+		//printf("Processing %s\n", word);
 		root = makeNewNode(value);
 		memo_t *m = makeMemo(root);
 		enqueue_memo_tail(memo_queue, m);
+	} else {
+		return NULL;
 	}
 
 	while ( !empty_memo_queue(memo_queue) ) {
@@ -185,7 +136,8 @@ serialize( struct TreeNode *root) {
 	struct TreeNode *n;
 	memo_queue_t *memo_queue;
 
-	start = data = (char *) malloc(256);
+	if ( root == NULL) { return strdup(""); }
+	start = data = (char *) malloc(25600);
 	memset(data, 0, 256);
 	memo_queue = (memo_queue_t *)malloc(sizeof(memo_queue_t));
 	memset(memo_queue, 0, sizeof(memo_queue_t));
@@ -208,6 +160,59 @@ serialize( struct TreeNode *root) {
 	}
 	return start;
 }
+// --------------------
+void
+print_memo_queue(memo_queue_t *q) {
+	memo_t *tmp = q->head;
+
+	printf("The Queue is \n");
+	while (tmp) {
+		printf(" memo %p \n", tmp);
+		tmp = tmp->next;
+	}
+	
+}
+void queue_tester() {
+	memo_queue_t *memo_queue;
+	memo_queue = (memo_queue_t *)malloc(sizeof(memo_queue_t));
+	memset(memo_queue, 0, sizeof(memo_queue_t));
+
+	struct TreeNode *n = makeNewNode(5);
+	memo_t *m1 = makeMemo(n);
+	memo_t *m2 = makeMemo(n);
+	memo_t *m3 = makeMemo(n);
+
+	enqueue_memo_tail(memo_queue, m1);
+	enqueue_memo_tail(memo_queue, m2);
+	enqueue_memo_tail(memo_queue, m3);
+	print_memo_queue(memo_queue);
+	memo_t *mx = dequeue_memo(memo_queue);
+	printf("Dequeued %p\n", mx);
+
+	print_memo_queue(memo_queue);
+}
+void printNode(struct TreeNode *n) {
+    printf("Value:%4d ", n->val);
+    if (n->left) {
+        printf("Left: %4d ", n->left->val);
+    } else {
+        printf("Left: Null ");
+    }
+    if (n->right) {
+        printf("Right: %4d ", n->right->val);
+    } else {
+        printf("Right: Null ");
+    }
+    printf("\n");
+}
+
+void inOrder(struct TreeNode *root) {
+    if(root != NULL) {
+        inOrder(root->left);
+        printNode(root);
+        inOrder(root->right);
+    }
+}
 
 int
 main() {
@@ -224,4 +229,7 @@ main() {
 	printf("Old: %s \n", data);
 	printf("New: %s \n", rslt);
 	printf("Comparison: %d\n", strcmp(data, rslt));
+	root = deserialize("");
+	rslt = serialize(root);
+	printf("New: %s \n", rslt);
 }
