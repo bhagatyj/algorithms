@@ -42,7 +42,11 @@ print_path_matrix( char **mat, int size, char *text) {
 	printf("Matrix %s\n", text);
 	for (i=0; i<size; i++) {
 		for (j=0; j<size; j++) {
-			printf("%8s", mat[i*size+j]);
+			if ( mat[i*size+j] ) {
+				printf("%8s", mat[i*size+j]);
+			} else {
+				printf("%8s", "");
+			}
 		}
 		printf("\n");
 	}
