@@ -15,24 +15,40 @@ using namespace std;
 map<char, int> stringMap;
 map<char, int> alreadyPrinted;
 
-void stringMapInit( string input ) {
-    for (char& c : input) {
-        map<char, int>::iterator it = stringMap.find(c);
-        if ( it == stringMap.end() ) {
-            stringMap.insert( pair<char, int>(c, 1) );
-        } else {
-            stringMap[c]++;
-        }
-    }
-}    
 
+// Initialize the character map with number of occurrences
+// for each character. 
+// This routine uses the default initialization of maps.
+// In cpp maps, if the key is not present, the first access
+// would create it automatically and default initialize it.
+// In this case, it would default initialize to 0 (int)
+// 
+void stringMapInit( string input ) {
+	for ( char & c : input ) {
+		stringMap[c]++;
+	}
+}
+
+// The walkandPrint walks along the inputString. It uses the fact 
+// that maps are arranged in sorted order of keys for simple key
+// types. If the char being walked is the first one in the map,
+// it deserves to be printed. So it prints it.
+//
+// If the char being walked is not the first one in the map,
+// but it no longer appears in the input string, this is our last
+// chance to print it. However, before printing it, we should make
+// sure that to print any chars that are more deserving.
+//
+// So, before printint the last char, we scan all the chars from
+// last printed index to current index and print them.
+//
 void walkAndPrint( string input ) {
     string output;
     map<char, int>::iterator it;
     map<char, int>::iterator curr;
     char lowest;
     int size = input.size();
-    int lastLowest = 0;
+    int lastPrintedIndex = 0;
 
     for (int i=0; i<size; i++) {
         char c = input[i];
@@ -56,26 +72,26 @@ void walkAndPrint( string input ) {
             output.append(string(1, c));
             stringMap.erase(c);
             alreadyPrinted.insert(pair<char, int>(c, 0));
-            lastLowest = i;
+            lastPrintedIndex = i;
         } else {
             int j;
-            // Before appending a last chance guy
-            // Check if there is anyone who is more deserving.
-            for (j=lastLowest; j<i; j++) {
-                if (input[j] < c) {
-                    cout << "Appending more deserved folks";
-                    if (alreadyPrinted.find(input[j]) != alreadyPrinted.end()) {
-                        continue;
-                    }
-                    output.append(string(1, input[j]));
-                    stringMap.erase(input[j]);
-                    alreadyPrinted.insert(pair<char, int>(input[j], 0));
-                    lastLowest = i;
-                }
-            }
             stringMap[c]--;
             if (stringMap[c] == 0) {
                 cout << "Appending last chance " << c << endl;
+            	// Before appending a last chance guy
+            	// Check if there is anyone who is more deserving.
+            	for (j=lastPrintedIndex; j<i; j++) {
+                	if (input[j] < c) {
+                    	if (alreadyPrinted.find(input[j]) != alreadyPrinted.end()) {
+                        	continue;
+                    	}
+                    	cout << "Appending more deserved folks" << endl;
+                    	output.append(string(1, input[j]));
+                    	stringMap.erase(input[j]);
+                    	alreadyPrinted.insert(pair<char, int>(input[j], 0));
+                    	lastPrintedIndex = i;
+                	}
+            	}
                 output.append(string(1,c));
                 stringMap.erase(c);
                 alreadyPrinted.insert(pair<char, int>(c, 0));
