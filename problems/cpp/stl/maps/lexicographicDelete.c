@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <assert.h>
 
 // Given a string which only contains lowercase. You need delete the repeated letters 
 // only leave one, and try to make the lexicographical order of new string is smallest. 
@@ -29,6 +30,19 @@ void stringMapInit( string input ) {
 	}
 }
 
+void printMap() {
+    map<char, int>::iterator it = stringMap.begin();
+    for ( ; it != stringMap.end() ; ++it ) {
+        cout << it->first << " --> " << it->second << endl;
+    }
+}
+
+void init( string input ) {
+	stringMap.erase( stringMap.begin(), stringMap.end() );
+	alreadyPrinted.erase( alreadyPrinted.begin(), alreadyPrinted.end() );
+    stringMapInit(input);
+}
+
 // The walkandPrint walks along the inputString. It uses the fact 
 // that maps are arranged in sorted order of keys for simple key
 // types. If the char being walked is the first one in the map,
@@ -42,7 +56,8 @@ void stringMapInit( string input ) {
 // So, before printint the last char, we scan all the chars from
 // last printed index to current index and print them.
 //
-void walkAndPrint( string input ) {
+string
+walkAndPrint( string input ) {
     string output;
     map<char, int>::iterator it;
     map<char, int>::iterator curr;
@@ -50,6 +65,9 @@ void walkAndPrint( string input ) {
     int size = input.size();
     int lastPrintedIndex = 0;
 
+	cout << "Input String: " << input << endl;
+	init( input );
+	printMap();
     for (int i=0; i<size; i++) {
         char c = input[i];
         if ( stringMap.empty() ) {
@@ -64,11 +82,12 @@ void walkAndPrint( string input ) {
         it = stringMap.begin();
         lowest = it->first;
 
-        cout << "Char :: " << c << " Lowest : " << lowest << endl;
+        cout << "Walking :: Char :: " << c 
+			 << " Lowest : " << lowest << endl;
 
 
         if ( c <= lowest ) {
-            cout << "Appending lowest" << c << endl;
+            cout << "Appending lowest: " << c << endl;
             output.append(string(1, c));
             stringMap.erase(c);
             alreadyPrinted.insert(pair<char, int>(c, 0));
@@ -77,21 +96,24 @@ void walkAndPrint( string input ) {
             int j;
             stringMap[c]--;
             if (stringMap[c] == 0) {
-                cout << "Appending last chance " << c << endl;
+                cout << "Last chance " << c << endl;
             	// Before appending a last chance guy
-            	// Check if there is anyone who is more deserving.
+            	// Check if there is anyone who is more deserving 
+            	// and not printed so far.
             	for (j=lastPrintedIndex; j<i; j++) {
                 	if (input[j] < c) {
                     	if (alreadyPrinted.find(input[j]) != alreadyPrinted.end()) {
                         	continue;
                     	}
-                    	cout << "Appending more deserved folks" << endl;
+                    	cout << "Appending more deserved folks: "
+								<< input[j] << endl;
                     	output.append(string(1, input[j]));
                     	stringMap.erase(input[j]);
                     	alreadyPrinted.insert(pair<char, int>(input[j], 0));
                     	lastPrintedIndex = i;
                 	}
             	}
+                cout << "Appending last chance " << c << endl;
                 output.append(string(1,c));
                 stringMap.erase(c);
                 alreadyPrinted.insert(pair<char, int>(c, 0));
@@ -100,15 +122,10 @@ void walkAndPrint( string input ) {
         }
     }
     cout << "Here is the ans..." << output << endl;
+	return output;
 }
 
 int main(int argc, char **argv) {
-    string input = string("cbacdcbc"); // expect acdb
-    stringMapInit(input);
-    map<char, int>::iterator it = stringMap.begin();
-    for ( ; it != stringMap.end() ; ++it ) {
-        cout << it->first << " --> " << it->second << endl;
-    }
-    walkAndPrint(input);
-    //cout << stringMap << endl;
+    assert( walkAndPrint( "cbacdcbc" ) == string("acdb") );
+    assert( walkAndPrint( "cbadcdcbc" ) == string("acdb") );
 }
