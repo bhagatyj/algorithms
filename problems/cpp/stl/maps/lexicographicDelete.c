@@ -60,8 +60,7 @@ string
 walkAndPrint( string input ) {
     string output;
     map<char, int>::iterator it;
-    map<char, int>::iterator curr;
-    char lowest;
+    char lowestChar;
     int size = input.size();
     int lastPrintedIndex = 0;
 
@@ -80,14 +79,14 @@ walkAndPrint( string input ) {
         }
 
         it = stringMap.begin();
-        lowest = it->first;
+        lowestChar = it->first;
 
         cout << "Walking :: Char :: " << c 
-			 << " Lowest : " << lowest << endl;
+			 << " Lowest : " << lowestChar << endl;
 
 
-        if ( c <= lowest ) {
-            cout << "Appending lowest: " << c << endl;
+        if ( c <= lowestChar ) {
+            cout << "Appending lowestChar: " << c << endl;
             output.append(string(1, c));
             stringMap.erase(c);
             alreadyPrinted.insert(pair<char, int>(c, 0));
