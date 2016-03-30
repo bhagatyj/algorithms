@@ -27,11 +27,9 @@ int main (int argc, char **argv) {
 
     // The MyClass constructor is used to automatically construct
     // a MyClass object. This is possible because the constructor
-    // has not been declared as "explicit"
+    // has not been declared as "explicit". Hence implicit construction
+    // is allowed.
     MyClass x = 2;
     cout << x;
 
 }
-
-
-
