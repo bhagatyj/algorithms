@@ -231,6 +231,29 @@ Tree::Tree( void ) {
     root = NULL;
 }
 
+
+void Tree::preOrderPrint( Node *n) {
+    n->printData();
+    if (n->left) {
+        preOrderPrint(n->left);
+    }
+    if (n->right) {
+        preOrderPrint(n->right);
+    }
+}
+// Pre-order iterative print uses a stack to store the nodes while printing.
+// It imitates the preOrderPrint procedure.
+//
+// We first processthe current node. Now, we need to process the left-sub-tree 
+// and then come back and process the right subtree. As we need to come back 
+// to process the right sub-tree, we need to store the current node on a 
+// stack before going into the left-subtree. 
+//
+// After completing the left sub-tree processing, pop the element and go to its
+// right subtree.
+//
+// Continue this process until the stack is empty.
+// 
 void Tree::preOrderIterativePrint( Node *n) {
 
 	stack<Node *> printStack;
@@ -249,6 +272,21 @@ void Tree::preOrderIterativePrint( Node *n) {
 		n = n->right;
 	}
 }
+
+void Tree::inOrderPrint( Node *n) {
+    if (n->left) {
+        inOrderPrint(n->left);
+    }
+    n->printData();
+    if (n->right) {
+        inOrderPrint(n->right);
+    }
+}
+
+// The principle is the same as preOrder Iterative print. The only change is the 
+// place at which we print the current node. Print the data in the current node
+// after completing the left sub-tree.
+//
 void Tree::inOrderIterativePrint( Node *n) {
 
 	stack<Node *> printStack;
@@ -268,6 +306,16 @@ void Tree::inOrderIterativePrint( Node *n) {
 	}
 }
 
+void Tree::postOrderPrint( Node *n) {
+    if (n->left) {
+        postOrderPrint(n->left);
+    }
+    if (n->right) {
+        postOrderPrint(n->right);
+    }
+    n->printData();
+}
+
 void Tree::postOrderIterativePrint( Node *n) {
 	stack<Node *> pS1, pS2;
 
@@ -278,15 +326,12 @@ void Tree::postOrderIterativePrint( Node *n) {
 		n = pS1.top();
 		pS1.pop();
 		pS2.push(n);
-		cout << "Pushed " << n->key << " into ps2" << endl;
 
 		if (n->left) {
 			pS1.push(n->left);
-			cout << "Pushed " << n->left->key << " into ps1" << endl;
 		}
 		if (n->right) {
 			pS1.push(n->right);
-			cout << "Pushed " << n->right->key << " into ps1" << endl;
 		}
 	}
 
@@ -298,36 +343,6 @@ void Tree::postOrderIterativePrint( Node *n) {
 
 }
 
-void Tree::preOrderPrint( Node *n) {
-    n->printData();
-    if (n->left) {
-        preOrderPrint(n->left);
-    }
-    if (n->right) {
-        preOrderPrint(n->right);
-    }
-}
-
-void Tree::inOrderPrint( Node *n) {
-    if (n->left) {
-        inOrderPrint(n->left);
-    }
-    n->printData();
-    if (n->right) {
-        inOrderPrint(n->right);
-    }
-}
-
-void Tree::postOrderPrint( Node *n) {
-    if (n->left) {
-        postOrderPrint(n->left);
-    }
-    if (n->right) {
-        postOrderPrint(n->right);
-    }
-    n->printData();
-}
-
 void
 Tree::printTree( void ) {
 
@@ -335,6 +350,8 @@ Tree::printTree( void ) {
     preOrderPrint(root);
 	cout << "Printing again using iterative proc" << endl;
 	preOrderIterativePrint(root);
+	cout << "Printing again using iterative proc" << endl;
+	preOrderIterativePrint2(root);
     cout << endl;
 
     cout << "Printing the tree in inorder" << endl;
@@ -428,6 +445,8 @@ void Tree::levelOrderPrint() {
     }
 }
 
+// This function runs level order print with a demarcation line after each level.
+// To find out that a level has completed, it adds a magic node.
 #define MAGIC_NODE 0xdeadbeef
 void Tree::levelOrderMarkerPrint() {
     queue<Node *> printQ;
