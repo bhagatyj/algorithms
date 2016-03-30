@@ -128,12 +128,12 @@ Tree::findHeight( Node *n) {
 // Now, the problem definition just changed to "delete the found node".
 // Since the "found node" is lower than the earlier node, it is more
 // likely, that it has less children and becomes either Case-1 or Case-2.
-// If it has two children, repeat above steps again and again until it 
-// becomes Case-1 or Case-2.
+// In fact, due to the property below, it __will__ become either 
+// case-1 or case-2.
 // 
 // Property used:
-// In a subtree, the minimum value node will not have a left child.
-// In a subtree, the maximum value node will not have a right child.
+// In a right subtree, the minimum value node will not have a left child.
+// In a left subtree, the maximum value node will not have a right child.
 // 
 void
 Tree::removeNode(int key) {
@@ -163,15 +163,17 @@ Tree::_removeNode(Node *n, int key) {
         }
         // Case 2a: No left child`
         if (!n->left) {
-            Node *child;
-            child = n->right;
+			// Save the pointer to right
+			// and then delete the node.
+            Node *child = n->right;
             delete n;
             return child;
         }
         // Case 2b: No right child
         if (!n->right) {
-            Node *child;
-            child = n->left;
+			// Save the pointer to left
+			// and then delete the node.
+            Node *child = n->left;
             delete n;
             return child;
         }
@@ -187,7 +189,7 @@ Tree::_removeNode(Node *n, int key) {
 
 Node *
 Tree::findMin(Node *n) {
-    Node *leftMin, *rightMin, *tmp;
+    Node *leftMin, *rightMin, *minOfNodeAndLeft;
 
     if ( !n ) {
         return NULL;
@@ -199,18 +201,19 @@ Tree::findMin(Node *n) {
     if ( ( !leftMin ) && ( !rightMin ) ) {
         return n;
     }
-    tmp = n;
+	// Find the smallest of all three..
+    minOfNodeAndLeft = n;
     if ( leftMin ) {
-        if ( leftMin->key < n->key ) {
-            tmp = leftMin;
+        if ( leftMin->key <= n->key ) {
+            minOfNodeAndLeft = leftMin;
         }
     }
     if ( rightMin ) {
-        if ( rightMin->key < tmp->key ) {
+        if ( rightMin->key <= minOfNodeAndLeft->key ) {
             return rightMin;
         }
     }
-    return tmp;
+    return minOfNodeAndLeft;
 }
 
 void
