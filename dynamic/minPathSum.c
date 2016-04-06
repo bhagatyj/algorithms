@@ -3,7 +3,9 @@
  * find a path from top left to bottom right 
  * which minimizes the sum of all numbers along its path.
  *
- * int (*a)[5] = (int [][5]){ { 1, 2, 3, 4, 5 } , { 6, 7, 8, 9, 10 } };
+ * int (*a)[5] = (int [][5]){ 
+ * 								{ 1, 2, 3, 4, 5 } , 
+ * 								{ 6, 7, 8, 9, 10 } };
  *
  */
 
@@ -74,6 +76,25 @@ fill_cost_path( int *cost_matrix, char **path_matrix,
 	return;
 }
 
+// Dynamic Programming:
+// The answer for N rows depends on the answer for N-1 rows.
+//
+// Initialization:
+// 	   Fill the [0][0] cell with [0][0]
+// 	   Fill all [i][0] cells with [i-1][0].
+// 	   Fill all [0][i] cells with [0][i-1].
+//
+// Sweep through the matrix diagonally.
+// On a diagonal, the sum of i,j indices will always be less than
+// a max number. The max number increases from 0 to 2*(size-1).
+// The sweep can be done using two loops without repeats.
+// For a given value of sum and i, j has only one value.
+//
+// In fact, sweeping diagnoally is not really required for this
+// problem. One can sweep row-wise as well. That would be much 
+// easier. Leaving the sweep diagonal implementation as it is
+// just to show a diagonal sweeping routine.
+//
 void
 find_path( int *qmat, int size) {
 	char **path_matrix;
@@ -85,17 +106,6 @@ find_path( int *qmat, int size) {
 	memset(path_matrix, 0, sizeof(char *) * size * size );
 	cost_matrix = create_matrix(size);
 
-	// This is the crucial part - DP.
-	// Initialization:
-	// 	   Fill the [0][0] cell with [0][0]
-	// 	   Fill all [i][0] cells with [i-1][0].
-	// 	   Fill all [0][i] cells with [0][i-1].
-	//
-	// Sweep through the matrix diagonally.
-	// On a diagonal, the sum of i,j indices will always be less than
-	// a max number. The max number increases from 0 to 2*(size-1).
-	// The sweep can be done using two loops without repeats.
-	// For a given value of sum and i, j has only one value.
 
 	cost_matrix[0] = qmat[0];
 	path_matrix[0] = "0, 0";
@@ -110,7 +120,7 @@ find_path( int *qmat, int size) {
 		path_matrix[i*size] = strdup(path);
 	}
 	
-	for ( sum=1; sum<(2*size-1); sum++) {
+	for (sum=1; sum<(2*size-1); sum++) {
 		for (i=1; i<min(sum, size); i++) {
 			j = sum-i;
 			fill_cost_path( cost_matrix, path_matrix, qmat, i, j, size);
