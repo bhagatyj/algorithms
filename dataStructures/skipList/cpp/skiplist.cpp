@@ -4,7 +4,7 @@
 // The SkipList contains a dummy node as head. The head node has key
 // value of -1. 
 
- using namespace std;
+using namespace std;
 
 const int MAX_LEVEL = 7;
 const int NUM_LEVELS = MAX_LEVEL+1;
@@ -35,6 +35,7 @@ public:
     }
     int getMaxLevel();
     void addNode( int value );
+    void removeNode( int value );
     class Node * findNode( int value );
     void print();
     
@@ -108,6 +109,26 @@ SkipList::findNode( int value ) {
     return NULL;
 }
 
+void
+SkipList::removeNode( int value ) {
+    Node *n = head;
+    int level = MAX_LEVEL;
+    while ( level >= 0 ) {
+        if ( n->next[level] == NULL ) {
+            level--; continue;
+        }
+        if ( n->next[level]->getKey() > value ) {
+            level--; continue;
+        }
+        if ( n->next[level]->getKey() < value ) {
+            n = n->next[level];
+            continue;
+        }
+        n->next[level] = n->next[level]->next[level];
+        level--;
+    }
+    return;
+}
 
 int main() {
     SkipList *sl = new SkipList();
@@ -115,7 +136,17 @@ int main() {
         sl->addNode(i);
     }
     sl->print();
-    for (int i=120; i<120+40; i+= 2) {
+    for (int i=120; i<160; i+= 2) {
+        Node *t = sl->findNode(i);
+        cout << i << " --> " 
+             << t << " --> "
+             << ( t ? t->getKey() : 0 ) << endl;
+    }
+    for (int i=140; i<180; i+= 4) {
+        sl->removeNode(i);
+    }
+    sl->print();
+    for (int i=120; i<160; i+= 2) {
         Node *t = sl->findNode(i);
         cout << i << " --> " 
              << t << " --> "
