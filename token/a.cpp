@@ -41,24 +41,30 @@ class Tag {
             return __parent;
         }
         int spacePos = line.find(' ');
+        if ( spacePos == -1 ) {
+            spacePos = line.find('>');
+        }
         string token = line.substr(1, spacePos-1 );
         if ( token == __name ) {
             // Add attribute
-            line.erase(0, spacePos+1);
-            spacePos = line.find(' ');
-            string attribute = line.substr(0, spacePos);
-            line.erase(0, spacePos+1);
-            spacePos = line.find(' ');
-            line.erase(0, spacePos+2);
-            spacePos = line.find('"');
-            string value = line.substr(0, spacePos);
-            // cout << "Adding attribute: " << attribute 
-                 // << " --> " << value << " to " << __name << endl;
-            add_attribute( attribute, value );
+            while ( spacePos != -1 ) {
+                line.erase(0, spacePos+1);
+                spacePos = line.find(' ');
+                string attribute = line.substr(0, spacePos);
+                line.erase(0, spacePos+1);
+                spacePos = line.find(' ');
+                line.erase(0, spacePos+2);
+                spacePos = line.find('"');
+                string value = line.substr(0, spacePos);
+                cout << "Adding attribute: " << attribute 
+                  << " --> " << value << " to " << __name << endl;
+                add_attribute( attribute, value );
+                spacePos = line.find(' ');
+            }
         } else {
             class Tag *newTag = new Tag(token, this);
             add_tag( token, newTag);
-            // cout << "Adding tag:" << token << ": in " << __name << endl;
+            cout << "Adding tag:" << token << ": in " << __name << endl;
             return newTag->parseLine( line );
         }
         return this;
