@@ -14,13 +14,14 @@ int **solutions;
 // eggdrop(1, 0) = 0
 // eggdrop(1, x) = x   for all x from 1 to f
 // eggdrop(x, y) = log2 y for all log2 y > x`
+#define OPTIMIZATION
 
 int main( ) {
 
     int numEggs, numFloors, e, f, x;
     int *workingSet;
 
-    numEggs = 7;
+    numEggs = 20;
     numFloors = 100;
     
     if ( numEggs < 1 ) {
@@ -47,20 +48,23 @@ int main( ) {
         solutions[1][f] = f;
     }
     // If there is no more floors, answer is 0.
+    // If there is only one floor, answer is 1.
     for ( e=1; e<=numEggs; e++) {
         solutions[e][0] = 0;
+        solutions[e][1] = 1;
     }
 
 #ifdef OPTIMIZATION
+    // Additional optimization : not needed.
+    //
     // If the number of floors is less than pow(2, e), then this
     // can be solved by binary search. For example, 100 floors and
     // 7 eggs can be solved by 7 drops.
     for ( e=1; e<=numEggs; e++) {
         for ( f=1; f<=numFloors; f++) {
             if ( f < pow(2, e) ) {
-                solutions[e][f] = e;
-            } else {
-                break;
+                // I can use binary division
+                solutions[e][f] = ceil( log ( f ) / log (2 ) );
             }
         }
     }
