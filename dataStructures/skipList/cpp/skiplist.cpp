@@ -37,6 +37,7 @@ public:
     void addNode( int value );
     void removeNode( int value );
     class Node * findNode( int value );
+    class Node * predecessor( int value );
     void print();
     
 };
@@ -109,6 +110,26 @@ SkipList::findNode( int value ) {
     return NULL;
 }
 
+class Node * 
+SkipList::predecessor( int value ) {
+    Node *n = head;
+    int level = MAX_LEVEL;
+    while ( level >= 0 ) {
+        if ( n->next[level] == NULL ) {
+            level--; continue;
+        }
+        if ( n->next[level]->getKey() > value ) {
+            level--; continue;
+        }
+        if ( n->next[level]->getKey() < value ) {
+            n = n->next[level];
+            continue;
+        }
+        level--;
+    }
+    return n;
+}
+
 void
 SkipList::removeNode( int value ) {
     Node *n = head;
@@ -132,7 +153,7 @@ SkipList::removeNode( int value ) {
 
 int main() {
     SkipList *sl = new SkipList();
-    for (int i=0; i<400; i+= 4) {
+    for (int i=100; i<200; i+= 4) {
         sl->addNode(i);
     }
     sl->print();
@@ -148,6 +169,12 @@ int main() {
     sl->print();
     for (int i=120; i<160; i+= 2) {
         Node *t = sl->findNode(i);
+        cout << i << " --> " 
+             << t << " --> "
+             << ( t ? t->getKey() : 0 ) << endl;
+    }
+    for (int i=120; i<=200; i+= 8) {
+        Node *t = sl->predecessor(i);
         cout << i << " --> " 
              << t << " --> "
              << ( t ? t->getKey() : 0 ) << endl;
