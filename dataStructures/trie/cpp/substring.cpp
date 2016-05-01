@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <assert.h>
 #include <vector>
 #include <queue>
 
@@ -21,7 +22,13 @@ public:
     bool searchWord(string s);
     void deleteWord(string s);
     static string findLongestSubstringRepeat( string s);
-    string findLongestWord( string s );
+    string findLongestWord();
+    void findLongestWordByDfs( Node *n, 
+                        string wordSoFar,
+                        string &longestWord );
+    string findLongestWordByBfs( Node *n,
+                        map< Node *, Node *> parents,
+                        string longestWord );
     Trie();
     ~Trie();
 
@@ -102,9 +109,25 @@ Trie::searchWord(string s) {
     s += '$';
     for (i=0; i < s.length(); i++ ) {
         char ch = s[i];
-        if ( current->children[ch] == NULL ) {
+        // Now, we have to check for the presence of
+        // the character in our dictionary.
+        // The wrong thing to do is:
+        //
+        // if ( current->children[ch] == NULL ) {
+        //     return false;
+        // } 
+        //
+        // That check adds an entry in the map for 'ch'
+        // and assigns it to NULL. Though the result is
+        // the same, the check has the side effect of
+        // increasing the number of nodes in the trie.
+        // This means that the number of nodes in our trie
+        // increases just by searching. Not good.
+        // 
+        // Use the "find" form of searching instead.
+        if ( current->children.find(ch) == current->children.end() ) { 
             return false;
-        } 
+        }
         current = current->children[ch];
     }
     if ( (current) && ( i == s.length() ) ) {
@@ -114,6 +137,14 @@ Trie::searchWord(string s) {
 }
         
 /*
+ * FIXME:
+ * Implement a function to find the longest suffix match 
+ * in a string.
+ *
+ * For example:
+ * word: cucumber lsm: cu
+ * word: abcdabcda lsm: abcda
+ *
 string
 Trie::findLongestSubstringRepeat( string s) {
 
@@ -151,9 +182,50 @@ Trie::findLongestSubstringRepeat( string s) {
 */
 
 string
-Trie::findLongestWord( string s ) {
+Trie::findLongestWordByBfs( Node *n, 
+                        map< Node *, Node *> parents,
+                        string longestWord ) {
+    // FIXME
+    return "";    
+}
+// To find the longest word in a trie. 
+void
+Trie::findLongestWordByDfs( Node *n, 
+                        string wordSoFar,
+                        string &longestWord ) {
 
-    return "";
+    map<char, Node *>::iterator it;
+    for ( it = n->children.begin(); it != n->children.end(); it++ ) {
+        // This if check for NULL is not needed if
+        // the rest of the code is written properly.
+        // Check out the comment in function searchWord.
+        // Nevertheless, it is always good to be careful.
+        if ( it->second ) {
+            findLongestWordByDfs( it->second, 
+                            wordSoFar + it->first, 
+                            longestWord );
+        }
+        if ( wordSoFar.length() > longestWord.length() ) {
+            longestWord = wordSoFar;
+        }
+    }
+    return;    
+}
+
+// To find the longest word in a trie. 
+// Use DFS to go down the graph and keep 
+// recording max word so far.
+string
+Trie::findLongestWord() {
+
+    map<Node *, Node *> parents1;
+    map<Node *, Node *> parents2;
+    string longestWord;
+
+    parents1[root] = root;
+    findLongestWordByDfs( root, "", longestWord );
+    return longestWord;
+
 }
 
 int main( int argc, char **argv) {
@@ -166,11 +238,13 @@ int main( int argc, char **argv) {
     trie.addWord("won");
     trie.addWord("cat");
     trie.addWord("catastrophic");
-    trie.deleteWord("world");
+    //trie.deleteWord("world");
     cout << trie.searchWord("man") << endl;
     cout << trie.searchWord("world") << endl;
     cout << trie.searchWord("worn") << endl;
     cout << trie.searchWord("cat") << endl;
     cout << trie.searchWord("managed") << endl;
+    cout << "Longest word in the dictionary is " 
+         << trie.findLongestWord() << endl;
 
 }
