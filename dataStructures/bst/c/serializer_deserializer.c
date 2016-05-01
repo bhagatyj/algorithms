@@ -77,6 +77,11 @@ bool empty_memo_queue(memo_queue_t *q) {
 }
 
 
+// Notes on strtok
+// Works on C-style character arrays
+// First call to strtok should have the pointer to the char-array
+// Subsequent calls should have NULL as the first argument.
+//
 struct TreeNode *
 deserialize( char *src ) {
 

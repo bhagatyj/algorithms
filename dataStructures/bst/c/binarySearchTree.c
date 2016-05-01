@@ -46,30 +46,6 @@ void printPostorder(node_t *node)
 	printf("%-24s:%lu\n", (char *) node->key, node->value);
 }
 
-// void dfsPrintPreOrder(void *stPtr)
-// {
-// 	symbol_table_t *st = (symbol_table_t *)stPtr;
-
-// 	printf("Nodes in pre-order...\n");
-// 	printPreorder(st->root);
-// }
-
-// // void dfsPrintInOrder(void *stPtr)
-// // {
-// // 	symbol_table_t *st = (symbol_table_t *)stPtr;
-
-// // 	printInorder(st->root);
-// // }
-
-// void dfsPrintPostOrder(void *stPtr)
-// {
-// 	symbol_table_t *st = (symbol_table_t *)stPtr;
-
-// 	printf("Nodes in post-order...\n");
-// 	printPostorder(st->root);
-// }
-
-
 node_t * addNode(node_t *main, node_t *newNode, symbol_table_t *st)
 {
 	int ret;
