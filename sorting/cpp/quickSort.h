@@ -141,8 +141,8 @@ QuickSorter::quicksort(int low, int high) {
     int pivotIndex;
 
     if (low == high) {
-		return;
-	}
+	return;
+    }
     pivotIndex = partition(low, high);
     quicksort(low, pivotIndex-1);
     quicksort(pivotIndex+1, high);
