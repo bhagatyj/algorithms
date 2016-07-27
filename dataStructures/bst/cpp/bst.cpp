@@ -65,18 +65,6 @@ class Tree {
         int height();
 };
 
-/*
-class AvlTree : Tree {
-    protected:
-        Node *insert( Node *n, int k, int v);
-        Node *_removeNode( Node *root, int key);
-    public:
-        void addNode( int k, int v);
-        void removeNode( int k);
-};
-*/
-
-        
 int
 Tree::height() {
     return findHeight( root );
@@ -187,6 +175,9 @@ Tree::_removeNode(Node *n, int key) {
     return n;
 }
 
+// FIXME:
+//  Finding the min in BST should be simpler.
+//  From root, keep going left until there is no further left.
 Node *
 Tree::findMin(Node *n) {
     Node *leftMin, *rightMin, *minOfNodeAndLeft;
@@ -433,15 +424,18 @@ void Tree::levelOrderPrint() {
 
     printQ.push(root);
     while ( !printQ.empty() ) {
+
+        // Do not forget to pop.
         Node *n = printQ.front();
+        printQ.pop();
         n->printData();
+
         if (n->left) { 
             printQ.push(n->left);
         }
         if (n->right) {
             printQ.push(n->right);
         }
-        printQ.pop();
     }
 }
 

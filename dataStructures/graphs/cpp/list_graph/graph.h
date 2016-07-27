@@ -153,6 +153,17 @@ Graph::bfs() {
     }
 }
 
+// Finding cycles: Theory
+//
+// In a directed graph, a cycle is present if and only if a node is seen again 
+// before all its descendants have been visited. In other words, if a node has 
+// a neighbor which is grey, then there is a cycle (and not when the neighbor 
+// is black). A grey node means we are currently exploring its descendants - 
+// and if one such descendant has an edge to this grey node, then there is a cycle. 
+// In an undirected graph, if the node under consideration has a black or grey 
+// neighbor, it indicates a cycle and the DFS should not visit it.
+//
+//
 #define WHITE 1
 #define GRAY  2
 #define BLACK 3
