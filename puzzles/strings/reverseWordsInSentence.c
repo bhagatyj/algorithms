@@ -18,46 +18,28 @@
  * be an off-by-one issue in calculating the length.
  *
  */
-char * reverse( char *src ) {
-    char *dst, *dstPos, *srcPos, *lastPos;
-    int len, wordLen;
-
-    len = strlen(src);
-    dst = (char *)malloc(len);
-    memset( dst, 0, len );
-    srcPos = lastPos = src + len;
-    dstPos = dst;
-
-    while ( srcPos > src ) {
-        srcPos--;
-        while ( *srcPos != ' ' )
-            if ( srcPos > src )
-                srcPos--;
-            else 
-                break;
-        if ( *srcPos == ' ' ) {
-            // Not the first word
-            wordLen = lastPos - srcPos - 1;
-            lastPos = srcPos;
-            strncpy( dstPos, srcPos+1, wordLen );
-            dstPos += wordLen;
-            *dstPos = ' ';
-            dstPos++;
-        } else {
-            // First word
-            wordLen = lastPos - srcPos;
-            strncpy( dstPos, srcPos, wordLen );
-            dstPos += wordLen;
-        }
+void 
+reverse( char *start, char *end)
+    char tmp;
+    while ( start < end ) {
+        tmp = *start;
+        *start = *end;
+        *end = tmp;
+        start++; end--;
     }
-    *dstPos = '\0';
-    dstPos++;
-    return dst;
+}
+
+char *
+reverseWords( char *input ) {
+    char *output = (char *)malloc(sizeof(char)*strlen(input));
+    if (!output) { return NULL; }
+
+    strcpy( output, input, strlen(input) );
 }
 
 int main ( int argc, char **argv) {
-    assert( strcmp( reverse("I am a boy"), "boy a am I" ) == 0 );
-    assert( strcmp( reverse("a boy"), "boy a" ) == 0 );
-    assert( strcmp( reverse("boy"), "boy" ) == 0 );
-    assert( strcmp( reverse(""), "" ) == 0 );
+    assert( strcmp( reverseWords("I am a boy"), "boy a am I" ) == 0 );
+    assert( strcmp( reverseWords("a boy"), "boy a" ) == 0 );
+    assert( strcmp( reverseWords("boy"), "boy" ) == 0 );
+    assert( strcmp( reverseWords(""), "" ) == 0 );
 }

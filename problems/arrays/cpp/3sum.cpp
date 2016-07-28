@@ -6,57 +6,63 @@
  * Problem Definition:
  *
  * Current Solution:
+ *  From Wikipedia
  *
- * Issue:
- *  When the twoSum is equal to sum, we need to run both cases.
  */
 using namespace std;
 
 void
-printIntVector( vector<int> answer ) {
-    for( vector<int>::iterator it = answer.begin(); it != answer.end(); it++ ) {
-        cout << *it << "  " ;
+printIntVectorVector( vector< vector<int> > answerList ) {
+    for( vector< vector<int> >::iterator it = answerList.begin(); 
+                    it != answerList.end(); it++ ) {
+        for( vector<int>::iterator it2 = it->begin(); 
+                    it2 != it->end(); it2++ ) {
+            cout << *it2 << "  " ;
+        }
+        cout << endl;
     }
     cout << endl;
 }
 
-vector<int>
+vector< vector<int> >
 find3Sum( vector<int> input, int sum) {
 
     sort( input.begin(), input.end() );
     unsigned size = input.size();
-    vector<int>::iterator low, high;
-    int n1, n2, n3, twoSum;
-    vector<int> answer;
+    vector<int>::iterator start, low, high, end;
+    vector< vector<int> > answerList;
 
-    low = input.begin();
-    high = input.end() - 1;
-
-    while ( low < high ) {
-        n1 = *low;
-        n2 = *high;
-        cout << "Choosing n1:" << n1 << " and n2:" << n2 << endl;
-        twoSum = n1 + n2;
-        n3 = sum - twoSum;
-        // Start binary search for n3.
-        if ( find( low + 1, high , n3 ) != high ) {
-            cout << "Found the answer...." << endl;
-            answer.push_back(n1);
-            answer.push_back(n2);
-            answer.push_back(n3);
-            break;
+    end = input.end() - 3;
+    for (start = input.begin(); start < end; start++ ) {
+        low = start + 1;
+        high = input.end() - 1;
+        
+        while ( low < high ) {
+            if ( *start + *low + *high == sum ) {
+                vector<int> answer;
+                answer.push_back(*start);
+                answer.push_back(*low);
+                answer.push_back(*high);
+                answerList.push_back(answer);
+                // We need to move something here to make 
+                // forward progress.
+                // Moving low forward.
+                // This implies that, duplicate results are lost.
+                low++;
+            }
+            if ( *start + *low + *high < sum ) { low++; } 
+            if ( *start + *low + *high > sum ) { high--; } 
         }
-        if ( twoSum < sum ) { low++; } else { high--; }
     }
-    return answer;
+    return answerList;
 }
 
 void 
 testCase1() {
-    int nums[] = { -6, -4, -1, 0, 1, 5, 9 };
+    int nums[] = { -6, -5, -4, -2, -1, 2, 5, 7, 9, 9 };
     vector<int> input( begin( nums ), end( nums ) );
-    vector<int> answer = find3Sum( input, 0 );
-    printIntVector( answer );
+    vector< vector<int> > answer = find3Sum( input, 0 );
+    printIntVectorVector( answer );
 }
 
 
