@@ -19,8 +19,8 @@ add( vector<int> n1, vector<int> n2 ) {
     while( (it1 != n1.rend()) &&
            (it2 != n2.rend()) ) {
         int value = *it1 + *it2 + carry;
-        answer.push_back( value % 10 );
-        carry = value / 10;
+        answer.push_back( value % 2 );
+        carry = value / 2;
         it1++; it2++;
     }
     if( it1 == n1.rend() ) {
@@ -35,8 +35,7 @@ add( vector<int> n1, vector<int> n2 ) {
             it1++; carry = 0;
         }
     }
-    // Do not ignore carry.
-    if( carry ) {
+    if ( carry ) {
         answer.push_back( carry );
     }
     reverse( answer.begin(), answer.end() );
@@ -46,10 +45,11 @@ add( vector<int> n1, vector<int> n2 ) {
 
 int main() {
 
-    int num1[] = { 1, 5, 6 };
-    int num2[] = { 9, 2, 7 };
-    vector<int> n1( begin(num1), end(num1) );
-    vector<int> n2( begin(num2), end(num2) );
+    string sn1 = "1000010";
+    string sn2 = "1000010";
+    vector<int> n1, n2;
+    for ( char ch: sn1 ) { n1.push_back( (ch == '0' ? 0 : 1 ) ); }
+    for ( char ch: sn2 ) { n2.push_back( (ch == '0' ? 0 : 1 ) ); }
 
     vector<int> answer = add(n1, n2);
     for( vector<int>::iterator it = answer.begin(); it != answer.end(); it++ ) {
