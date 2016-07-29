@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-/* Design Considerations:
+/* 
+ * Problem: Remove duplicate lines in a text.
+ *
+ * Design Considerations:
  *
  * Storing only the unique lines saves space - esp in cases 
  * where there are large number of duplicate lines in the input.
@@ -20,6 +19,10 @@
  * The hash function used is a simple summation of all the char values.
  *
  */
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct line_data_t_ {
     char * line;
