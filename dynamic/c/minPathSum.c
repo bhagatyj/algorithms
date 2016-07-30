@@ -20,10 +20,7 @@ create_matrix( int size) {
 	int i;
 
 	mat = (int *) malloc(sizeof(int *) * size * size);
-	assert(mat);
-	for (i=0; i<size; i++) {
-		memset(mat, 0, sizeof(int)*size*size);
-	}
+	memset(mat, 0, sizeof(int)*size*size);
 	return mat;
 }
 
@@ -60,16 +57,16 @@ int min( int i, int j) {
 	
 void
 fill_cost_path( int *cost_matrix, char **path_matrix,
-				int *qmat, int i, int j, int size) {
+				int *questionMatrix, int i, int j, int size) {
 	char path[32];
 	if ( cost_matrix[(i-1)*size+j] < cost_matrix[i*size+(j-1)] ) {
 		cost_matrix[i*size+j] = cost_matrix[(i-1)*size+j] + 
-									qmat[i*size+j];
+									questionMatrix[i*size+j];
 		snprintf(path, 32, "%d, %d", i-1, j);
 		path_matrix[i*size+j] = strdup(path);
 	} else {
 		cost_matrix[i*size+j] = cost_matrix[(i)*size+j-1] + 
-									qmat[i*size+j];
+									questionMatrix[i*size+j];
 		snprintf(path, 32, "%d, %d", i, j-1);
 		path_matrix[i*size+j] = strdup(path);
 	}
@@ -84,19 +81,10 @@ fill_cost_path( int *cost_matrix, char **path_matrix,
 // 	   Fill all [i][0] cells with [i-1][0].
 // 	   Fill all [0][i] cells with [0][i-1].
 //
-// Sweep through the matrix diagonally.
-// On a diagonal, the sum of i,j indices will always be less than
-// a max number. The max number increases from 0 to 2*(size-1).
-// The sweep can be done using two loops without repeats.
-// For a given value of sum and i, j has only one value.
-//
-// In fact, sweeping diagnoally is not really required for this
-// problem. One can sweep row-wise as well. That would be much 
-// easier. Leaving the sweep diagonal implementation as it is
-// just to show a diagonal sweeping routine.
+// Sweep through the matrix row-by-row.
 //
 void
-find_path( int *qmat, int size) {
+find_path( int *questionMatrix, int size) {
 	char **path_matrix;
 	int *cost_matrix;
 	int i, j, sum;
@@ -107,23 +95,26 @@ find_path( int *qmat, int size) {
 	cost_matrix = create_matrix(size);
 
 
-	cost_matrix[0] = qmat[0];
+	cost_matrix[0] = questionMatrix[0];
 	path_matrix[0] = "0, 0";
 
+    // Fill the 0th row and the 0th column,
+    // The function fill_cost_path uses i-1 and j-1.
+    // Completing the 0th row and 0th column here avoids
+    // special cases inside the function.
 	for (i=1; i<size; i++) {
-		cost_matrix[i] = cost_matrix[i-1] + qmat[i];
+		cost_matrix[i] = cost_matrix[i-1] + questionMatrix[i];
 		snprintf(path, 32, "%d, %d", 0, i-1);
 		path_matrix[i] = strdup(path);
 
-		cost_matrix[i*size] = cost_matrix[(i-1)*size] + qmat[i*size];
+		cost_matrix[i*size] = cost_matrix[(i-1)*size] + questionMatrix[i*size];
 		snprintf(path, 32, "%d, %d", i-1, 0);
 		path_matrix[i*size] = strdup(path);
 	}
 	
-	for (sum=1; sum<(2*size-1); sum++) {
-		for (i=1; i<min(sum, size); i++) {
-			j = sum-i;
-			fill_cost_path( cost_matrix, path_matrix, qmat, i, j, size);
+	for (i=1; i<size; i++) {
+		for (j=0; j<size; j++) {
+			fill_cost_path( cost_matrix, path_matrix, questionMatrix, i, j, size);
 		}
 	}
 	print_matrix( cost_matrix, 5, "Cost");
@@ -133,14 +124,14 @@ find_path( int *qmat, int size) {
 
 int main(int argc, char **argv) {
 
-	int qmat[5][5] = { { 1, 1, 4, 2, 3 },
+	int questionMatrix[5][5] = { { 1, 1, 4, 2, 3 },
 					   { 2, 3, 1, 4, 1 },
 					   { 3, 2, 1, 2, 4 },
 					   { 5, 4, 2, 4, 5 },
 					   { 6, 7, 8, 9, 2 }};
 	int i, j, size = 5;
-	printf("Size of qmat is %lu\n", sizeof(qmat) );
-	print_matrix( (int *)qmat, 5, "Question");
-	find_path((int *)qmat, 5);
+	printf("Size of questionMatrix is %lu\n", sizeof(questionMatrix) );
+	print_matrix( (int *)questionMatrix, 5, "Question");
+	find_path((int *)questionMatrix, 5);
 
 }
