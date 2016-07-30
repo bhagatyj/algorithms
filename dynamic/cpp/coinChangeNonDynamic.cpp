@@ -66,11 +66,11 @@ Solution::findCoins(std::vector<int> &coins, int index, int amount, int coins_so
 		}
 		rest = amount - (i*denom);
 		int ans = findCoins( coins, index-1, rest, coins_so_far+i, solution);
-		if (ans == -1) {
-			continue;
-		} else {
-			continue;
-		}
+        // We may or may not have found the answer in this run.
+        // Irrespective, continue through all the runs and keep accumulating
+        // the solutions in the solution variable.
+        // After we try all the runs, we will get the minimum value.
+        //
 
 	}
 	// Tried all possible combinations
