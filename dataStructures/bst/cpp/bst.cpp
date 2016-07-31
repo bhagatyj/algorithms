@@ -245,6 +245,7 @@ void Tree::preOrderPrint( Node *n) {
 //
 // Continue this process until the stack is empty.
 // 
+#ifdef OLD_METHOD
 void Tree::preOrderIterativePrint( Node *n) {
 
 	stack<Node *> printStack;
@@ -263,7 +264,35 @@ void Tree::preOrderIterativePrint( Node *n) {
 		n = n->right;
 	}
 }
+#else
 
+void Tree::preOrderIterativePrint( Node *n ) {
+
+    if( not n ) { return; }
+    
+    stack<Node *> printStack;
+    printStack.push(n);
+    while( not printStack.empty() ) {
+        n = printStack.top();
+        printStack.pop();
+        n->printData();
+        // ****** CRITICAL COMMENT **********
+        // Pre-order implies Node, Left, Right
+        // Since we are pushing to stack, we should so
+        // 1. Visit Node.
+        // 2. Push right
+        // 3. Push left
+        // so that when we pop, left comes out first.
+        if( n->right ) {
+            printStack.push( n->right );
+        }
+        if( n->left ) {
+            printStack.push( n->left );
+        }
+    }
+}
+#endif
+    
 void Tree::inOrderPrint( Node *n) {
     if (n->left) {
         inOrderPrint(n->left);
@@ -278,6 +307,7 @@ void Tree::inOrderPrint( Node *n) {
 // place at which we print the current node. Print the data in the current node
 // after completing the left sub-tree.
 //
+#ifdef OLD_METHOD
 void Tree::inOrderIterativePrint( Node *n) {
 
 	stack<Node *> printStack;
@@ -296,6 +326,24 @@ void Tree::inOrderIterativePrint( Node *n) {
 		n = n->right;
 	}
 }
+#else
+void Tree::inOrderIterativePrint( Node *n) {
+
+    stack<Node*> printStack;
+
+    while( ( not printStack.empty() ) or ( n != NULL ) ) {
+        if( n != NULL ) {
+            printStack.push(n);
+            n = n->left;
+        } else {
+            n = printStack.top();
+            printStack.pop();
+            n->printData();
+            n = n->right;
+        }
+    }
+}
+#endif
 
 void Tree::postOrderPrint( Node *n) {
     if (n->left) {
@@ -342,7 +390,7 @@ Tree::printTree( void ) {
 	cout << "Printing again using iterative proc" << endl;
 	preOrderIterativePrint(root);
 	cout << "Printing again using iterative proc" << endl;
-	preOrderIterativePrint2(root);
+	//preOrderIterativePrint2(root);
     cout << endl;
 
     cout << "Printing the tree in inorder" << endl;
