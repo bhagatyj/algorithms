@@ -26,8 +26,6 @@ reverseWords( char *input ) {
         if(( *wordEnd == ' ' ) ||
            ( *wordEnd == 0 ) ) {
             reverse( start, wordEnd-1 );
-            // Take care of extra spaces
-            while( *wordEnd == ' ' ) { wordEnd++; }
             start = wordEnd+1;
         }
     }
