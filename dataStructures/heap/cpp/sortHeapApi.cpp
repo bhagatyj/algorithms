@@ -22,7 +22,9 @@ sortUsingHeapApi( vector<int> &numbers) {
     make_heap( numbers.begin(), numbers.end(), comp );
     
     while( not numbers.empty() ) {
-        // CRITICAL 
+        // CRITICAL COMMENT
+        // pop_heap needs comp function to re-arrange
+        // properly.
         pop_heap( numbers.begin(), numbers.end(), comp );
         output.push_back( numbers.back() );
         numbers.pop_back();
