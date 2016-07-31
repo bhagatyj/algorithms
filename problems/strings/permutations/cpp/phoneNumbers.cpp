@@ -33,13 +33,21 @@ int main() {
 
     x.push_back('a');
     x.push_back('b');
+    x.push_back('c');
     numMap[2] =  x ;
     x.clear();
-    x.push_back('c');
     x.push_back('d');
+    x.push_back('e');
+    x.push_back('f');
     numMap[3] =  x ;
+    x.clear();
+    x.push_back('x');
+    x.push_back('y');
+    x.push_back('z');
+    numMap[9] =  x ;
     
     phoneNum.push_back(2);
+    phoneNum.push_back(9);
     phoneNum.push_back(3);
 
     getPermutations( phoneNum, phoneWords, "", 0 );
