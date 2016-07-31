@@ -12,11 +12,7 @@ printIntVector( vector<int> &numbers ) {
 }
 
 bool comp( const int &n1, const int &n2 ) {
-    if ( n1 < n2 ) {
-        return true;
-    } else {
-        return false;
-    }
+    return ( n1 > n2 );
 }
 
 vector<int> 
@@ -26,11 +22,11 @@ sortUsingHeapApi( vector<int> &numbers) {
     make_heap( numbers.begin(), numbers.end(), comp );
     
     while( not numbers.empty() ) {
-        pop_heap( numbers.begin(), numbers.end() );
+        // CRITICAL 
+        pop_heap( numbers.begin(), numbers.end(), comp );
         output.push_back( numbers.back() );
         numbers.pop_back();
     }
-
     return output;
 }
 
