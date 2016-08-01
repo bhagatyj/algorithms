@@ -29,17 +29,6 @@ serialize( Node *root, string &data ) {
     serialize( root->right, data );
 }
 
-void
-splitToTokens( string data, char delim, list<string> &tokens ) {
-
-    stringstream ss(data);
-    string item;
-
-    while( getline( ss, item, delim) ) {
-        tokens.push_back(item);
-    }
-}
-
 Node *
 deserialize( list<string> &tokens ) {
 
@@ -62,9 +51,13 @@ Node *
 deserialize( string &data ) {
     
     list<string> tokens;
-    
-    splitToTokens( data, DELIMITER, tokens);
+    stringstream ss(data);
+    string item;
 
+    while( getline( ss, item, DELIMITER) ) {
+        tokens.push_back(item);
+    }
+    
     if( tokens.empty() ) return NULL;
 
     return deserialize( tokens );
