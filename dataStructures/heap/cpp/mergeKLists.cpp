@@ -48,7 +48,6 @@ mergeKLists( vector< vector<int> > numLists, vector<int> &output ) {
     
     // Make the heap and order it.
     make_heap( dataSet.begin(), dataSet.end() );
-    printDataVector( dataSet );
 
     while( not dataSet.empty() ) {
         pop_heap( dataSet.begin(), dataSet.end() );
@@ -97,7 +96,7 @@ int main( ) {
     vector< vector< int > > numLists;
     vector<int> output;
 
-    for( int i=0; i<2; i++ ) {
+    for( int i=0; i<8; i++ ) {
         vector<int> numbers;
         int count = rand() % 8;
         for( int j=0; j<count; j++) {
