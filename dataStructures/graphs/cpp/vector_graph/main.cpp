@@ -8,18 +8,19 @@
 // and so on...
 //
 // For example:
-//
-// 3
-// 2 1 10 2 20
-// 0
-// 1 1 15
-//
+/*
+4
+2 1 50 2 20
+0
+2 1 15 3 10
+0
+*/
 // would imply
 //
-//     1 <--10-- 0 ---20---> 2
+//     1 <--50-- 0 ---20---> 2 ----10---->3 
 //     ^                     |
 //     |                     |
-//     ----------------------
+//     ---------15-----------
 
 using namespace std;
 Graph * getInput() {
@@ -47,4 +48,7 @@ int main() {
     G->dfs();
     G->parent_dfs();
     G->bfs();
+
+    cout << "Start Djikstra " << endl;
+    G->djikstra( 0);
 }

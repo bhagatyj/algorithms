@@ -2,10 +2,12 @@
 #include <vector>
 #include <map>
 #include <queue>
+#include <limits>
 
 using namespace std;
 
 class Graph;
+class DNode;
 
 class Adj {
     int  __node;
@@ -34,6 +36,8 @@ public:
     void parent_dfs();
     void bfs_visit( int node, map<int, bool> &visitedNodes );
     void bfs();
+    void djikstra( int source );
+    int findMin( vector<DNode> distances );
 };
 
 void 
@@ -146,5 +150,86 @@ Graph::bfs() {
             visitedNodes[node] = true;
             bfs_visit( node, visitedNodes );
         }
+    }
+}
+
+// Find the min distance from the source node to every other node.
+//
+// Create a Djikstra data structure
+class DNode {
+        int node;
+        int prevNode;
+        int cost;
+        bool visitComplete;
+        friend class Graph;
+    public:
+        DNode( int n ) : node(n), prevNode(-1), 
+                  cost(std::numeric_limits<int>::max()), visitComplete(false) {};
+        bool operator< ( DNode other ) {
+            // Return the opposite as we need a minHeap
+            return ( cost > other.cost );
+        }
+        int getCost() { return cost; }
+};
+
+int
+Graph::findMin( vector<DNode> distances ) {
+
+    // Find the minimum Node from the nodes that has not been visited so far.
+    // If all the nodes have been visited already, return end.
+    int minCost = std::numeric_limits<int>::max();
+    int size = distances.size();
+    int minIndex = -1;
+
+    for( int i=0; i<size; i++) {
+        if( (distances[i].getCost() < minCost) &&
+            ( not distances[i].visitComplete) ) {
+            minCost = distances[i].getCost();
+            minIndex = i;
+        }
+    }
+    return minIndex;
+
+}
+
+void
+Graph::djikstra( int source ) {
+
+    // Initialize all the DNodes
+    vector<DNode> distances;
+    vector<DNode> results;
+    int minNode;
+
+    if( source >= __numVertices ) { cout << "Input Error" << endl; return; }
+
+    for( int i=0; i<__numVertices; i++) {
+        distances.push_back( DNode( i ) );
+    }
+
+    // Initialize the source
+    distances[source].prevNode = source;
+    distances[source].cost = 0;
+
+    // Find the minCost Node.
+    minNode = findMin( distances );
+
+    while( minNode != -1 ) {
+        distances[minNode].visitComplete = true;
+        cout << "Can visit node " << minNode 
+             << " with a distance of " 
+             << distances[minNode].getCost() << endl;
+        results.push_back( distances[minNode] );
+        int minNodeDistance = distances[minNode].getCost();
+
+        // Loop through all the vertices and update distances.
+        for( vector<class Adj>::iterator it = __adj[minNode].begin();
+                                it!= __adj[minNode].end(); it++ ) {
+            if ( distances[it->__node].cost > ( minNodeDistance + it->__distance ) ) {
+                distances[it->__node].cost = minNodeDistance + it->__distance;
+                distances[it->__node].prevNode = minNode;
+            }
+        }
+        // Find the next minimum
+        minNode = findMin( distances );
     }
 }
