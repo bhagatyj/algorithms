@@ -123,6 +123,7 @@ Graph::bfs_visit( int node, map<int, bool> &visitedNodes ) {
     nodesAtThisLevel.push( node );
     while ( ! nodesAtThisLevel.empty() ) {
         node = nodesAtThisLevel.front();
+        nodesAtThisLevel.pop();
         for ( it = __adj[node].begin(); it != __adj[node].end(); it++ ) {
             if ( !visitedNodes[it->__node] ) {
                 cout << "Visiting Node: " << it->__node << endl;
@@ -130,7 +131,6 @@ Graph::bfs_visit( int node, map<int, bool> &visitedNodes ) {
                 visitedNodes[it->__node] = true;
             }
         }
-        nodesAtThisLevel.pop();
     }
 
 }
