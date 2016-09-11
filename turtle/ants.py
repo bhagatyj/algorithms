@@ -5,7 +5,6 @@ def line(t, x1, y1, x2, y2):
     t.goto(x1, y1)
     t.down()
     t.goto(x2, y2)
-    t.up()
 
 class Ant:
     def __init__( self, t, x, y ):
@@ -22,9 +21,8 @@ class Ant:
         return distance
 
     def stepTowardsFriend( self ):
-        distance = self.distanceFromFriend()
-        newX = self.x + (1.0/100) * (self.friend.x - self.x)
-        newY = self.y + (1.0/100) * (self.friend.y - self.y)
+        newX = self.x + (0.01) * (self.friend.x - self.x)
+        newY = self.y + (0.01) * (self.friend.y - self.y)
         line( t, self.x, self.y, newX, newY)
         self.x = newX
         self.y = newY
