@@ -19,6 +19,7 @@ class Node {
         int key;
         int value;
         int height;
+        int diameter;
         Node *left;
         Node *right;
 
@@ -37,6 +38,8 @@ Node::printData(void) {
     cout << "Key:" << key << " Val:" << value ;
     cout << "\t\tLeft : " << ((left) ? (left->key) : 0xFFFF) ;
     cout << "\t\tRight : " << ((right) ? (right->key) : 0xFFFF);
+    cout << "\t\tHeight : " << height; 
+    cout << "\t\tDiameter : " << diameter; 
     cout << endl;
 }
 
@@ -409,18 +412,57 @@ Tree::printTree( void ) {
     levelOrderPrint();
     cout << endl;
 }
+
+void
+Node::findHeight() {
+
+    if( ( left ) && ( right ) ) {
+        height = max( left->height, right->height ) + 1;
+    }
+    if( ( !n->left ) && ( n->right ) ) {
+        n->height = n->right->height  + 1;
+    }
+    if( ( n->left ) && ( !n->right ) ) {
+        n->height = n->left->height + 1;
+    }
+    if( ( !n->left ) && ( !n->right ) ) {
+        n->height = 0;
+    }
+}
+
+void
+Node::findDiameter() {
+    int leftDiameter=0, rightDiameter=0 ;
+
+    if( n->left ) {
+        leftDiameter = n->left->diameter;
+    }
+    if( n->right ) {
+        rightDiameter = n->right->Diameter;
+    }
+    
+    diameter = max( leftDiameter, rightDiameter );
+    diameter = max( diameter, height );
+      
+}
         
 Node * Tree::insert( Node *n, int k, int v) {
     if ( ! n ) {
         n = new Node(k, v);
+        n->height = 0;
+        n->diameter = 0;
 		return n;
     } 
 	if ( k < n->key ) {
         n->left = insert( n->left, k, v );
+        n->findHeight();
+        n->findDiameter();
 		return n;
     } 
 	if ( k > n->key ) {
         n->right = insert( n->right, k, v );
+        n->findHeight();
+        n->findDiameter();
 		return n;
 	}
     // Found a node with the same key.
@@ -431,6 +473,8 @@ Node * Tree::insert( Node *n, int k, int v) {
 
 void  Tree::addNode( int k, int v) {
     root = insert( root, k, v );
+    n->findHeight();
+    n->findDiameter();
 }
 
 // ## Level Order Traversal
