@@ -1,4 +1,10 @@
 /*
+ *
+ * Problem: Given a number-string, find the next numerically higher number
+ * that is a pallindrome.
+ *
+ *
+ * Design:
 
 	Given the number of digits can be as high as million, it is easier
 	to manipulate this as a string as opposed to number.

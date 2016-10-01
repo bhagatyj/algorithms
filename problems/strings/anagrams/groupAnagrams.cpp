@@ -4,6 +4,18 @@
 #include <map>
 using namespace std;
 
+// Problem:
+// Given an array of strings, return an array of arrays of anagrams
+//
+// Logic:
+// We need to run through the array and put anagrams in buckets. In order
+// to classify them in buckets, we need to use a key. The aim of the 
+// key is to put all anagrams in the same bucket. 
+//
+// A good key could be the sorted characters in the string. That should be 
+// the same for all anagrams formed using same characters. Thus the hash 
+// function returns all the chars in the string in sorted order.
+
 vector< vector< string> > 
 groupAnagrams( vector<string> input ) {
     vector< vector<string> > output;
