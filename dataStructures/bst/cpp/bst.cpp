@@ -25,6 +25,8 @@ class Node {
 
         Node( int k, int v );
         void printData( void );
+        void findHeight( void );
+        void findDiameter( void );
 };
 
 Node::Node( int k, int v) {
@@ -419,14 +421,14 @@ Node::findHeight() {
     if( ( left ) && ( right ) ) {
         height = max( left->height, right->height ) + 1;
     }
-    if( ( !n->left ) && ( n->right ) ) {
-        n->height = n->right->height  + 1;
+    if( ( !left ) && ( right ) ) {
+        height = right->height  + 1;
     }
-    if( ( n->left ) && ( !n->right ) ) {
-        n->height = n->left->height + 1;
+    if( ( left ) && ( !right ) ) {
+        height = left->height + 1;
     }
-    if( ( !n->left ) && ( !n->right ) ) {
-        n->height = 0;
+    if( ( !left ) && ( !right ) ) {
+        height = 0;
     }
 }
 
@@ -434,11 +436,11 @@ void
 Node::findDiameter() {
     int leftDiameter=0, rightDiameter=0 ;
 
-    if( n->left ) {
-        leftDiameter = n->left->diameter;
+    if( left ) {
+        leftDiameter = left->diameter;
     }
-    if( n->right ) {
-        rightDiameter = n->right->Diameter;
+    if( right ) {
+        rightDiameter = right->diameter;
     }
     
     diameter = max( leftDiameter, rightDiameter );
@@ -473,8 +475,8 @@ Node * Tree::insert( Node *n, int k, int v) {
 
 void  Tree::addNode( int k, int v) {
     root = insert( root, k, v );
-    n->findHeight();
-    n->findDiameter();
+    root->findHeight();
+    root->findDiameter();
 }
 
 // ## Level Order Traversal
