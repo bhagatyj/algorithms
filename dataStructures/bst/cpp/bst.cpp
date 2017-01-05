@@ -5,9 +5,9 @@
 // ## Level Order Traversal
 // ## Height of tree
 // ## Deletion of node in bst
-// ## Check if a binart tree is BST - Method 1
+// ## Check if a binary tree is BST - Method 1
 // check if each node falls within expected range
-// ## Check if a binart tree is BST - Method 2 
+// ## Check if a binary tree is BST - Method 2 
 // (in order traversal - check sorted order)
 // ##
 // 
@@ -27,6 +27,34 @@ class Node {
         void printData( void );
         void findHeight( void );
         void findDiameter( void );
+        void getNodesAtLevel( int currentLevel, int desiredLevel,
+                    queue<Node *> *resultQ );
+};
+
+class Tree {
+    protected:
+        Node *root;
+        Node *insert( Node *n, int k, int v);
+        int findHeight( Node *n);
+        Node *_removeNode( Node *root, int key);
+        Node * findMin(Node *n);
+    public:
+        void addNode( int k, int v);
+        void removeNode( int k);
+        Tree ( Node *n);
+        Tree ( void );
+        void printNodesAtLevel( int level );
+        void preOrderPrint( Node *n);
+        void inOrderPrint( Node *n);
+        void postOrderPrint( Node *n);
+		void preOrderIterativePrint( Node *n);
+		void inOrderIterativePrint( Node *n);
+		void postOrderIterativePrint( Node *n);
+        void levelOrderPrint() ;
+        void levelOrderMarkerPrint() ;
+        void printTree();
+        void printRoot();
+        int height();
 };
 
 Node::Node( int k, int v) {
@@ -44,31 +72,6 @@ Node::printData(void) {
     cout << "\t\tDiameter : " << diameter; 
     cout << endl;
 }
-
-class Tree {
-    protected:
-        Node *root;
-        Node *insert( Node *n, int k, int v);
-        int findHeight( Node *n);
-        Node *_removeNode( Node *root, int key);
-        Node * findMin(Node *n);
-    public:
-        void addNode( int k, int v);
-        void removeNode( int k);
-        Tree ( Node *n);
-        Tree ( void );
-        void preOrderPrint( Node *n);
-        void inOrderPrint( Node *n);
-        void postOrderPrint( Node *n);
-		void preOrderIterativePrint( Node *n);
-		void inOrderIterativePrint( Node *n);
-		void postOrderIterativePrint( Node *n);
-        void levelOrderPrint() ;
-        void levelOrderMarkerPrint() ;
-        void printTree();
-        void printRoot();
-        int height();
-};
 
 int
 Tree::height() {
@@ -579,6 +582,36 @@ void Tree::levelOrderMarkerPrint() {
     }
 }
 
+void
+Node::getNodesAtLevel( int currentLevel, int desiredLevel, 
+                        queue<Node *> *resultQ ) {
+    if( currentLevel == desiredLevel ) {
+        resultQ->push( this );
+        return;
+    }
+    if( left ) {
+        left->getNodesAtLevel( currentLevel+1, desiredLevel, resultQ );
+    } 
+    if( right ) {
+        right->getNodesAtLevel( currentLevel+1, desiredLevel, resultQ );
+    } 
+}
+
+void
+Tree::printNodesAtLevel( int level ) {
+    
+    queue< Node *> resultQ;
+    root->getNodesAtLevel( 0, level, &resultQ );
+    cout << "Printing Nodes at Level:" << level << endl;
+    while ( ! resultQ.empty() ) {
+        Node *n = resultQ.front();
+        resultQ.pop();
+        cout << n->key << endl;
+    }
+    cout << endl;
+    
+}
+
 // As this is a simple bst and not a balanced bst,
 // the order in which elements are added determines
 // the structure of the tree.
@@ -605,4 +638,5 @@ int main(int argc, char **argv) {
     cout << "Height of the tree is " << t->height() << endl;
     t->printTree();
     t->levelOrderMarkerPrint();
+    t->printNodesAtLevel(2);
 }
