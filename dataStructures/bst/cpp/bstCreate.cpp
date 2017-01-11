@@ -105,36 +105,6 @@ Bst::preOrder() {
         }
     }
 }
-
-queue<SerialNode * > *
-Bst::serializePreOrder() {
-
-    // Create an empty stack and push root to it.
-    stack<Node *> printStack;
-    queue<SerialNode *> *serialData = new queue<SerialNode *>();
-    // Handle base case
-    if( __root == NULL ) {
-        return serialData;
-    }
-    printStack.push(__root);
-
-    while( not printStack.empty() ) {
-        Node *n;
-        n = printStack.top();
-        printStack.pop();
-    
-        SerialNode *sNode = new SerialNode( n->__key, n->__value );
-        serialData->push( sNode );
-        if( n->__right ) {
-            printStack.push( n->__right );
-        }
-        if( n->__left ) {
-            printStack.push( n->__left );
-        }
-    }
-    return serialData;
-}
-
 void
 Bst::inOrder() {
 
@@ -208,43 +178,6 @@ Bst::postOrder() {
         printStack.pop();
         cout << *n << endl;
     }
-}
-
-stack<SerialNode *> *
-Bst::serializePostOrder() {
-
-    stack<SerialNode *> *serialData = new stack<SerialNode *>();
-    // Handle Base case
-    if( __root == NULL ) {
-        return serialData;
-    }
-
-    stack<Node *> tempStack;
-    stack<Node *> printStack;
-    Node *n;
-
-    tempStack.push( __root );
-
-    while( !tempStack.empty() ) {
-        n = tempStack.top();
-        tempStack.pop();
-        printStack.push( n );
-
-        if( n->__left ) {
-            tempStack.push( n->__left );
-        }
-        if( n->__right ) {
-            tempStack.push( n->__right );
-        }
-    }
-
-    while( !printStack.empty() ) {
-        n = printStack.top();
-        printStack.pop();
-        SerialNode *sNode = new SerialNode( n->__key, n->__value );
-        serialData->push( sNode );
-    }
-    return serialData;
 }
 
 void
@@ -344,6 +277,35 @@ Bst::_insertNode( Node *root, Node *n ) {
         
 }
         
+queue<SerialNode * > *
+Bst::serializePreOrder() {
+
+    // Create an empty stack and push root to it.
+    stack<Node *> printStack;
+    queue<SerialNode *> *serialData = new queue<SerialNode *>();
+    // Handle base case
+    if( __root == NULL ) {
+        return serialData;
+    }
+    printStack.push(__root);
+
+    while( not printStack.empty() ) {
+        Node *n;
+        n = printStack.top();
+        printStack.pop();
+    
+        SerialNode *sNode = new SerialNode( n->__key, n->__value );
+        serialData->push( sNode );
+        if( n->__right ) {
+            printStack.push( n->__right );
+        }
+        if( n->__left ) {
+            printStack.push( n->__left );
+        }
+    }
+    return serialData;
+}
+
 Node *
 Bst::deSerializePreOrder( queue<SerialNode *> *serialData ) {
 
@@ -386,6 +348,43 @@ Bst::deSerializePreOrder( queue<SerialNode *> *serialData ) {
     return newRoot;
 }
         
+stack<SerialNode *> *
+Bst::serializePostOrder() {
+
+    stack<SerialNode *> *serialData = new stack<SerialNode *>();
+    // Handle Base case
+    if( __root == NULL ) {
+        return serialData;
+    }
+
+    stack<Node *> tempStack;
+    stack<Node *> printStack;
+    Node *n;
+
+    tempStack.push( __root );
+
+    while( !tempStack.empty() ) {
+        n = tempStack.top();
+        tempStack.pop();
+        printStack.push( n );
+
+        if( n->__left ) {
+            tempStack.push( n->__left );
+        }
+        if( n->__right ) {
+            tempStack.push( n->__right );
+        }
+    }
+
+    while( !printStack.empty() ) {
+        n = printStack.top();
+        printStack.pop();
+        SerialNode *sNode = new SerialNode( n->__key, n->__value );
+        serialData->push( sNode );
+    }
+    return serialData;
+}
+
 Node *
 Bst::deSerializePostOrder( stack<SerialNode *> *serialData ) {
 
