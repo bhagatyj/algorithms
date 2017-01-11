@@ -51,6 +51,8 @@ public:
     int removeNode( int k);
     Node * deSerializePreOrder( queue<SerialNode *> *serialData );
     queue<SerialNode *> * serializePreOrder();
+    Node * deSerializePostOrder( stack<SerialNode *> *serialData );
+    stack<SerialNode *> * serializePostOrder();
 };
 
 ostream & operator<<( ostream &out, Node &n) {
@@ -130,7 +132,6 @@ Bst::serializePreOrder() {
             printStack.push( n->__left );
         }
     }
-
     return serialData;
 }
 
@@ -207,7 +208,43 @@ Bst::postOrder() {
         printStack.pop();
         cout << *n << endl;
     }
+}
 
+stack<SerialNode *> *
+Bst::serializePostOrder() {
+
+    stack<SerialNode *> *serialData = new stack<SerialNode *>();
+    // Handle Base case
+    if( __root == NULL ) {
+        return serialData;
+    }
+
+    stack<Node *> tempStack;
+    stack<Node *> printStack;
+    Node *n;
+
+    tempStack.push( __root );
+
+    while( !tempStack.empty() ) {
+        n = tempStack.top();
+        tempStack.pop();
+        printStack.push( n );
+
+        if( n->__left ) {
+            tempStack.push( n->__left );
+        }
+        if( n->__right ) {
+            tempStack.push( n->__right );
+        }
+    }
+
+    while( !printStack.empty() ) {
+        n = printStack.top();
+        printStack.pop();
+        SerialNode *sNode = new SerialNode( n->__key, n->__value );
+        serialData->push( sNode );
+    }
+    return serialData;
 }
 
 void
@@ -348,6 +385,48 @@ Bst::deSerializePreOrder( queue<SerialNode *> *serialData ) {
     }
     return newRoot;
 }
+        
+Node *
+Bst::deSerializePostOrder( stack<SerialNode *> *serialData ) {
+
+    stack<Node *> tmpStack;
+    int currentKey;
+    // Base case
+    if( serialData->empty() ) {
+        return NULL;
+    }
+
+    SerialNode *root = serialData->top();
+    serialData->pop();
+    cout << "Key:" << root->__key << endl;
+
+    Node *newRoot = new Node( root->__key, root->__value );
+    tmpStack.push( newRoot );
+
+    while( !serialData->empty() ) {
+
+        SerialNode *serialNode = serialData->top();
+        serialData->pop();
+        Node *newNode = new Node( serialNode->__key, serialNode->__value );
+        cout << "Dequeued Key:" << serialNode->__key << endl;
+
+        Node *parent = NULL;
+        while( ( !tmpStack.empty() ) && 
+               ( newNode->__key < tmpStack.top()->__key ) ) {
+            parent = tmpStack.top();
+            tmpStack.pop();
+        }
+
+        if( parent != NULL ) {
+            parent->__left = newNode;
+            tmpStack.push( newNode );
+        } else {
+            tmpStack.top()->__right = newNode;
+            tmpStack.push( newNode );
+        }
+    }
+    return newRoot;
+}
     
 int main() {
 
@@ -361,7 +440,7 @@ int main() {
 
     cout << endl << "Pre Order Iterative" << endl;
     myBst->preOrder();
-/*
+
     cout << endl << "Pre Order Recursive" << endl;
     myBst->preOrderRecursive();
 
@@ -374,10 +453,15 @@ int main() {
     myBst->postOrder();
     cout << endl << "Post Order Recursive" << endl;
     myBst->postOrderRecursive();
-*/
-    queue<SerialNode *> *mySeries = myBst->serializePreOrder();
 
-    Node *root = myBst->deSerializePreOrder( mySeries );
-    Bst *deSerializedBst = new Bst(root);
-    deSerializedBst->preOrder();
+    queue<SerialNode *> *myPreSeries = myBst->serializePreOrder();
+
+    Node *root = myBst->deSerializePreOrder( myPreSeries );
+    Bst *deSerializedPreBst = new Bst(root);
+    deSerializedPreBst->preOrder();
+
+    stack<SerialNode *> *myPostSeries = myBst->serializePostOrder();
+    root = myBst->deSerializePostOrder( myPostSeries );
+    Bst *deSerializedPostBst = new Bst(root);
+    deSerializedPostBst->preOrder();
 }
