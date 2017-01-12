@@ -10,14 +10,11 @@ class Graph;
 class DNode;
 
 class Adj {
-    int  __node;
-    int  __distance;
+    int  node;
+    int  distance;
     friend class Graph;
 public:
-    Adj( int node, int distance ) {
-        __node = node;
-        __distance = distance;
-    }
+    Adj( int n, int d ) : node(n), distance(d) {}
         
 };
 
@@ -49,8 +46,8 @@ Graph::printGraph() {
     for (it = __adj.begin(); it != __adj.end(); it++ ) {
         cout << "At vertex:" << index << endl;
         for ( itt = it->begin(); itt != it->end(); itt++ ) {
-            cout << "\tnode:" << itt->__node
-                 << " dist:" << itt->__distance;
+            cout << "\tnode:" << itt->node
+                 << " dist:" << itt->distance;
         }
         cout << endl;
         index++;
@@ -64,10 +61,10 @@ Graph::dfs_visit( int node, map<int, bool> &visitedNodes) {
 
     vector<class Adj>::iterator it;
     for ( it = __adj[node].begin(); it != __adj[node].end(); it++ ) {
-        if ( ! visitedNodes[it->__node] ) {
-            cout << "Visiting Node: " << it->__node << endl;
-            visitedNodes[ it->__node ] = true;
-            dfs_visit( it->__node, visitedNodes );
+        if ( ! visitedNodes[it->node] ) {
+            cout << "Visiting Node: " << it->node << endl;
+            visitedNodes[ it->node ] = true;
+            dfs_visit( it->node, visitedNodes );
         }
     }
 
@@ -92,11 +89,11 @@ Graph::parent_dfs_visit( int node, map<int, char> &parentNode) {
 
     vector<class Adj>::iterator it;
     for ( it = __adj[node].begin(); it != __adj[node].end(); it++ ) {
-        if ( ! parentNode[it->__node] ) {
-            cout << "Visiting Node: " << it->__node
+        if ( ! parentNode[it->node] ) {
+            cout << "Visiting Node: " << it->node
                  << " from Node:" << node << endl;
-            parentNode[ it->__node ] = 'a' + node;
-            parent_dfs_visit( it->__node, parentNode );
+            parentNode[ it->node ] = 'a' + node;
+            parent_dfs_visit( it->node, parentNode );
         }
     }
 
@@ -129,10 +126,10 @@ Graph::bfs_visit( int node, map<int, bool> &visitedNodes ) {
         node = nodesAtThisLevel.front();
         nodesAtThisLevel.pop();
         for ( it = __adj[node].begin(); it != __adj[node].end(); it++ ) {
-            if ( !visitedNodes[it->__node] ) {
-                cout << "Visiting Node: " << it->__node << endl;
-                nodesAtThisLevel.push( it->__node );
-                visitedNodes[it->__node] = true;
+            if ( !visitedNodes[it->node] ) {
+                cout << "Visiting Node: " << it->node << endl;
+                nodesAtThisLevel.push( it->node );
+                visitedNodes[it->node] = true;
             }
         }
     }
@@ -224,9 +221,9 @@ Graph::djikstra( int source ) {
         // Loop through all the vertices and update distances.
         for( vector<class Adj>::iterator it = __adj[minNode].begin();
                                 it!= __adj[minNode].end(); it++ ) {
-            if ( distances[it->__node].cost > ( minNodeDistance + it->__distance ) ) {
-                distances[it->__node].cost = minNodeDistance + it->__distance;
-                distances[it->__node].prevNode = minNode;
+            if ( distances[it->node].cost > ( minNodeDistance + it->distance ) ) {
+                distances[it->node].cost = minNodeDistance + it->distance;
+                distances[it->node].prevNode = minNode;
             }
         }
         // Find the next minimum
