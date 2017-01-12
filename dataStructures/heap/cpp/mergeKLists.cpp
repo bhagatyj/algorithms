@@ -107,5 +107,6 @@ int main( ) {
     }
     printIntVectorVector( numLists );
     mergeKLists( numLists, output );
+    cout << "Sorted List is: " << endl;
     printIntVector( output );
 }
