@@ -5,13 +5,12 @@
 
 using namespace std;
 class Graph;
-
 class Adj {
-        int node;
+        int vertex;
         int distance;
         friend class Graph;
     public:
-        Adj(int n, int d) : node(n), distance(d) {};
+        Adj(int n, int d) : vertex(n), distance(d) {};
 };
 
 class Graph {
@@ -64,10 +63,10 @@ void
 Graph::topoSortDfs( int vertex, map<int, bool> &visitedMap, stack<int> *topoStack ) {
 
     for( auto it = adjvv[vertex].begin(); it != adjvv[vertex].end(); it++ ) {
-        cout << "visiting node:" << it->node << endl;
-        if( !visitedMap[ it->node ] ) {
-            visitedMap[it->node] = true;
-            topoSortDfs( it->node, visitedMap, topoStack );
+        cout << "visiting vertex:" << it->vertex << endl;
+        if( !visitedMap[ it->vertex ] ) {
+            visitedMap[it->vertex] = true;
+            topoSortDfs( it->vertex, visitedMap, topoStack );
         }
     }
     // Add to stack when I have nowhere else to visit
@@ -81,7 +80,7 @@ Graph::topoSort() {
     int vertex;
 
     for( vertex = 0; vertex< adjvv.size(); vertex++ ) {
-        cout << "outer visiting node:" << vertex << endl;
+        cout << "outer visiting vertex:" << vertex << endl;
         if( !visitedMap[ vertex ] ) {
             visitedMap[vertex] = true;
             topoSortDfs( vertex, visitedMap, &topoStack );
