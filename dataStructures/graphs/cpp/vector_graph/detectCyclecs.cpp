@@ -70,13 +70,18 @@ Graph::Graph( int numVertices, int averageEdgesPerVertex ) {
     srand(time(NULL));
     for( int i=0; i<numVertices; i++) {
         // Toss and see if this vertex has edges 
-        int numEdges = rand() % averageEdgesPerVertex;
+        //int numEdges = rand() % averageEdgesPerVertex;
         vector<Adj> adjv;
-        for( int j=0; j<numEdges; j++) {
-            int vertex = rand() % numVertices;
-            int distance = rand() % 100;
-            Adj adj(vertex, distance);
-            adjv.push_back(adj);
+        double chance = ( 1.0 * averageEdgesPerVertex /numVertices );
+        for( int j=0; j<numVertices; j++) {
+            if ( i != j ) {
+                double d1 = rand()*1.0/RAND_MAX;
+                if ( d1 < chance ) {
+                    int distance = rand() % 100;
+                    Adj adj(j, distance);
+                    adjv.push_back(adj);
+                }
+            }
         }
         adjvv.push_back(adjv);
     }

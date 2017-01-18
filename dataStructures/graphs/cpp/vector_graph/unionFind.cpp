@@ -32,7 +32,7 @@ class Graph {
     public:
         Graph( int numVertices) { adjvv.resize( numVertices ); };
         void addEdge( Edge e );
-        Graph( int numVertices, int numEdges );
+        Graph( int numVertices, double averageEdgesPerVertex );
         bool isCyclicDfsTraverse(int vertex, map<int, int> &vertexColor);
         bool isCyclic();
         void printGraph();
@@ -86,20 +86,21 @@ UnionFind::isConnected(int a, int b) {
     return getRoot(a) == getRoot(b);
 }
 
-Graph::Graph( int numVertices, int averageEdgesPerVertex ) {
+Graph::Graph( int numVertices, double averageEdgesPerVertex ) {
+    map<pair<int,int>, bool> edges;
     srand(time(NULL));
     for( int i=0; i<numVertices; i++) {
-        // Toss and see if this vertex has edges 
-        //int numEdges = rand() % averageEdgesPerVertex;
         vector<Adj> adjv;
-        double chance = ( 1.0 * averageEdgesPerVertex /numVertices );
         for( int j=0; j<numVertices; j++) {
+            if ( edges[pair<int,int>(i,j)] == true ) { continue; }
             if ( i != j ) {
                 double d1 = rand()*1.0/RAND_MAX;
-                if ( d1 < chance ) {
+                if ( d1 < averageEdgesPerVertex ) {
                     int distance = rand() % 100;
                     Adj adj(j, distance);
                     adjv.push_back(adj);
+                    edges[pair<int,int>(i,j)] = true;
+                    edges[pair<int,int>(j,i)] = true;
                 }
             }
         }
@@ -115,7 +116,7 @@ Graph::addEdge( Edge e ) {
 void
 Graph::printGraph() {
     for( int i=0; i < adjvv.size(); i++ ) {
-        cout << "Vertex : " << i << endl;
+        cout << "\tVertex : " << i << endl;
         for( auto it=adjvv[i].begin(); it != adjvv[i].end(); it++ ) {
             cout << "\t\t vertex:" << it->vertex << " distance:" 
                     << it->distance << endl;
@@ -171,7 +172,7 @@ Graph::getMST() {
 // If the heap was over, no MST can be formed.
 // If we reached the goal, we have an MST.
 void
-tryGraph(int numVertices, int numEdgesPerVertex) {
+tryGraph(int numVertices, double numEdgesPerVertex) {
     vector<Edge> edges;
     Graph G(numVertices, numEdgesPerVertex);
     G.printGraph();
@@ -183,8 +184,8 @@ tryGraph(int numVertices, int numEdgesPerVertex) {
 }
 
 int main() {
-    tryGraph(8, 1);
-    tryGraph(8, 2);
+    tryGraph(8, 1.0/8);
+    tryGraph(8, 1.5/8);
 }
     
 
