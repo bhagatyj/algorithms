@@ -5,12 +5,12 @@
 #include <vector>
 
 using namespace std;
-class Graph;
+class UndirGraph;
 class Adj {
     protected:
         int vertex;
         int distance;
-        friend class Graph;
+        friend class UndirGraph;
     public:
         Adj(int v, int d): vertex(v),distance(d) {};
 };
@@ -26,67 +26,20 @@ class Edge {
         }
 };
     
-class Graph {
+class UndirGraph {
     protected:
         vector<vector<Adj> > adjvv;
     public:
-        Graph( int numVertices) { adjvv.resize( numVertices ); };
+        UndirGraph( int numVertices) { adjvv.resize( numVertices ); };
         void addEdge( Edge e );
-        Graph( int numVertices, double averageEdgesPerVertex );
+        UndirGraph( int numVertices, double averageEdgesPerVertex );
         bool isCyclicDfsTraverse(int vertex, map<int, int> &vertexColor);
         bool isCyclic();
-        void printGraph();
-        Graph getMST();
-};
-class UnionFind {
-    protected:
-        vector<int> idv;
-    public:
-        UnionFind( int n );
-        bool unionIfNonCyclic( int a, int b );
-        bool isConnected( int a, int b );
-        int getRoot( int a);
+        void printUndirGraph();
+        UndirGraph getMST();
 };
 
-UnionFind::UnionFind(int n) { 
-    int i;
-    idv.resize( n ); 
-    for(i=0; i<n; i++) {
-        idv[i] = i;
-    }
-}
-
-int
-UnionFind::getRoot( int a ) {
-    // For the root idv[a] will be a.
-    // Keep going till you hit yourself.
-    while ( idv[a] != a ) {
-        a = idv[a];
-    }
-    return a;
-}
-
-bool
-UnionFind::unionIfNonCyclic( int a, int b ) {
-    int r1;
-    int r2;
-
-    // If the nodes are already connected, return.
-    if( isConnected(a,b) ) {
-        return false;
-    }
-    r1 = getRoot(a);
-    r2 = getRoot(b);
-    idv[r1] = r2;
-    return true;
-}
-
-bool
-UnionFind::isConnected(int a, int b) {
-    return getRoot(a) == getRoot(b);
-}
-
-Graph::Graph( int numVertices, double averageEdgesPerVertex ) {
+UndirGraph::UndirGraph( int numVertices, double averageEdgesPerVertex ) {
     map<pair<int,int>, bool> edges;
     srand(time(NULL));
     for( int i=0; i<numVertices; i++) {
@@ -113,13 +66,13 @@ Graph::Graph( int numVertices, double averageEdgesPerVertex ) {
 }
         
 void
-Graph::addEdge( Edge e ) {
+UndirGraph::addEdge( Edge e ) {
     adjvv[e.a].push_back( Adj(e.b, e.distance) );    
     adjvv[e.b].push_back( Adj(e.a, e.distance) );    
 }
 
 void
-Graph::printGraph() {
+UndirGraph::printUndirGraph() {
     for( int i=0; i < adjvv.size(); i++ ) {
         cout << "\tVertex : " << i << endl;
         for( auto it=adjvv[i].begin(); it != adjvv[i].end(); it++ ) {
@@ -153,9 +106,9 @@ printEdges(vector<Edge> const &edges)
 
 }
 
-Graph
-Graph::getMST() {
-    Graph mst( adjvv.size() );
+UndirGraph
+UndirGraph::getMST() {
+    UndirGraph mst( adjvv.size() );
     int i, mstEdges = 0;
     vector<Edge> edges;
     vector<bool> addedVertices;
@@ -163,7 +116,7 @@ Graph::getMST() {
     int nextVertex = 0;
     addedVertices.resize( adjvv.size() );
     do {
-        cout << "Picked vertex " << nextVertex << endl;
+        //cout << "Picked vertex " << nextVertex << endl;
         addedVertices[nextVertex] = true;
         for( auto it = adjvv[nextVertex].begin(); it != adjvv[nextVertex].end(); it++) {
             Edge e(nextVertex, it->vertex, it->distance);
@@ -172,12 +125,12 @@ Graph::getMST() {
         edges = pruneEdges( edges, addedVertices );
         if( edges.empty() ) { break; }
         make_heap( edges.begin(), edges.end() );
-        printEdges(edges);
+        // printEdges(edges);
         Edge nextEdge = edges.front();
         pop_heap( edges.begin(), edges.end() );
         edges.pop_back();
 
-        cout << "Picked Edge " << nextEdge.a << " " << nextEdge.b << endl;
+        //cout << "Picked Edge " << nextEdge.a << " " << nextEdge.b << endl;
         if ( addedVertices[nextEdge.a] ) {
             nextVertex = nextEdge.b; 
         } else {
@@ -192,14 +145,14 @@ Graph::getMST() {
     } while ( mstEdges < (adjvv.size() - 1 ) );
     if( mstEdges < (adjvv.size() - 1) ) {
         cout << "could not form mst" << endl;
-        return mst;
+        return UndirGraph::UndirGraph(adjvv.size());
     } else {
         return mst;
     }
 }
 
 // Run a DFS and add the edges to a min-heap.
-// Get the smallest edge and add to new Graph and 
+// Get the smallest edge and add to new UndirGraph and 
 // try unionIfNonCyclic.
 // When the number of edges reach the goal ("numberOfVertices-1"),
 //      or the heap is over
@@ -207,20 +160,20 @@ Graph::getMST() {
 // If the heap was over, no MST can be formed.
 // If we reached the goal, we have an MST.
 void
-tryGraph(int numVertices, double numEdgesPerVertex) {
+tryUndirGraph(int numVertices, double numEdgesPerVertex) {
     vector<Edge> edges;
-    Graph G(numVertices, numEdgesPerVertex);
-    G.printGraph();
-    Graph G2 = G.getMST();
+    UndirGraph G(numVertices, numEdgesPerVertex);
+    G.printUndirGraph();
+    UndirGraph G2 = G.getMST();
     cout << "MST " << endl;
-    G2.printGraph();
+    G2.printUndirGraph();
     cout << "Done " << endl;
 
 }
 
 int main() {
-    tryGraph(5, 1.5/4);
-    //tryGraph(8, 1.5/8);
+    tryUndirGraph(5, 1.5/4);
+    //tryUndirGraph(8, 1.5/8);
 }
     
 
