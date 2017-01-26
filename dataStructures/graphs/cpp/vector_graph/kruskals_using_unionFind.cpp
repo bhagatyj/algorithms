@@ -43,7 +43,7 @@ class UnionFind {
         vector<int> idv;
     public:
         UnionFind( int n );
-        bool unionIfNonCyclic( int a, int b );
+        bool addIfNonCyclic( int a, int b );
         bool isConnected( int a, int b );
         int getRoot( int a);
 };
@@ -67,7 +67,7 @@ UnionFind::getRoot( int a ) {
 }
 
 bool
-UnionFind::unionIfNonCyclic( int a, int b ) {
+UnionFind::addIfNonCyclic( int a, int b ) {
     int r1;
     int r2;
 
@@ -150,7 +150,7 @@ UndirGraph::getMST() {
         pop_heap( edges.begin(), edges.end() );
         edges.pop_back();
 
-        toAdd = mstUnionFind.unionIfNonCyclic( nextEdge.a, nextEdge.b );
+        toAdd = mstUnionFind.addIfNonCyclic( nextEdge.a, nextEdge.b );
         if ( toAdd ) {
             mst.addEdge( nextEdge );
             mstEdges++;
@@ -170,7 +170,7 @@ UndirGraph::getMST() {
 
 // Run a DFS and add the edges to a min-heap.
 // Get the smallest edge and add to new UndirGraph and 
-// try unionIfNonCyclic.
+// try addIfNonCyclic.
 // When the number of edges reach the goal ("numberOfVertices-1"),
 //      or the heap is over
 //          stop.
