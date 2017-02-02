@@ -42,6 +42,10 @@ join(int pA, int pB) {
     // Find A's root
     rootA = getRoot(pA);
     rootB = getRoot(pB);
+    if( rootA == rootB) {
+        // already joined.
+        return;
+    }
     rootAB = min(rootA, rootB);
     root[rootA] = rootAB;
     root[rootB] = rootAB;
