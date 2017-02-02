@@ -28,13 +28,11 @@ map<int, int> root;
 map<int, int> groupCount;
 
 int
-getCount(int pA) {
-    int rootA = pA;
-    while ( (root.find(rootA) != root.end())  &&
-            (root[rootA] != rootA) ) {
-        rootA = root[rootA];
+getRoot(int x) {
+    while ( (root[x] != x) ) {
+        x = root[x];
     } 
-    return groupCount[rootA];
+    return x;
 }
 
 void
@@ -42,27 +40,12 @@ join(int pA, int pB) {
     int rootA, rootB, rootAB;
 
     // Find A's root
-    rootA = pA;
-    while ( (root.find(rootA) != root.end())  &&
-            (root[rootA] != rootA) ) {
-        rootA = root[rootA];
-    } 
-    rootB = pB;
-    while ( (root.find(rootB) != root.end())  &&
-            (root[rootB] != rootB) ) {
-        rootB = root[rootB];
-    } 
+    rootA = getRoot(pA);
+    rootB = getRoot(pB);
     rootAB = min(rootA, rootB);
-    //cout << "Setting root of " << rootA << " " << rootB << " to " << rootAB << endl;
     root[rootA] = rootAB;
     root[rootB] = rootAB;
-
-    if ( groupCount[rootA] == 0 ) { groupCount[rootA] = 1; }
-    if ( groupCount[rootB] == 0 ) { groupCount[rootB] = 1; }
-
-    int total = groupCount[rootA] + groupCount[rootB];
-    groupCount[rootA] = total;
-    groupCount[rootB] = total;
+    groupCount[rootAB] = groupCount[rootA] + groupCount[rootB];
 }
 
 int main() {
@@ -72,13 +55,14 @@ int main() {
     char c;
     cin >> numPeople >> numQueries ;
     for( auto i=0; i<numQueries; i++) {
+        root[i] = i;
         groupCount[i] = 1;
     }
     for( auto i=0; i<numQueries; i++) {
         cin >> c;
         if ( c == 'Q' ) {
             cin >> pA;
-            cout << getCount(pA) << endl;
+            cout << groupCount[getRoot(pA)] << endl;
         } else {
             cin >> pA >> pB;
             join( pA, pB);
