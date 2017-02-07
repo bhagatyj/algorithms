@@ -17,6 +17,7 @@
  */
 
 #include <cmath>
+#include <assert.h>
 #include <map>
 #include <cstdio>
 #include <vector>
@@ -57,17 +58,22 @@ int main() {
     int numPeople, numQueries;
     int pA, pB;
     char c;
+
     cin >> numPeople >> numQueries ;
-    for( auto i=0; i<numQueries; i++) {
+    for( auto i=0; i<numPeople; i++) {
         root[i] = i;
         groupCount[i] = 1;
     }
+
     for( auto i=0; i<numQueries; i++) {
         cin >> c;
         if ( c == 'Q' ) {
             cin >> pA;
+            //cout << "pA : " << pA << " root:" << getRoot(pA) 
+            //<< " members: " << groupCount[getRoot(pA)] << endl;
             cout << groupCount[getRoot(pA)] << endl;
         } else {
+            assert( c == 'M' );
             cin >> pA >> pB;
             join( pA, pB);
         }
