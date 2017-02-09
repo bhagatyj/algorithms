@@ -1,9 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>
+#include<limits.h>
+#include<string.h>
 #include"ptrQ.h"
 #include"ptrStack.h"
  
+#include <stdbool.h>
 typedef struct node_t_ {
     int key;
     struct node_t_ *left;
@@ -50,6 +53,8 @@ node_t *rightRotate(node_t *n)
     leftChildsRight = leftChild->right;
 
     // Perform rotation
+    // I become my Left child-s right child
+    // My left child-s right child becomes my left.
     leftChild->right = n;
     n->left = leftChildsRight;
  
@@ -73,6 +78,8 @@ node_t *leftRotate(node_t *n)
     rightChildsLeft = rightChild->left;
  
     // Perform rotation
+    // I become my Right child-s left child
+    // My right child-s left child becomes my right
     rightChild->left = n;
     n->right = rightChildsLeft;;
  
@@ -108,7 +115,7 @@ int isLeftHeavy(node_t *n) {
  
 node_t* insert(node_t* node, int key)
 {
-    /* 1.  Perform the normal BST rotation */
+    /* 1.  Perform the normal Bst rotation */
     if (node == NULL)
         return(newNode(key));
  
@@ -279,6 +286,73 @@ void levelTraversal(node_t *root) {
     free(st);
 
 }
+
+// Caveats:
+// In a Bst, all the descendants of a node should obey the rule
+// the value of the descendant should be less than root if it is on the left-side.
+// the value of the descendant should be more than root if it is on the left-side.
+// Hence, recursive checking is needed.
+//
+// Special care needs to be taken for the first occurence of INT_MIN and INT_MAX.
+// For example, the following trees are valid:
+//
+// [-2147483648]
+// [-2147483648,null,2147483647]
+// [2147483647]
+// [2147483647, -2147483648,null]
+//
+bool isValidBstNode(node_t *root, int min, int max, bool leftMaxAllowed, bool rightMaxAllowed) {
+
+	if (!root) {
+		return true;
+	}
+	if (leftMaxAllowed) {
+		if ( root->key < min ) { return false; }
+	} else {
+		if ( root->key <= min ) { return false; }
+	}
+	if (rightMaxAllowed) {
+		if ( root->key > max ) { return false; }
+	} else {
+		if ( root->key >= max ) { return false; }
+	}
+
+	bool leftValid = isValidBstNode( root->left, min, root->key, leftMaxAllowed, false );
+	bool rightValid = isValidBstNode( root->right, root->key, max, false, rightMaxAllowed );
+	printf("key:%d min:%d max:%d allowed:%d%d left:%d %p right:%d %p\n",
+             root->key, min, max, leftMaxAllowed, rightMaxAllowed, 
+		     leftValid, root->left, rightValid, root->right);
+	return (leftValid & rightValid);
+} 
+
+bool isValidBst(node_t * root) {
+	
+	return isValidBstNode( root, INT_MIN, INT_MAX, true, true);
+    
+}
+
+void isValidBstTester() {
+  node_t *root;
+
+  root = (node_t *) malloc(sizeof(node_t));
+  memset(root, 0, sizeof(node_t));
+  root->right = (node_t *) malloc(sizeof(node_t));
+  memset(root->right, 0, sizeof(node_t));
+  // [ 1, N, 1 ] -> invalid
+  root->key = 1;
+  root->right->key = 1;
+  printf("Validity %d \n",isValidBst(root));
+
+  // [ -2147483648, N, 1 ] -> valid
+  root->key = -2147483648;
+  printf("Validity %d \n",isValidBst(root));
+
+  // [ -2147483648, N, 2147483647 ] -> valid
+  root->right->key = 2147483647;
+  printf("Validity %d \n",isValidBst(root));
+
+}
+	
 int main()
 {
   node_t *root = NULL;
@@ -295,6 +369,10 @@ int main()
   printf("Post order traversal of the constructed AVL tree is \n");
   postOrder_nonRecursive(root);
   printf("Height is %d\n", height(root) );
- 
+  printf("Validity %d \n",isValidBst(root));
+
+  isValidBstTester();
+
   return 0;
+
 }
