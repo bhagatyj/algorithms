@@ -6,10 +6,24 @@ using namespace std;
 // In map, once the item is inserted, you cannot change the key. 
 // Modifying "it->first" gives error. 
 // pair<const key_type, mapped_type>
+//
 int main(int argc, char **argv) {
 
     map<int, char> alphabets;
     int i;
+
+	// Reading before initialization.
+	// Value will be zero.
+	// In CPP maps, as soon as you access the map with the [] operator,
+	// if the key doesn't exist it gets added.
+	// The default initializer of the type gets invoked
+	// For ints and chars, the default value is 0.
+	//
+    for (i=0; i<26; i++) {
+        cout << i << " --> " << alphabets[i] 
+                  << " --> " << (int) alphabets[i] 
+				  << endl;
+    }
 
     for (i=0; i<26; i++) {
         alphabets[i] = 'a' + i;

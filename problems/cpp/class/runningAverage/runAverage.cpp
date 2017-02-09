@@ -1,6 +1,7 @@
 // Implement a class that can calculate the running average of a stream of input numbers 
 
 #include <iostream>
+#include <assert.h>
 
 using namespace std;
 
@@ -40,5 +41,6 @@ int main (int argc, char **argv) {
     ra.addNum(5);
     ra.addNum(10);
     ra.addNum(10);
-    cout << ra.average();
+    cout << ra.average() << endl;
+	assert ( ra.average() == 7.5 );
 }

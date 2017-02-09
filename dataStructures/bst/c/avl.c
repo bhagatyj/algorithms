@@ -104,13 +104,15 @@ int isRightHeavy(node_t *n) {
     if ( !n ) {
         return 0;
     }
-    return ( getBalance(n) < -1 );
+    return ( height(n->right) > ( 1 + height(n->left) ) );
+    //return ( getBalance(n) < -1 );
 }
 int isLeftHeavy(node_t *n) {
     if ( !n ) {
         return 0;
     }
-    return ( getBalance(n) > 1 );
+    return ( height(n->left) > ( 1 + height(n->right) ) );
+    // return ( getBalance(n) > 1 );
 }
  
 node_t* insert(node_t* node, int key)
@@ -192,48 +194,93 @@ void postOrder(node_t *root) {
     }
 }
 
-void preOrder_nonRecursive(node_t *root) {
+//                   a
+//             b           c
+//          d     e     f     g
+//
+// Print: a b d e c f g
+// 
+// essentially, print a, 
+//              push it to stack and go left
+//              print b, 
+//              push it to stack and go left
+//              print d
+//              cannot go left anymore.
+//              pop and go right
+//              print e
+//              cannot go left anymore
+//              pop and go right
+//              print c
+//              push it to stack and go left
+//              print f
+//              cannot go left anymore
+//              pop and go right
+//              print g
+//              cannot go left anymore
+//              pop returns empty -> done.
+//
+// In summary, once you get a node, do the following
+//      print it
+//      push it to stack
+//      go left
+//   and keep doing that in a while loop.
+//   This is the inner while loop.
+//
+//  When there is no more left, we get out of inner while loop.
+//  Now pop an element from the stack, take the right node
+//  and go back to the inner while loop.
+//
+//  This pop, take-right, go back to inner-loop needs to be present
+//  in the outer while loop.
+//
+//  The outer while loop exits when there is nothing more to pop. As 
+//  nothing more to pop is the initial condition, the outer loop is
+//  written as a while-1 and the condition checked in the middle.
+//
+void preOrder_nonRecursive(node_t *curr) {
 
     ptrStack_t *pS = get_new_ptrStack();
 
     if (pS == NULL) { return; }
-    if ( !root ) { return; }
+    if ( !curr ) { return; }
 
     while (1) {
-        while (root) {
-            // Process current node
-            printNode(root);
-            ptrStack_push(pS, root);
-            root = root->left;
+        while (curr) {
+            printNode(curr);
+            ptrStack_push(pS, curr);
+            curr = curr->left;
         }
         if ( is_ptrStack_empty(pS) ) {
             break;
         }
-        root = ptrStack_pop(pS);
-        root = root->right;
+        curr = ptrStack_pop(pS);
+        curr = curr->right;
     }
     free(pS);
 }
 
-void inOrder_nonRecursive(node_t *root) {
+// This is the exact same logic as in preOrder_nonRecursive
+// except for the line printNode(curr) which has moved
+// to after pop - to conform to (left, me, right) printing.
+//
+void inOrder_nonRecursive(node_t *curr) {
 
     ptrStack_t *pS = get_new_ptrStack();
 
     if (pS == NULL) { return; }
-    if ( !root ) { return; }
+    if ( !curr ) { return; }
 
     while (1) {
-        while (root) {
-            // Process current node
-            ptrStack_push(pS, root);
-            root = root->left;
+        while (curr) {
+            ptrStack_push(pS, curr);
+            curr = curr->left;
         }
         if ( is_ptrStack_empty(pS) ) {
             break;
         }
-        root = ptrStack_pop(pS);
-        printNode(root);
-        root = root->right;
+        curr = ptrStack_pop(pS);
+        printNode(curr);
+        curr = curr->right;
     }
     free(pS);
 }
@@ -241,17 +288,35 @@ void inOrder_nonRecursive(node_t *root) {
 /*
  * Post order is more tricky than pre and in order 
  * traversal.
+ * It needs us to print all lefts and rights before
+ * printing selfs. 
+ * So we use two stacks. PS1 and PS2.
+ * It is easier to collect items in reverse order.
+ *
+ *         --------               -------
+ *         |      |               |      |
+ *         |      |               |      |
+ *         |      |               |      |
+ *         |      |               |      |
+ *         |      |               |      |
+ *   R     |      |               |      |
+ *   |     |      |               --------
+ *   |     --------                 A  |
+ *   V       | |  A                 |  In the end
+ *   |__(1)__| |  |_(L.R)__ ___self-|  |----> PRINT
+ *             |           |
+ *             |---(2)-----|
  */
-void postOrder_nonRecursive(node_t *root) {
+void postOrder_nonRecursive(node_t *curr) {
 
     ptrStack_t *pS1 = get_new_ptrStack();
     ptrStack_t *pS2 = get_new_ptrStack();
 
     if (pS1 == NULL) { return; }
     if (pS2 == NULL) { return; }
-    if ( !root ) { return; }
+    if ( !curr ) { return; }
 
-    ptrStack_push(pS1, root);
+    ptrStack_push(pS1, curr);
     while (! is_ptrStack_empty(pS1) ) {
 
         node_t *n = (node_t *)ptrStack_pop(pS1);
@@ -272,11 +337,11 @@ void postOrder_nonRecursive(node_t *root) {
     free(pS2);
 }
 
-void levelTraversal(node_t *root) {
+void levelTraversal(node_t *curr) {
     ptrQ_t *st = get_new_ptrQ();
     if (st == NULL) { return; }
 
-    ptrQ_enq(st, root);
+    ptrQ_enq(st, curr);
     while ( ! is_ptrQ_empty(st) ) {
         node_t *n = (node_t *)ptrQ_deq(st);
         printNode(n);
@@ -364,10 +429,10 @@ int main()
  
   printf("Level order traversal of the constructed AVL tree is \n");
   levelTraversal(root);
-  printf("Post order traversal of the constructed AVL tree is \n");
-  postOrder(root);
-  printf("Post order traversal of the constructed AVL tree is \n");
-  postOrder_nonRecursive(root);
+  printf("Pre order traversal of the constructed AVL tree is \n");
+  preOrder(root);
+  printf("Pre order traversal of the constructed AVL tree is \n");
+  preOrder_nonRecursive(root);
   printf("Height is %d\n", height(root) );
   printf("Validity %d \n",isValidBst(root));
 
