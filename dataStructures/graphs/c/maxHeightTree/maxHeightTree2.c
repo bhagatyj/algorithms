@@ -92,8 +92,8 @@ int* findMinHeightTrees(int n, int** edges, int edgesRowSize, int edgesColSize, 
 	for (i=0; i<edgesRowSize; i++) {
 		node_t *x = (node_t *)malloc(sizeof(node_t));
 		node_t *y = (node_t *)malloc(sizeof(node_t));
-		int key1 = edges[edgesRowSize][0];
-		int key2 = edges[edgesRowSize][1];
+		int key1 = edges[i][0];
+		int key2 = edges[i][1];
 		memset(x, 0, sizeof(node_t));
 		memset(y, 0, sizeof(node_t));
 		x->key = key1;

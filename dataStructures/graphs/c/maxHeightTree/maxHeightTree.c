@@ -47,6 +47,54 @@ typedef struct node_t_ {
 
 int* findMinHeightTrees(int n, int** edges, int edgesRowSize, int edgesColSize, int* returnSize) {
 
+#if 1
+	int i, j, *ans, numCands, *edge;
+	node_t *cands; 
+	int iter=0;
+
+	cands = (node_t *) malloc( n *sizeof(node_t) );
+	memset(cands, 0, n *sizeof(node_t) );
+	ans = (int *) malloc(2 *sizeof(int));
+	printf("ans is at %p\n", ans);
+	for (i=0; i<n; i++) {
+		cands[i].candidate = true;
+	}
+
+	do {	
+		printf("Iteration ... %d\n", iter++);
+		for (i=0; i<edgesRowSize; i++) {
+			edge = *(edges + i);
+			if ( cands[edge[0]].candidate  && 
+				 cands[edge[1]].candidate )  {
+					cands[edge[0]].degree++;
+					cands[edge[1]].degree++;
+			}
+		}
+		numCands = 0;
+		for (i=0; i<n; i++) {
+			if ( cands[i].degree <= 1 ) {
+				cands[i].candidate = false;
+			} else {
+				numCands++;
+			}
+			cands[i].degree = 0;
+		}
+	} while (numCands > 2);
+
+	*returnSize = numCands;
+	j=0;
+	for (i=0; i<n; i++) {
+		if (cands[i].candidate == true) {
+			printf("Candidate %d\n", i);
+			*(ans+j) = i;
+			j++;
+		}
+	}
+	free(cands);
+	*(ans) = numCands;
+	return ans;
+    
+#else
     int i, j, *ans, numCands;
     node_t *cands;
     int iter=0;
@@ -98,6 +146,7 @@ int* findMinHeightTrees(int n, int** edges, int edgesRowSize, int edgesColSize, 
     }
     //*(returnSize) = numCands;
     return ans;
+#endif
 }
 int main() {
 	int **edges; // { { 1, 0 }, { 1, 2 }, {1, 3} };
@@ -143,7 +192,9 @@ int main() {
 	for (i=0; i<5; i++) {
 		free(edges[i]);
 	}
-	free(edges); free(ans);
+	free(edges); 
+	printf("Free ans %p\n", ans);
+	free(ans);
 
 	edges = (int **) malloc ( 5 * sizeof(int *) );
 	assert(edges);
